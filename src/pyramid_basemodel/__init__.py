@@ -77,7 +77,7 @@ def save(instance_or_instances, session=Session):
     else:
         session.add(v)
 
-def bind_engine(engine, session=Session, base=Base):
+def bind_engine(engine, session=Session, base=Base, should_drop=False):
     """Bind the ``session`` and ``base`` to the ``engine``.
       
       Setup::
@@ -101,12 +101,21 @@ def bind_engine(engine, session=Session, base=Base):
       
           >>> mock_base.metadata.create_all.assert_called_with(mock_engine)
       
+      Drops tables if ``should_drop`` is ``True``::
+      
+          >>> mock_base.metadata.drop_all.called
+          False
+          >>> bind_engine(mock_engine, session=mock_session, base=mock_base,
+          ...             should_drop=True)
+          >>> mock_base.metadata.drop_all.assert_called_with(mock_engine)
+      
     """
     
     session.configure(bind=engine)
     base.metadata.bind = engine
+    if should_drop:
+        base.metadata.drop_all(engine)
     base.metadata.create_all(engine)
-
 
 def includeme(config):
     """Bind to the db engine specifed in ``config.registry.settings``.
@@ -121,11 +130,13 @@ def includeme(config):
           >>> pyramid_basemodel.engine_from_config.return_value = 'engine'
           >>> pyramid_basemodel.bind_engine = Mock()
           >>> mock_config = Mock()
+          >>> mock_config.registry.settings = {}
       
       Calls ``bind_engine`` with the configured ``engine``::
       
           >>> includeme(mock_config)
-          >>> pyramid_basemodel.bind_engine.assert_called_with('engine')
+          >>> pyramid_basemodel.bind_engine.assert_called_with('engine', 
+          ...                                                  should_drop=False)
       
       Teardown::
       
@@ -137,5 +148,6 @@ def includeme(config):
     # Bind the engine.
     settings = config.registry.settings
     engine = engine_from_config(settings, 'sqlalchemy.')
-    bind_engine(engine)
+    should_drop = settings.get('basemodel.should_drop_all', False)
+    bind_engine(engine, should_drop=should_drop)
 
