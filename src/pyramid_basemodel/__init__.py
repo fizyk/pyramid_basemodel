@@ -32,6 +32,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import Column, DateTime, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
+from pyramid.settings import asbool
 from zope.sqlalchemy import ZopeTransactionExtension
 
 Session = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
@@ -158,7 +159,7 @@ def includeme(config):
     # Bind the engine.
     settings = config.registry.settings
     engine = engine_from_config(settings, 'sqlalchemy.')
-    should_create = settings.get('basemodel.should_create_all', True)
-    should_drop = settings.get('basemodel.should_drop_all', False)
+    should_create = asbool(settings.get('basemodel.should_create_all', True))
+    should_drop = asbool(settings.get('basemodel.should_drop_all', False))
     bind_engine(engine, should_create=should_create, should_drop=should_drop)
 
