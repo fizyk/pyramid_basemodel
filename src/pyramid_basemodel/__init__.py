@@ -77,7 +77,8 @@ def save(instance_or_instances, session=Session):
     else:
         session.add(v)
 
-def bind_engine(engine, session=Session, base=Base, should_drop=False):
+def bind_engine(engine, session=Session, base=Base, should_create=True,
+        should_drop=False):
     """Bind the ``session`` and ``base`` to the ``engine``.
       
       Setup::
@@ -101,6 +102,14 @@ def bind_engine(engine, session=Session, base=Base, should_drop=False):
       
           >>> mock_base.metadata.create_all.assert_called_with(mock_engine)
       
+      Unless ``should_create`` is ``False``::
+      
+          >>> mock_base = Mock()
+          >>> bind_engine(mock_engine, session=mock_session, base=mock_base,
+          ...             should_create=False)
+          >>> mock_base.metadata.create_all.called
+          False
+      
       Drops tables if ``should_drop`` is ``True``::
       
           >>> mock_base.metadata.drop_all.called
@@ -115,7 +124,8 @@ def bind_engine(engine, session=Session, base=Base, should_drop=False):
     base.metadata.bind = engine
     if should_drop:
         base.metadata.drop_all(engine)
-    base.metadata.create_all(engine)
+    if should_create:
+        base.metadata.create_all(engine)
 
 def includeme(config):
     """Bind to the db engine specifed in ``config.registry.settings``.
@@ -136,7 +146,7 @@ def includeme(config):
       
           >>> includeme(mock_config)
           >>> pyramid_basemodel.bind_engine.assert_called_with('engine', 
-          ...                                                  should_drop=False)
+          ...         should_create=True, should_drop=False)
       
       Teardown::
       
@@ -148,6 +158,7 @@ def includeme(config):
     # Bind the engine.
     settings = config.registry.settings
     engine = engine_from_config(settings, 'sqlalchemy.')
+    should_create = settings.get('basemodel.should_create_all', True)
     should_drop = settings.get('basemodel.should_drop_all', False)
-    bind_engine(engine, should_drop=should_drop)
+    bind_engine(engine, should_create=should_create, should_drop=should_drop)
 
