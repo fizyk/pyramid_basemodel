@@ -26,6 +26,7 @@ __all__ = [
     'bind_engine',
 ]
 
+import inflect
 from datetime import datetime
 
 from sqlalchemy import engine_from_config
@@ -37,6 +38,17 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 Session = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
+
+class classproperty(object):
+    """A basic [class property](http://stackoverflow.com/a/3203659)."""
+    
+    def __init__(self, getter):
+        self.getter = getter
+    
+    def __get__(self, instance, owner):
+        return self.getter(owner)
+    
+
 
 class BaseMixin(object):
     """Provides an int ``id`` as primary key, ``version``, ``created`` and
@@ -50,6 +62,61 @@ class BaseMixin(object):
     modified = Column('m', DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     query = Session.query_property()
+    
+    @classproperty
+    def class_name(cls):
+        """Either returns ``cls._class_name``, if provided, or defaults to
+          the literal class name using ``cls.__name__``.
+          
+              >>> class Foo(BaseMixin):
+              ...     pass
+              ... 
+              >>> Foo.class_name
+              'Foo'
+              >>> foo = Foo()
+              >>> foo.class_name
+              'Foo'
+              >>> Foo._class_name = 'Baz'
+              >>> foo = Foo()
+              >>> foo.class_name
+              'Baz'
+          
+        """
+        
+        return getattr(cls, '_class_name', cls.__name__)
+    
+    @classproperty
+    def plural_class_name(cls):
+        """Either returns ``self._plural_class_name``, if provided, or defaults
+          to a pluralised version of the literal class name.
+          
+              >>> class Material(BaseMixin):
+              ...     pass
+              ... 
+              >>> Material.plural_class_name
+              'Materials'
+              >>> m = Material()
+              >>> m.plural_class_name
+              'Materials'
+              >>> class Process(BaseMixin):
+              ...     pass
+              ... 
+              >>> Process.plural_class_name
+              'Processes'
+              >>> Process._plural_class_name = 'Flobbles'
+              >>> Process.plural_class_name
+              'Flobbles'
+          
+        """
+        
+        # If provided, use ``self._plural_class_name``.
+        if hasattr(cls, '_plural_class_name'):
+            return cls._plural_class_name
+        
+        # Otherwise pluralise the literal class name.
+        pluralise = inflect.engine().plural
+        return pluralise(cls.class_name)
+    
 
 
 def save(instance_or_instances, session=Session):
