@@ -1,4 +1,19 @@
 
+# 0.1.6
+
+Base the ``BaseMixin.class_name`` on a singularised version of the plural
+class name.  This may seem a bit arse about face, but allows us to use the
+tablename to split the word, e.g.:
+
+    >>> class OperatingScale(Base, BaseMixin):
+    ...     __tablename__ 'operating_scales'
+    ... 
+    >>> OperatingScale.class_name
+    'Operating Scale'
+
+Just ignore all this if you don't plan on using the `class_name`, `class_slug` and
+`plural_class_name` properties.
+
 # 0.1.5
 
 Provide `BaseMixin.class_slug` and base it and the `BaseMixin.plural_class_name`
