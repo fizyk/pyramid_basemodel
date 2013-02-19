@@ -26,6 +26,7 @@ __all__ = [
     'bind_engine',
 ]
 
+import inflect
 from datetime import datetime
 
 from sqlalchemy import engine_from_config
@@ -65,24 +66,45 @@ class BaseMixin(object):
     @classproperty
     def class_name(cls):
         """Either returns ``cls._class_name``, if provided, or defaults to
-          the literal class name using ``cls.__name__``.
+          the singular of ``cls.plural_class_name``, which is derived from
+          the tablename.
           
               >>> class Foo(BaseMixin):
-              ...     pass
+              ...     __tablename__ = 'flobbles'
               ... 
               >>> Foo.class_name
-              'Foo'
+              'Flobble'
               >>> foo = Foo()
               >>> foo.class_name
-              'Foo'
+              'Flobble'
               >>> Foo._class_name = 'Baz'
               >>> foo = Foo()
               >>> foo.class_name
               'Baz'
           
+          If singularising the plural class name doesn't work, uses the
+          ``cls.__name__``::
+          
+              >>> class Foo(BaseMixin):
+              ...     plural_class_name = 'Not Plural'
+              ... 
+              >>> Foo.class_name
+              'Foo'
+          
         """
         
-        return getattr(cls, '_class_name', cls.__name__)
+        # Try the manual override.
+        if hasattr(cls, '_class_name'):
+            return cls._class_name
+        
+        # Fallback on the pluralise lib.
+        singularise = inflect.engine().singular_noun
+        name = singularise(cls.plural_class_name)
+        if name:
+            return name
+        
+        # If that didn't work, fallback on the class name.
+        return cls.__name__
     
     @classproperty
     def class_slug(cls):

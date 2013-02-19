@@ -44,6 +44,7 @@ setup(
     install_requires=[
         'pyramid_tm',
         'pyramid',
+        'inflect',
         'zope.sqlalchemy',
         'SQLAlchemy'
     ]
