@@ -26,7 +26,6 @@ __all__ = [
     'bind_engine',
 ]
 
-import inflect
 from datetime import datetime
 
 from sqlalchemy import engine_from_config
@@ -86,26 +85,49 @@ class BaseMixin(object):
         return getattr(cls, '_class_name', cls.__name__)
     
     @classproperty
+    def class_slug(cls):
+        """Either returns ``cls._class_slug``, if provided, or defaults to
+          the tablename.
+          
+              >>> class Foo(BaseMixin):
+              ...     __tablename__ = 'foos'
+              ... 
+              >>> Foo.class_slug
+              'foos'
+              >>> foo = Foo()
+              >>> foo.class_slug
+              'foos'
+              >>> Foo._class_slug = 'bazaramas'
+              >>> foo = Foo()
+              >>> foo.class_slug
+              'bazaramas'
+          
+        """
+        
+        return getattr(cls, '_class_slug', cls.__tablename__)
+    
+    @classproperty
     def plural_class_name(cls):
         """Either returns ``self._plural_class_name``, if provided, or defaults
-          to a pluralised version of the literal class name.
+          to a title cases version of the tablename, with underscores replaced
+          with spaces.
           
               >>> class Material(BaseMixin):
-              ...     pass
+              ...     __tablename__ = 'materials'
               ... 
               >>> Material.plural_class_name
               'Materials'
               >>> m = Material()
               >>> m.plural_class_name
               'Materials'
-              >>> class Process(BaseMixin):
-              ...     pass
+              >>> class ProcessMaterials(BaseMixin):
+              ...     __tablename__ = 'process_materials'
               ... 
-              >>> Process.plural_class_name
-              'Processes'
-              >>> Process._plural_class_name = 'Flobbles'
-              >>> Process.plural_class_name
-              'Flobbles'
+              >>> ProcessMaterials.plural_class_name
+              'Process Materials'
+              >>> ProcessMaterials._plural_class_name = 'Pro Materials'
+              >>> ProcessMaterials.plural_class_name
+              'Pro Materials'
           
         """
         
@@ -114,8 +136,7 @@ class BaseMixin(object):
             return cls._plural_class_name
         
         # Otherwise pluralise the literal class name.
-        pluralise = inflect.engine().plural
-        return pluralise(cls.class_name)
+        return cls.__tablename__.replace('_', ' ').title()
     
 
 
