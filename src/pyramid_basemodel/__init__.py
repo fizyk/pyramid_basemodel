@@ -67,7 +67,7 @@ class BaseMixin(object):
     def class_name(cls):
         """Either returns ``cls._class_name``, if provided, or defaults to
           the singular of ``cls.plural_class_name``, which is derived from
-          the tablename.
+          the tablename::
           
               >>> class Foo(BaseMixin):
               ...     __tablename__ = 'flobbles'
@@ -109,7 +109,7 @@ class BaseMixin(object):
     @classproperty
     def class_slug(cls):
         """Either returns ``cls._class_slug``, if provided, or defaults to
-          the tablename.
+          the tablename::
           
               >>> class Foo(BaseMixin):
               ...     __tablename__ = 'foos'
@@ -132,7 +132,7 @@ class BaseMixin(object):
     def plural_class_name(cls):
         """Either returns ``self._plural_class_name``, if provided, or defaults
           to a title cases version of the tablename, with underscores replaced
-          with spaces.
+          with spaces::
           
               >>> class Material(BaseMixin):
               ...     __tablename__ = 'materials'
