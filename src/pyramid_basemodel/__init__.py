@@ -129,6 +129,48 @@ class BaseMixin(object):
         return getattr(cls, '_class_slug', cls.__tablename__)
     
     @classproperty
+    def singular_class_slug(cls):
+        """Either returns ``self._singular_class_slug``, if provided, or defaults
+          to a singular version of ``cls.class_slug``. If that's not found, falls
+          back on the lowercase last word of the class name::
+          
+              >>> class Material(BaseMixin):
+              ...     __tablename__ = 'materials'
+              ... 
+              >>> Material.singular_class_slug
+              'material'
+              >>> m = Material()
+              >>> m.singular_class_slug
+              'material'
+              >>> class ProcessMaterials(BaseMixin):
+              ...     __tablename__ = 'process_materials'
+              ... 
+              >>> ProcessMaterials.singular_class_slug
+              'process_material'
+              >>> ProcessMaterials.class_slug = 'XXXXXX_NO_SINGULAR_XXXXX'
+              >>> ProcessMaterials.singular_class_slug
+              'material'
+              >>> ProcessMaterials._singular_class_slug = 'material'
+              >>> ProcessMaterials.singular_class_slug
+              'materials'
+              >>> 
+          
+        """
+        
+        # If provided, use ``self._singular_class_slug``.
+        if hasattr(cls, '_singular_class_slug'):
+            return cls._singular_class_slug
+        
+        # Otherwise singularise the class_slug.
+        singularise = inflect.engine().singular_noun
+        slug = singularise(cls.class_slug)
+        if slug:
+            return slug
+        
+        # If that didn't work, fallback on the class name.
+        return cls.class_name.split()[-1].lower()
+    
+    @classproperty
     def plural_class_name(cls):
         """Either returns ``self._plural_class_name``, if provided, or defaults
           to a title cases version of the tablename, with underscores replaced
