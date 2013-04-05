@@ -103,8 +103,12 @@ class BaseModelContainer(BaseRoot):
     def __init__(self, request, model_cls, key=None, parent=None, **kwargs):
         """Instantiate the container."""
         
+        # Compose.
         if key is None:
             key = model_cls.class_slug
+        if parent is None:
+            parent = BaseRoot(request)
+        
         self.request = request
         self.model_cls = model_cls
         self.__name__ = key
