@@ -47,6 +47,7 @@ setup(
         'inflect',
         'requests',
         'slugify',
+        'zope.interface',
         'zope.sqlalchemy',
         'SQLAlchemy'
     ]
