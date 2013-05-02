@@ -45,6 +45,8 @@ setup(
         'pyramid_tm',
         'pyramid',
         'inflect',
+        'requests',
+        'slugify',
         'zope.sqlalchemy',
         'SQLAlchemy'
     ]
