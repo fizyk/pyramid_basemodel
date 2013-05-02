@@ -1,4 +1,10 @@
 
+# 0.1.7
+
+Added a `pyramid_basemodel.blob.Blob` model class to store large binary files.
+
+Fixed up `.slug` module doctests. Fix ``install_requires` list in `setup.py`.
+
 # 0.1.6
 
 Base the ``BaseMixin.class_name`` on a singularised version of the plural
