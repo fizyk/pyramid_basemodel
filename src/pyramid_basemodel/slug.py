@@ -40,72 +40,55 @@ class BaseSlugNameMixin(object):
           Setup::
           
               >>> from mock import MagicMock as Mock
+              >>> mock_unique = Mock()
               >>> return_none = lambda: None
               >>> return_true = lambda: True
-              >>> def mock_n_aware_filter_by(slug=None):
-              ...     mock_query = Mock()
-              ...     if slug.endswith(str(1)):
-              ...         mock_query.all.return_value = []
-              ...     else:
-              ...         mock_query.all.return_value = [True]
-              ...     return mock_query
-              ... 
               >>> mixin = BaseSlugNameMixin()
               >>> mixin.query = Mock()
-          
+              
           If there's a slug and no name, it's a noop::
           
               >>> mixin.name = None
               >>> mixin.slug = 'slug'
-              >>> mixin.set_slug()
+              >>> mixin.set_slug(unique=mock_unique)
               >>> mixin.slug
               'slug'
-              >>> mixin.query.filter_by.called
+              >>> mock_unique.called
               False
           
-          If there is a slug and a name and the slug starts with the sluggified
-          name, then it's a noop::
+          If there is a slug and a name and the slug is the name, then it's a noop::
           
-              >>> mixin.slug = 'abc-1'
+              >>> mixin.slug = 'abc'
               >>> mixin.name = u'Abc'
-              >>> mixin.set_slug()
+              >>> mixin.set_slug(unique=mock_unique)
               >>> mixin.slug
-              'abc-1'
-              >>> mixin.query.filter_by.called
+              'abc'
+              >>> mock_unique.called
               False
           
           If there's no name, uses a random digest::
           
+              >>> mock_unique = lambda *args: args[-1]
               >>> mixin.slug = None
               >>> mixin.name = None
-              >>> mixin.query.filter_by.return_value.first = return_none
-              >>> mixin.set_slug()
+              >>> mixin.set_slug(unique=mock_unique)
               >>> len(mixin.slug)
               32
           
           Otherwise slugifies the name::
           
               >>> mixin.name = u'My nice name'
-              >>> mixin.set_slug()
+              >>> mixin.set_slug(unique=mock_unique)
               >>> mixin.slug
               u'my-nice-name'
           
           Appending n until the slug is unique::
           
+              >>> mock_unique = lambda *args: u'{0}-1'.format(args[-1])
               >>> mixin.slug = None
-              >>> mixin.query.filter_by = mock_n_aware_filter_by
-              >>> mixin.set_slug()
+              >>> mixin.set_slug(unique=mock_unique)
               >>> mixin.slug
               u'my-nice-name-1'
-          
-          If the slug is never unique, falls back on a random digest::
-          
-              >>> mixin.query.filter_by = Mock()
-              >>> mixin.query.filter_by.return_value.all.return_value = [True]
-              >>> mixin.slug = None
-              >>> mixin.set_slug()
-              >>> len(mixin.slug.split('my-nice-name-')[1])
-              16
           
         """
         
