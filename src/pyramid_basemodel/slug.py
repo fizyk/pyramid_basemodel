@@ -104,8 +104,12 @@ class BaseSlugNameMixin(object):
         if candidate is None:
             if self.name:
                 candidate = to_slug(self.name)
-            else:
+            if not candidate:
                 candidate = gen_digest(num_bytes=16)
+        
+        # Make sure it's not longer than 64 chars.
+        candidate = candidate[:64]
+        unique_candidate = candidate[:61]
         
         # If there's no name, only set the slug if its not already set.
         if self.slug and not self.name:
@@ -118,7 +122,7 @@ class BaseSlugNameMixin(object):
                 return
         
         # Iterate until the slug is unique.
-        slug = unique(self, self.query, self.__class__.slug, candidate)
+        slug = unique(self, self.query, self.__class__.slug, unique_candidate)
         
         # Set the slug value.
         self.slug = slug
