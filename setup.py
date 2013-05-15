@@ -14,7 +14,7 @@ def _read(file_name):
 
 setup(
     name = 'pyramid_basemodel',
-    version = '0.1.7',
+    version = '0.1.8',
     description = 'Global base classes for Pyramid SQLAlchemy applications.',
     author = 'James Arthur',
     author_email = 'username: thruflo, domain: gmail.com',

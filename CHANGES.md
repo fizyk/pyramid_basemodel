@@ -1,4 +1,9 @@
 
+# 0.1.8
+
+Allow concrete subclasses of ``BaseModelContainer`` to be provided in the
+``tree.BaseContentRoot.mapping`` (as well as interfaces).
+
 # 0.1.7
 
 Added a `pyramid_basemodel.blob.Blob` model class to store large binary files.
