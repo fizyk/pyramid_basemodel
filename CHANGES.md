@@ -1,4 +1,8 @@
 
+# 0.2
+
+Fix Python3 support (requires 3.3 for the unicode literal character).
+
 # 0.1.8
 
 Allow concrete subclasses of ``BaseModelContainer`` to be provided in the
