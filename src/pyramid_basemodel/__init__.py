@@ -26,7 +26,16 @@ __all__ = [
     'bind_engine',
 ]
 
-import inflect
+import sys
+
+# Make inflect optional for python3.
+try:
+    import inflect
+except ImportError:
+    if sys.version_info[0] == 2:
+        raise
+    inflect = None
+
 from datetime import datetime
 
 from sqlalchemy import engine_from_config
@@ -97,11 +106,12 @@ class BaseMixin(object):
         if hasattr(cls, '_class_name'):
             return cls._class_name
         
-        # Fallback on the pluralise lib.
-        singularise = inflect.engine().singular_noun
-        name = singularise(cls.plural_class_name)
-        if name:
-            return name
+        # Try the inflect lib.
+        if inflect is not None:
+            singularise = inflect.engine().singular_noun
+            name = singularise(cls.plural_class_name)
+            if name:
+                return name
         
         # If that didn't work, fallback on the class name.
         return cls.__name__
@@ -162,10 +172,11 @@ class BaseMixin(object):
             return cls._singular_class_slug
         
         # Otherwise singularise the class_slug.
-        singularise = inflect.engine().singular_noun
-        slug = singularise(cls.class_slug)
-        if slug:
-            return slug
+        if inflect is not None:
+            singularise = inflect.engine().singular_noun
+            slug = singularise(cls.class_slug)
+            if slug:
+                return slug
         
         # If that didn't work, fallback on the class name.
         return cls.class_name.split()[-1].lower()

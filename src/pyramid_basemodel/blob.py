@@ -37,7 +37,11 @@ __all__ = [
 import logging
 logger = logging.getLogger(__name__)
 
-from cStringIO import StringIO
+try: # py2
+    from cStringIO import StringIO
+except ImportError: # py3
+    from io import BytesIO
+
 from gzip import GzipFile
 from tempfile import NamedTemporaryFile
 

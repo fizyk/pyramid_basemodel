@@ -73,6 +73,6 @@ class BaseContentRoot(BaseRoot):
             container = self.container_factory(self.apex, '')
             return self.locatable(container[key], key)
         
-        raise KeyError, key
+        raise KeyError(key)
     
 

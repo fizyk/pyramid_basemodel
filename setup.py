@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+
 from os.path import dirname, join as join_path
 from setuptools import setup, find_packages
 
@@ -11,6 +13,19 @@ def _read(file_name):
     return text
     
 
+
+requirements = [
+    'pyramid_tm',
+    'pyramid',
+    'requests',
+    'slugify',
+    'zope.interface',
+    'zope.sqlalchemy',
+    'SQLAlchemy'
+]
+if sys.version_info[0] == 2:
+    # currently has py3 compat issues
+    requirements.append('inflect')
 
 setup(
     name = 'pyramid_basemodel',
@@ -41,14 +56,5 @@ setup(
     package_dir = {'': 'src'},
     include_package_data = True,
     zip_safe = False,
-    install_requires=[
-        'pyramid_tm',
-        'pyramid',
-        'inflect',
-        'requests',
-        'slugify',
-        'zope.interface',
-        'zope.sqlalchemy',
-        'SQLAlchemy'
-    ]
+    install_requires=requirements
 )

@@ -39,7 +39,7 @@ def slug_validator(node, value, regexp=None):
     
     # Raise a ValueError.
     if not regexp.match(value):
-        raise ValueError, u'{0} is not a valid slug.'.format(value)
+        raise ValueError(u'{0} is not a valid slug.'.format(value))
 
 
 @implementer(IModelContainer)
