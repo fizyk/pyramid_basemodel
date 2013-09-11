@@ -134,3 +134,17 @@ def get_all_matching(cls, column_name, values):
     query = cls.query.filter(column.in_(values))
     return query.all()
 
+def get_object_id(instance):
+    """Return an identifier that's unique across database tables, e.g.::
+      
+          >>> from mock import MagicMock
+          >>> mock_user = MagicMock()
+          >>> mock_user.__tablename__ = 'users'
+          >>> mock_user.id = 1234
+          >>> get_object_id(mock_user)
+          u'users#1234'
+      
+    """
+    
+    return u'{0}#{1}'.format(instance.__tablename__, instance.id)
+

@@ -38,12 +38,15 @@ except ImportError:
 
 from datetime import datetime
 
+from zope.interface import classImplements
+from zope.sqlalchemy import ZopeTransactionExtension
+
 from sqlalchemy import engine_from_config
 from sqlalchemy import Column, DateTime, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
+
 from pyramid.settings import asbool
-from zope.sqlalchemy import ZopeTransactionExtension
 
 from .interfaces import IDeclarativeBase
 
