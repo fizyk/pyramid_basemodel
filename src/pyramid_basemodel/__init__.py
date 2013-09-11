@@ -45,8 +45,11 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from pyramid.settings import asbool
 from zope.sqlalchemy import ZopeTransactionExtension
 
+from .interfaces import IDeclarativeBase
+
 Session = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
+classImplements(Base, IDeclarativeBase)
 
 class classproperty(object):
     """A basic [class property](http://stackoverflow.com/a/3203659)."""

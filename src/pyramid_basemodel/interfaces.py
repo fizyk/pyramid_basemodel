@@ -3,6 +3,7 @@
 """Marker interfaces for models and containers."""
 
 __all__ = [
+    'IDeclarativeBase',
     'IModel',
     'IModelContainer',
 ]
@@ -10,7 +11,10 @@ __all__ = [
 from zope.interface import Attribute
 from zope.interface import Interface
 
-class IModel(Interface):
+class IDeclarativeBase(Interface):
+    """Implemented by the declarative base and all classes that inherit from it."""
+
+class IModel(IDeclarativeBase):
     """Provided by models."""
 
 class IModelContainer(Interface):
