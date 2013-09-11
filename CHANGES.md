@@ -1,4 +1,10 @@
 
+# 0.2.1
+
+Provide `util.get_object_id` function and stamp
+`sqlalchemy.ext.declarative.declarative_base()` subclasses with the
+`interfaces.IDeclarativeBase` interface.
+
 # 0.2
 
 Fix Python3 support (requires 3.3 for the unicode literal character).
