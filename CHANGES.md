@@ -1,4 +1,8 @@
 
+# 0.2.2
+
+Support dotted path `sqlalchemy.pool_class` configuration.
+
 # 0.2.1
 
 Provide `util.get_object_id` function and stamp
