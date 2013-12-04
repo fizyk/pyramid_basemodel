@@ -46,6 +46,7 @@ from sqlalchemy import Column, DateTime, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+from pyramid.path import DottedNameResolver
 from pyramid.settings import asbool
 
 from .interfaces import IDeclarativeBase
@@ -327,7 +328,12 @@ def includeme(config):
     
     # Bind the engine.
     settings = config.registry.settings
-    engine = engine_from_config(settings, 'sqlalchemy.')
+    engine_kwargs = {}
+    pool_class = settings.pop('sqlalchemy.pool_class', None)
+    if pool_class:
+        dotted_name = DottedNameResolver()
+        engine_kwargs['poolclass'] = dotted_name.resolve(pool_class)
+    engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
     should_create = asbool(settings.get('basemodel.should_create_all', True))
     should_drop = asbool(settings.get('basemodel.should_drop_all', False))
     bind_engine(engine, should_create=should_create, should_drop=should_drop)
