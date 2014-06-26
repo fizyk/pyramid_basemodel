@@ -92,11 +92,11 @@ class BaseModelContainer(BaseRoot):
         try:
             self.validator(None, key)
         except self.validation_exception:
-            raise KeyError, key
+            raise KeyError(key)
         
         context = self.get_child(key)
         if not context:
-            raise KeyError, key
+            raise KeyError(key)
         
         return self.locatable(context, key)
     
@@ -199,30 +199,30 @@ class InstanceTraversalMixin(object):
         try:
             self._validator(None, key)
         except self.validation_exception:
-            raise KeyError, key
+            raise KeyError(key)
         
         # Only lookup children from instances that have them.
         has_children = hasattr(self, 'children')
         if not has_children:
-            raise KeyError, key
+            raise KeyError(key)
         
         # Only lookup if the target column exists.
         column = getattr(self.__class__, self.traversal_key_name, None)
         if not column:
-            raise KeyError, key
+            raise KeyError(key)
         
         try:
             query = self._base_child_query
             query = query.filter_by(parent=self).filter(column==key)
             context = query.first()
             if not context:
-                raise KeyError, key
+                raise KeyError(key)
         except InvalidRequestError as err:
             # If the query was invalid, the lookup fails, e.g.: if the
             # instance had the requisit properties but they weren't actually
             # sqlalchemy columns.
             logger.warn(err, exc_info=True)
-            raise KeyError, key
+            raise KeyError(key)
         
         # Return the context, having set the parent and flagged as locatable.
         return self.locatable(context, key)
