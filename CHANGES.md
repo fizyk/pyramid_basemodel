@@ -1,4 +1,8 @@
 
+# 0.2.3
+
+Fix Python3 `KeyError` syntax bug.
+
 # 0.2.2
 
 Support dotted path `sqlalchemy.pool_class` configuration.
