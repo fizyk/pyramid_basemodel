@@ -121,10 +121,11 @@ class BaseSlugNameMixin(object):
             if self.slug == candidate:
                 return
         
-        # Iterate until the slug is unique.
+        # Iterate until the slug is unique -- first setting the slug so we
+        # don't trigger an IntegrityError by flushing with an empty slug.
+        self.slug = unique_candidate
         slug = unique(self, self.query, self.__class__.slug, unique_candidate)
         
-        # Set the slug value.
+        # Finally set the unique slug value.
         self.slug = slug
-    
 
