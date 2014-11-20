@@ -1,4 +1,9 @@
 
+# 0.2.4
+
+Jig slug generation code to avoid IntegrityError caused by flushing
+instances with an empty slug.
+
 # 0.2.3
 
 Fix Python3 `KeyError` syntax bug.
