@@ -17,6 +17,8 @@ from sqlalchemy.types import Unicode
 from .util import ensure_unique
 from .util import generate_random_digest
 
+from . import Session
+
 class BaseSlugNameMixin(object):
     """ORM mixin class that provides ``slug`` and ``name`` properties, with a
       ``set_slug`` method to set the slug value from the name and a default
@@ -34,7 +36,8 @@ class BaseSlugNameMixin(object):
     # A human readable name, e.g.: `Foo Bar`.
     name = Column(Unicode(64), nullable=False)
     
-    def set_slug(self, candidate=None, to_slug=None, gen_digest=None, unique=None):
+    def set_slug(self, candidate=None, to_slug=None, gen_digest=None, session=None,
+            unique=None):
         """Generate and set a unique ``self.slug`` from ``self.name``.
           
           Setup::
@@ -99,6 +102,8 @@ class BaseSlugNameMixin(object):
             gen_digest = generate_random_digest
         if unique is None:
             unique = ensure_unique
+        if session is None:
+            session = Session
         
         # Generate a candidate slug.
         if candidate is None:
@@ -121,11 +126,10 @@ class BaseSlugNameMixin(object):
             if self.slug == candidate:
                 return
         
-        # Iterate until the slug is unique -- first setting the slug so we
-        # don't trigger an IntegrityError by flushing with an empty slug.
-        self.slug = unique_candidate
-        slug = unique(self, self.query, self.__class__.slug, unique_candidate)
-        
+        # Iterate until the slug is unique.
+        with session.no_autoflush:
+            slug = unique(self, self.query, self.__class__.slug, unique_candidate)
+
         # Finally set the unique slug value.
         self.slug = slug
 
