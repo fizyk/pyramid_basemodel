@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 import slugify
 
+from sqlalchemy import inspect as sa_inspect
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Unicode
 
@@ -37,7 +38,7 @@ class BaseSlugNameMixin(object):
     name = Column(Unicode(64), nullable=False)
     
     def set_slug(self, candidate=None, to_slug=None, gen_digest=None, session=None,
-            unique=None):
+            unique=None, inspect=None):
         """Generate and set a unique ``self.slug`` from ``self.name``.
           
           Setup::
@@ -104,7 +105,9 @@ class BaseSlugNameMixin(object):
             unique = ensure_unique
         if session is None:
             session = Session
-        
+        if inspect is None:
+            inspect = sa_inspect
+
         # Generate a candidate slug.
         if candidate is None:
             if self.name:
@@ -124,8 +127,12 @@ class BaseSlugNameMixin(object):
         # reset (i.e.: we only want to set a slug if the name has changed).
         if self.slug and self.name:
             if self.slug == candidate:
-                return
-        
+                # XXX as long as the instance is pending, as otherwise
+                # we skip checking uniqueness on unsaved instances.
+                insp = inspect(self)
+                if insp.persistent or insp.detatched:
+                    return
+
         # Iterate until the slug is unique.
         with session.no_autoflush:
             slug = unique(self, self.query, self.__class__.slug, unique_candidate)
