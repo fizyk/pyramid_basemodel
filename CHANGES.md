@@ -1,8 +1,7 @@
 
-# 0.2.4
+# 0.2.4 -> 0.2.6
 
-Jig slug generation code to avoid IntegrityError caused by flushing
-instances with an empty slug.
+Faff about horribly with the slug generation code.
 
 # 0.2.3
 
