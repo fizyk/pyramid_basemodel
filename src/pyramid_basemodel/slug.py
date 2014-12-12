@@ -130,7 +130,7 @@ class BaseSlugNameMixin(object):
                 # XXX as long as the instance is pending, as otherwise
                 # we skip checking uniqueness on unsaved instances.
                 insp = inspect(self)
-                if insp.persistent or insp.detatched:
+                if insp.persistent or insp.detached:
                     return
 
         # Iterate until the slug is unique.
