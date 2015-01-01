@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 import slugify
 
+from sqlalchemy import exc as sa_exc
 from sqlalchemy import inspect as sa_inspect
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Unicode
@@ -44,6 +45,7 @@ class BaseSlugNameMixin(object):
           Setup::
           
               >>> from mock import MagicMock as Mock
+              >>> mock_inspect = Mock()
               >>> mock_unique = Mock()
               >>> return_none = lambda: None
               >>> return_true = lambda: True
@@ -55,21 +57,24 @@ class BaseSlugNameMixin(object):
               >>> mixin.name = None
               >>> mixin.slug = 'slug'
               >>> mixin.set_slug(unique=mock_unique)
+              >>> mock_unique.called
+              False
               >>> mixin.slug
               'slug'
-              >>> mock_unique.called
-              False
+              
+          If there is a slug and a name and the slug is the candidate, then it's a noop::
           
-          If there is a slug and a name and the slug is the name, then it's a noop::
-          
-              >>> mixin.slug = 'abc'
+              >>> mixin.slug = u'abc'
               >>> mixin.name = u'Abc'
-              >>> mixin.set_slug(unique=mock_unique)
-              >>> mixin.slug
-              'abc'
+              >>> mixin.set_slug(candidate=u'abc', inspect=mock_inspect,
+              ...         unique=mock_unique)
               >>> mock_unique.called
               False
-          
+              >>> mock_inspect.called
+              True
+              >>> mixin.slug
+              u'abc'
+              
           If there's no name, uses a random digest::
           
               >>> mock_unique = lambda *args: args[-1]
@@ -129,9 +134,13 @@ class BaseSlugNameMixin(object):
             if self.slug == candidate:
                 # XXX as long as the instance is pending, as otherwise
                 # we skip checking uniqueness on unsaved instances.
-                insp = inspect(self)
-                if insp.persistent or insp.detached:
-                    return
+                try:
+                    insp = inspect(self)
+                except sa_exc.NoInspectionAvailable:
+                    pass
+                else:
+                    if insp.persistent or insp.detached:
+                        return
 
         # Iterate until the slug is unique.
         with session.no_autoflush:
