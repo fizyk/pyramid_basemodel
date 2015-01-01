@@ -1,4 +1,11 @@
 
+# 0.3
+
+Default `basemodel.should_create_all` to `False`. This will break apps that rely on tables being created by default. However, it's much saner to only
+invoke both `metadata.create_all(engine)` and `metadata.drop_all(engine)` when
+explicitly told to, particularly as most applications will use migrations
+to manage the database schema.
+
 # 0.2.4 -> 0.2.6
 
 Faff about horribly with the slug generation code.
