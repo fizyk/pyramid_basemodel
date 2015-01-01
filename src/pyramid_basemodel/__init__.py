@@ -248,7 +248,7 @@ def save(instance_or_instances, session=Session):
     else:
         session.add(v)
 
-def bind_engine(engine, session=Session, base=Base, should_create=True,
+def bind_engine(engine, session=Session, base=Base, should_create=False,
         should_drop=False):
     """Bind the ``session`` and ``base`` to the ``engine``.
       
@@ -269,26 +269,28 @@ def bind_engine(engine, session=Session, base=Base, should_create=True,
           >>> mock_base.metadata.bind == mock_engine
           True
       
-      Creates tables if they don't exist::
+      Doesn't create or drop tables by default::
       
-          >>> mock_base.metadata.create_all.assert_called_with(mock_engine)
+          >>> mock_base.metadata.create_all.called
+          False
+          >>> mock_base.metadata.drop_all.called
+          False
       
-      Unless ``should_create`` is ``False``::
+      Creates tables if ``should_create`` is ``True``::
       
           >>> mock_base = Mock()
           >>> bind_engine(mock_engine, session=mock_session, base=mock_base,
-          ...             should_create=False)
+          ...             should_create=True)
           >>> mock_base.metadata.create_all.called
-          False
-      
+          True
+
       Drops tables if ``should_drop`` is ``True``::
       
-          >>> mock_base.metadata.drop_all.called
-          False
           >>> bind_engine(mock_engine, session=mock_session, base=mock_base,
           ...             should_drop=True)
-          >>> mock_base.metadata.drop_all.assert_called_with(mock_engine)
-      
+          >>> mock_base.metadata.drop_all.called
+          True
+
     """
     
     session.configure(bind=engine)
@@ -317,7 +319,7 @@ def includeme(config):
       
           >>> includeme(mock_config)
           >>> pyramid_basemodel.bind_engine.assert_called_with('engine', 
-          ...         should_create=True, should_drop=False)
+          ...         should_create=False, should_drop=False)
       
       Teardown::
       
@@ -334,7 +336,7 @@ def includeme(config):
         dotted_name = DottedNameResolver()
         engine_kwargs['poolclass'] = dotted_name.resolve(pool_class)
     engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
-    should_create = asbool(settings.get('basemodel.should_create_all', True))
+    should_create = asbool(settings.get('basemodel.should_create_all', False))
     should_drop = asbool(settings.get('basemodel.should_drop_all', False))
     bind_engine(engine, should_create=should_create, should_drop=should_drop)
 
