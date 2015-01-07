@@ -321,6 +321,14 @@ def includeme(config):
           >>> pyramid_basemodel.bind_engine.assert_called_with('engine', 
           ...         should_create=False, should_drop=False)
       
+      Unless told not to::
+
+          >>> pyramid_basemodel.bind_engine = Mock()
+          >>> mock_config.registry.settings = {'basemodel.should_bind_engine': False}
+          >>> includeme(mock_config)
+          >>> pyramid_basemodel.bind_engine.called
+          False
+
       Teardown::
       
           >>> pyramid_basemodel.engine_from_config = _engine_from_config
@@ -335,8 +343,9 @@ def includeme(config):
     if pool_class:
         dotted_name = DottedNameResolver()
         engine_kwargs['poolclass'] = dotted_name.resolve(pool_class)
-    engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
+    should_bind = asbool(settings.get('basemodel.should_bind_engine', True))
     should_create = asbool(settings.get('basemodel.should_create_all', False))
     should_drop = asbool(settings.get('basemodel.should_drop_all', False))
-    bind_engine(engine, should_create=should_create, should_drop=should_drop)
-
+    if should_bind:
+        engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
+        bind_engine(engine, should_create=should_create, should_drop=should_drop)
