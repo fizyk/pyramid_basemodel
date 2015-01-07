@@ -1,4 +1,12 @@
 
+# 0.3.1
+
+Introduce the `basemodel.should_bind_engine` config flag, which can be used,
+e.g.: in ftests, to disable the automatic engine setup, even when application
+code `config.include('pyramid_basemodel')`s.
+
+Defaults to `True`!
+
 # 0.3
 
 Default `basemodel.should_create_all` to `False`. This will break apps that rely on tables being created by default. However, it's much saner to only
