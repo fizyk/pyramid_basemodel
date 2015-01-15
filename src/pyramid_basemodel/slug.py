@@ -13,6 +13,7 @@ import slugify
 
 from sqlalchemy import exc as sa_exc
 from sqlalchemy import inspect as sa_inspect
+from sqlalchemy.ext import declarative 
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Unicode
 
@@ -27,19 +28,30 @@ class BaseSlugNameMixin(object):
       name aware factory classmethod.
     """
     
+    _max_slug_length = 64
+    _slug_is_unique = True
+
     @property
     def __name__(self):
         return self.slug
     
     
-    # A url friendly slug, e.g.: `foo-bar`.
-    slug = Column(Unicode(64), nullable=False, unique=True)
-    
-    # A human readable name, e.g.: `Foo Bar`.
-    name = Column(Unicode(64), nullable=False)
-    
-    def set_slug(self, candidate=None, to_slug=None, gen_digest=None, session=None,
-            unique=None, inspect=None):
+    @declarative.declared_attr
+    def slug(cls):
+        """A url friendly slug, e.g.: `foo-bar`."""
+        
+        l = cls._max_slug_length
+        is_unique = cls._slug_is_unique
+        return Column(Unicode(l), nullable=False, unique=is_unique)
+
+    @declarative.declared_attr
+    def name(cls):
+        """A human readable name, e.g.: `Foo Bar`."""
+        
+        l = cls._max_slug_length
+        return Column(Unicode(l), nullable=False)
+
+    def set_slug(self, candidate=None, **kwargs):
         """Generate and set a unique ``self.slug`` from ``self.name``.
           
           Setup::
@@ -49,69 +61,76 @@ class BaseSlugNameMixin(object):
               >>> mock_unique = Mock()
               >>> return_none = lambda: None
               >>> return_true = lambda: True
-              >>> mixin = BaseSlugNameMixin()
-              >>> mixin.query = Mock()
+              >>> from sqlalchemy.types import Integer
+              >>> from pyramid_basemodel import Base
+              >>> class Model(Base, BaseSlugNameMixin):
+              ...     __tablename__ = 'models'
+              ...     id =  Column(Integer, primary_key=True)
+              >>> inst = Model()
+              >>> inst.query = Mock()
               
           If there's a slug and no name, it's a noop::
           
-              >>> mixin.name = None
-              >>> mixin.slug = 'slug'
-              >>> mixin.set_slug(unique=mock_unique)
+              >>> inst.name = None
+              >>> inst.slug = 'slug'
+              >>> inst.set_slug(unique=mock_unique)
               >>> mock_unique.called
               False
-              >>> mixin.slug
+              >>> inst.slug
               'slug'
               
           If there is a slug and a name and the slug is the candidate, then it's a noop::
           
-              >>> mixin.slug = u'abc'
-              >>> mixin.name = u'Abc'
-              >>> mixin.set_slug(candidate=u'abc', inspect=mock_inspect,
+              >>> inst.slug = u'abc'
+              >>> inst.name = u'Abc'
+              >>> inst.set_slug(candidate=u'abc', inspect=mock_inspect,
               ...         unique=mock_unique)
               >>> mock_unique.called
               False
               >>> mock_inspect.called
               True
-              >>> mixin.slug
+              >>> inst.slug
               u'abc'
               
           If there's no name, uses a random digest::
           
               >>> mock_unique = lambda *args: args[-1]
-              >>> mixin.slug = None
-              >>> mixin.name = None
-              >>> mixin.set_slug(unique=mock_unique)
-              >>> len(mixin.slug)
+              >>> inst.slug = None
+              >>> inst.name = None
+              >>> inst.set_slug(unique=mock_unique)
+              >>> len(inst.slug)
               32
           
           Otherwise slugifies the name::
           
-              >>> mixin.name = u'My nice name'
-              >>> mixin.set_slug(unique=mock_unique)
-              >>> mixin.slug
+              >>> inst.name = u'My nice name'
+              >>> inst.set_slug(unique=mock_unique)
+              >>> inst.slug
               u'my-nice-name'
           
           Appending n until the slug is unique::
           
               >>> mock_unique = lambda *args: u'{0}-1'.format(args[-1])
-              >>> mixin.slug = None
-              >>> mixin.set_slug(unique=mock_unique)
-              >>> mixin.slug
+              >>> inst.slug = None
+              >>> inst.set_slug(unique=mock_unique)
+              >>> inst.slug
               u'my-nice-name-1'
-          
+
+          Truncates the slug::
+
+              >>> mock_unique = Mock()
+              >>> inst.name = u'a' * 95
+              >>> inst.set_slug(unique=mock_unique)
+              >>> len(mock_unique.call_args[0][3])
+              61
         """
         
         # Compose.
-        if to_slug is None:
-            to_slug = slugify.slugify
-        if gen_digest is None:
-            gen_digest = generate_random_digest
-        if unique is None:
-            unique = ensure_unique
-        if session is None:
-            session = Session
-        if inspect is None:
-            inspect = sa_inspect
+        gen_digest = kwargs.get('gen_digest', generate_random_digest)
+        inspect = kwargs.get('inspect', sa_inspect)
+        session = kwargs.get('session', Session)
+        to_slug = kwargs.get('to_slug', slugify.slugify)
+        unique = kwargs.get('unique', ensure_unique)
 
         # Generate a candidate slug.
         if candidate is None:
@@ -121,9 +140,11 @@ class BaseSlugNameMixin(object):
                 candidate = gen_digest(num_bytes=16)
         
         # Make sure it's not longer than 64 chars.
-        candidate = candidate[:64]
-        unique_candidate = candidate[:61]
-        
+        l = self._max_slug_length 
+        l_minus_ellipsis = l - 3
+        candidate = candidate[:l]
+        unique_candidate = candidate[:l_minus_ellipsis]
+
         # If there's no name, only set the slug if its not already set.
         if self.slug and not self.name:
             return
@@ -148,4 +169,3 @@ class BaseSlugNameMixin(object):
 
         # Finally set the unique slug value.
         self.slug = slug
-
