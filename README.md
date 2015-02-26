@@ -18,7 +18,7 @@ You can use these as base classes for declarative model definitions, e.g.::
         
     
 You can then bind these to the `sqlalchemy.url` in your paster `.ini` config by
-importing your model and then including this package, e.g.:
+importing your model and this package, e.g.:
 
     # for example in yourapp.__init__.py
     import mymodel
@@ -28,13 +28,6 @@ importing your model and then including this package, e.g.:
         config.include('pyramid_basemodel')
         config.include('pyramid_tm')
         return config.make_wsgi_app()
-    
-Alternatively, if you package your models as a Pyramid include, as for example
-[pyramid_simpleauth][] does, the trick is to include your package before you
-include this package, e.g.:
-
-    config.include('pyramid_simpleauth') # imports the simple auth model classes
-    config.include('pyramid_basemodel')
 
 Or if this is all too much voodoo, you can just use the `bind_engine` function::
 

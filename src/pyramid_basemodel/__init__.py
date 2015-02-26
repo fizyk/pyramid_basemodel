@@ -318,15 +318,19 @@ def includeme(config):
       Calls ``bind_engine`` with the configured ``engine``::
       
           >>> includeme(mock_config)
-          >>> pyramid_basemodel.bind_engine.assert_called_with('engine', 
-          ...         should_create=False, should_drop=False)
-      
+          >>>
+          >>> mock_config.action.assert_called_with(None,
+          ...         pyramid_basemodel.bind_engine,
+          ...         ('engine',),
+          ...         {'should_create': False, 'should_drop': False})
+
       Unless told not to::
 
           >>> pyramid_basemodel.bind_engine = Mock()
+          >>> mock_config = Mock()
           >>> mock_config.registry.settings = {'basemodel.should_bind_engine': False}
           >>> includeme(mock_config)
-          >>> pyramid_basemodel.bind_engine.called
+          >>> mock_config.action.called
           False
 
       Teardown::
@@ -348,4 +352,6 @@ def includeme(config):
     should_drop = asbool(settings.get('basemodel.should_drop_all', False))
     if should_bind:
         engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
-        bind_engine(engine, should_create=should_create, should_drop=should_drop)
+        config.action(None, bind_engine, (engine,), {
+            'should_create': should_create,
+            'should_drop': should_drop})
