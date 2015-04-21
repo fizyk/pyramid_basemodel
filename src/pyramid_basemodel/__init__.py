@@ -71,10 +71,16 @@ class BaseMixin(object):
       ``modified`` columns and a scoped ``self.query`` property.
     """
     
+    #: primary key
     id =  Column(Integer, primary_key=True)
     
+    #: schema version
     version = Column('v', Integer, default=1)
+    
+    #: timestamp of object creation
     created = Column('c', DateTime, default=datetime.utcnow)
+    
+    #: timestamp of object's latest update
     modified = Column('m', DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     query = Session.query_property()
