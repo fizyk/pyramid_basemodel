@@ -348,7 +348,12 @@ def includeme(config):
     
     # Bind the engine.
     settings = config.registry.settings
-    engine_kwargs = {}
+    engine_kwargs_factory = settings.pop('sqlalchemy.engine_kwargs_factory', None)
+    if engine_kwargs_factory:
+        kwargs_factory = config.maybe_dotted(engine_kwargs_factory)
+        engine_kwargs = kwargs_factory(registry)
+    else:
+        engine_kwargs = {}
     pool_class = settings.pop('sqlalchemy.pool_class', None)
     if pool_class:
         dotted_name = DottedNameResolver()
