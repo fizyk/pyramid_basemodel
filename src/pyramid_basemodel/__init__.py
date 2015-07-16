@@ -49,8 +49,6 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from pyramid.path import DottedNameResolver
 from pyramid.settings import asbool
 
-import winnow
-
 from .interfaces import IDeclarativeBase
 
 Session = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
@@ -359,12 +357,6 @@ def includeme(config):
     should_create = asbool(settings.get('basemodel.should_create_all', False))
     should_drop = asbool(settings.get('basemodel.should_drop_all', False))
     if should_bind:
-        json_serializer_config = {   "json_serializer" : winnow.utils.json_dumps,
-                "json_deserializer" : winnow.utils.json_loads
-            }
-
-        engine_kwargs.update(json_serializer_config)
-
         engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
         config.action(None, bind_engine, (engine,), {
             'should_create': should_create,
