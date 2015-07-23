@@ -29,7 +29,7 @@ if sys.version_info[0] == 2:
 
 setup(
     name = 'pyramid_basemodel',
-    version = '0.3.3',
+    version = '0.3.4',
     description = 'Global base classes for Pyramid SQLAlchemy applications.',
     author = 'James Arthur',
     author_email = 'username: thruflo, domain: gmail.com',

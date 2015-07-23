@@ -1,4 +1,8 @@
 
+# 0.3.4
+
+Remove stray print statements.
+
 # 0.3.3
 
 Bump to remove `src/*.egg-info` directory from PyPI distribution.
