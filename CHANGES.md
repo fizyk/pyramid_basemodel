@@ -1,4 +1,12 @@
 
+# 0.3.3
+
+Bump to remove `src/*.egg-info` directory from PyPI distribution.
+
+# 0.3.2
+
+Make engine kwargs configurable.
+
 # 0.3.1
 
 Introduce the `basemodel.should_bind_engine` config flag, which can be used,
