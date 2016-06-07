@@ -116,53 +116,58 @@ def get_or_create(cls, **kwargs):
 def get_all_matching(cls, column_name, values):
     """Get all the instances of ``cls`` where the column called ``column_name``
       matches one of the ``values`` provided.
-      
+
       Setup::
-      
+
           >>> from mock import Mock
           >>> mock_cls = Mock()
           >>> mock_cls.query.filter.return_value.all.return_value = ['result']
-      
+
       Queries and returns the results::
-      
+
           >>> get_all_matching(mock_cls, 'a', [1,2,3])
           ['result']
           >>> mock_cls.a.in_.assert_called_with([1,2,3])
           >>> mock_cls.query.filter.assert_called_with(mock_cls.a.in_.return_value)
-      
+
     """
-    
+
     column = getattr(cls, column_name)
     query = cls.query.filter(column.in_(values))
     return query.all()
 
 def get_object_id(instance):
     """Return an identifier that's unique across database tables, e.g.::
-      
+
           >>> from mock import MagicMock
           >>> mock_user = MagicMock()
           >>> mock_user.__tablename__ = 'users'
           >>> mock_user.id = 1234
           >>> get_object_id(mock_user)
           u'users#1234'
-      
+
     """
-    
+
     return u'{0}#{1}'.format(instance.__tablename__, instance.id)
 
 def table_args_indexes(tablename, columns):
     """Call with a class name and a list of relation id columns to return the
       appropriate op.execute created indexes, e.g.:
 
-          >>> a = table_args_indexes('basket_items', ['basket_id', 'product_id',])
+          >>> a = table_args_indexes(
+          ...     'basket_items', [
+          ...         'basket_id',
+          ...         ('c', 'created'),
+          ...     ]
+          ... )
           >>> b = (
           ...     schema.Index(
           ...         'basket_items_basket_id_idx',
           ...         'basket_id',
           ...     ),
           ...     schema.Index(
-          ...         'basket_items_product_id_idx',
-          ...         'product_id',
+          ...         'basket_items_c_idx',
+          ...         'created',
           ...     ),
           ... )
           >>> str(a) == str(b)
@@ -176,7 +181,13 @@ def table_args_indexes(tablename, columns):
 
     indexes = []
     for item in columns:
-        idx_name = '{0}_{1}_idx'.format(tablename, item)
-        idx = schema.Index(idx_name, item)
+        if len(item) == 2:
+            db_name = item[0] # db column
+            attr_name = item[1] # sqlalchemy attr
+        else:
+            db_name = item
+            attr_name = item
+        idx_name = '{0}_{1}_idx'.format(tablename, db_name)
+        idx = schema.Index(idx_name, attr_name)
         indexes.append(idx)
     return tuple(indexes)
