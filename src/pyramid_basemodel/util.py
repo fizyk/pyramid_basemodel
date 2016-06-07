@@ -8,6 +8,8 @@ logger = logging.getLogger(__name__)
 import os
 from binascii import hexlify
 
+from sqlalchemy import schema
+
 def generate_random_digest(num_bytes=28, urandom=None, to_hex=None):
     """Generates a random hash and returns the hex digest as a unicode string.
       
@@ -148,3 +150,33 @@ def get_object_id(instance):
     
     return u'{0}#{1}'.format(instance.__tablename__, instance.id)
 
+def table_args_indexes(tablename, columns):
+    """Call with a class name and a list of relation id columns to return the
+      appropriate op.execute created indexes, e.g.:
+
+          >>> a = table_args_indexes('basket_items', ['basket_id', 'product_id',])
+          >>> b = (
+          ...     schema.Index(
+          ...         'basket_items_basket_id_idx',
+          ...         'basket_id',
+          ...     ),
+          ...     schema.Index(
+          ...         'basket_items_product_id_idx',
+          ...         'product_id',
+          ...     ),
+          ... )
+          >>> str(a) == str(b)
+          True
+
+      This is useful as a way to tell `alembic revision --autogenerate` that
+      these indexes should exist, even when created manually using `op.execute`.
+
+      Ref: https://bitbucket.org/zzzeek/alembic/issues/233/add-indexes-to-include_object-hook
+    """
+
+    indexes = []
+    for item in columns:
+        idx_name = '{0}_{1}_idx'.format(tablename, item)
+        idx = schema.Index(idx_name, item)
+        indexes.append(idx)
+    return tuple(indexes)
