@@ -1,3 +1,6 @@
+# 0.3.7
+
+Fix support for zope.sqlalchemy >= 1.2
 
 # 0.3.4
 
