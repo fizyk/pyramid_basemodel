@@ -32,7 +32,9 @@ setup(
     version="0.3.7",
     description="Global base classes for Pyramid SQLAlchemy applications.",
     author="James Arthur",
-    author_email="username: thruflo, domain: gmail.com",
+#    author_email="username: thruflo, domain: gmail.com",
+    maintainer="Grzegorz Śliwiński",
+    maintainer_email="fizyk+pypi@fizyk.net.pl",
     url="http://github.com/thruflo/pyramid_basemodel",
     classifiers=[
         "Development Status :: 3 - Alpha",
