@@ -45,7 +45,7 @@ def generate_random_digest(num_bytes=28, urandom=None, to_hex=None):
     r = urandom(num_bytes)
     
     # Return as a unicode string.
-    return unicode(to_hex(r))
+    return to_hex(r).decode("utf-8")
 
 def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=None):
     """Takes a ``candidate`` value for a unique ``property_`` and iterates,
@@ -144,7 +144,7 @@ def get_object_id(instance):
           >>> mock_user.__tablename__ = 'users'
           >>> mock_user.id = 1234
           >>> get_object_id(mock_user)
-          u'users#1234'
+          'users#1234'
 
     """
 

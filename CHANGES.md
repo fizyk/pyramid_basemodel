@@ -1,3 +1,9 @@
+
+# unreleased
+
+[enhancement] Switch slugify to python-slugify as the latter is python3 compatible
+[CI] use CI
+
 # 0.3.7
 
 Fix support for zope.sqlalchemy >= 1.2

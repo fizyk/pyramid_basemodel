@@ -322,7 +322,9 @@ def includeme(config):
           >>> pyramid_basemodel.engine_from_config.return_value = 'engine'
           >>> pyramid_basemodel.bind_engine = Mock()
           >>> mock_config = Mock()
-          >>> mock_config.registry.settings = {}
+          >>> configure_mock = {"registry.settings": {}}
+          >>> mock_config.configure_mock(**configure_mock)
+          >>> mock_config.get_settings.return_value = mock_config.registry.settings
       
       Calls ``bind_engine`` with the configured ``engine``::
       
@@ -337,7 +339,9 @@ def includeme(config):
 
           >>> pyramid_basemodel.bind_engine = Mock()
           >>> mock_config = Mock()
-          >>> mock_config.registry.settings = {'basemodel.should_bind_engine': False}
+          >>> configure_mock = {"registry.settings": {'basemodel.should_bind_engine': False}}
+          >>> mock_config.configure_mock(**configure_mock)
+          >>> mock_config.get_settings.return_value = mock_config.registry.settings
           >>> includeme(mock_config)
           >>> mock_config.action.called
           False

@@ -18,7 +18,7 @@ requirements = [
     "pyramid_tm",
     "pyramid",
     "requests",
-    "slugify",
+    "python-slugify",
     "zope.interface",
     "zope.sqlalchemy",
     "SQLAlchemy",
