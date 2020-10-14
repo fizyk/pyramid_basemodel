@@ -81,16 +81,16 @@ class BaseSlugNameMixin(object):
               
           If there is a slug and a name and the slug is the candidate, then it's a noop::
           
-              >>> inst.slug = u'abc'
-              >>> inst.name = u'Abc'
-              >>> inst.set_slug(candidate=u'abc', inspect=mock_inspect,
+              >>> inst.slug = 'abc'
+              >>> inst.name = 'Abc'
+              >>> inst.set_slug(candidate='abc', inspect=mock_inspect,
               ...         unique=mock_unique)
               >>> mock_unique.called
               False
               >>> mock_inspect.called
               True
               >>> inst.slug
-              u'abc'
+              'abc'
               
           If there's no name, uses a random digest::
           
@@ -103,18 +103,18 @@ class BaseSlugNameMixin(object):
           
           Otherwise slugifies the name::
           
-              >>> inst.name = u'My nice name'
+              >>> inst.name = 'My nice name'
               >>> inst.set_slug(unique=mock_unique)
               >>> inst.slug
-              u'my-nice-name'
+              'my-nice-name'
           
           Appending n until the slug is unique::
           
-              >>> mock_unique = lambda *args: u'{0}-1'.format(args[-1])
+              >>> mock_unique = lambda *args: '{0}-1'.format(args[-1])
               >>> inst.slug = None
               >>> inst.set_slug(unique=mock_unique)
               >>> inst.slug
-              u'my-nice-name-1'
+              'my-nice-name-1'
 
           Truncates the slug::
 

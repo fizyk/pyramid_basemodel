@@ -18,14 +18,24 @@ requirements = [
     "pyramid_tm",
     "pyramid",
     "requests",
-    "slugify",
+    "python-slugify",
     "zope.interface",
     "zope.sqlalchemy",
     "SQLAlchemy",
+    "inflect",
 ]
-if sys.version_info[0] == 2:
-    # currently has py3 compat issues
-    requirements.append("inflect")
+
+test_requires = [
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+    "mock",
+]
+
+extras_require = {
+    'tests': test_requires,
+}
+
 
 setup(
     name="pyramid_basemodel",
@@ -59,4 +69,5 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=requirements,
+    extras_require=extras_require
 )
