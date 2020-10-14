@@ -136,19 +136,11 @@ def get_all_matching(cls, column_name, values):
     query = cls.query.filter(column.in_(values))
     return query.all()
 
+
 def get_object_id(instance):
-    """Return an identifier that's unique across database tables, e.g.::
-
-          >>> from mock import MagicMock
-          >>> mock_user = MagicMock()
-          >>> mock_user.__tablename__ = 'users'
-          >>> mock_user.id = 1234
-          >>> get_object_id(mock_user)
-          'users#1234'
-
-    """
-
+    "Return an identifier that's unique across database tables."
     return u'{0}#{1}'.format(instance.__tablename__, instance.id)
+
 
 def table_args_indexes(tablename, columns):
     """Call with a class name and a list of relation id columns to return the

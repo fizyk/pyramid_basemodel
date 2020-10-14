@@ -26,16 +26,7 @@ __all__ = [
     "bind_engine",
 ]
 
-import sys
-
-# Make inflect optional for python3.
-try:
-    import inflect
-except ImportError:
-    if sys.version_info[0] == 2:
-        raise
-    inflect = None
-
+import inflect
 from datetime import datetime
 
 from zope.interface import classImplements
@@ -88,32 +79,14 @@ class BaseMixin(object):
 
     @classproperty
     def class_name(cls):
-        """Either returns ``cls._class_name``, if provided, or defaults to
-          the singular of ``cls.plural_class_name``, which is derived from
-          the tablename::
-          
-              >>> class Foo(BaseMixin):
-              ...     __tablename__ = 'flobbles'
-              ... 
-              >>> Foo.class_name
-              'Flobble'
-              >>> foo = Foo()
-              >>> foo.class_name
-              'Flobble'
-              >>> Foo._class_name = 'Baz'
-              >>> foo = Foo()
-              >>> foo.class_name
-              'Baz'
-          
-          If singularising the plural class name doesn't work, uses the
-          ``cls.__name__``::
-          
-              >>> class Foo(BaseMixin):
-              ...     plural_class_name = 'Not Plural'
-              ... 
-              >>> Foo.class_name
-              'Foo'
-          
+        """
+        Determine class name based on the _class_name or the __tablename__.
+
+        If provided, defaults to ``cls._class_name``, otherwise default to
+        ``cls.plural_class_name``, which is derived from the cls.__tablename__.
+
+        If singularising the plural class name doesn't work, uses the
+          ``cls.__name__``
         """
 
         # Try the manual override.
