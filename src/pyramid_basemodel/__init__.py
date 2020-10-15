@@ -93,67 +93,22 @@ class BaseMixin(object):
         if hasattr(cls, "_class_name"):
             return cls._class_name
 
-        # Try the inflect lib.
-        if inflect is not None:
-            singularise = inflect.engine().singular_noun
-            name = singularise(cls.plural_class_name)
-            if name:
-                return name
+        singularise = inflect.engine().singular_noun
+        name = singularise(cls.plural_class_name)
+        if name:
+            return name
 
         # If that didn't work, fallback on the class name.
         return cls.__name__
 
     @classproperty
     def class_slug(cls):
-        """Either returns ``cls._class_slug``, if provided, or defaults to
-          the tablename::
-          
-              >>> class Foo(BaseMixin):
-              ...     __tablename__ = 'foos'
-              ... 
-              >>> Foo.class_slug
-              'foos'
-              >>> foo = Foo()
-              >>> foo.class_slug
-              'foos'
-              >>> Foo._class_slug = 'bazaramas'
-              >>> foo = Foo()
-              >>> foo.class_slug
-              'bazaramas'
-          
-        """
-
+        "Class slug based on either _class_slug or __tablename__"
         return getattr(cls, "_class_slug", cls.__tablename__)
 
     @classproperty
     def singular_class_slug(cls):
-        """Either returns ``self._singular_class_slug``, if provided, or defaults
-          to a singular version of ``cls.class_slug``. If that's not found, falls
-          back on the lowercase last word of the class name::
-          
-              >>> class Material(BaseMixin):
-              ...     __tablename__ = 'materials'
-              ... 
-              >>> Material.singular_class_slug
-              'material'
-              >>> m = Material()
-              >>> m.singular_class_slug
-              'material'
-              >>> class ProcessMaterials(BaseMixin):
-              ...     __tablename__ = 'process_materials'
-              ... 
-              >>> ProcessMaterials.singular_class_slug
-              'process_material'
-              >>> ProcessMaterials.class_slug = 'XXXXXX_NO_SINGULAR_XXXXX'
-              >>> ProcessMaterials.singular_class_slug
-              'material'
-              >>> ProcessMaterials._singular_class_slug = 'material'
-              >>> ProcessMaterials.singular_class_slug
-              'materials'
-              >>> 
-          
-        """
-
+        "Return singular version of ``cls.class_slug``."
         # If provided, use ``self._singular_class_slug``.
         if hasattr(cls, "_singular_class_slug"):
             return cls._singular_class_slug
@@ -170,29 +125,7 @@ class BaseMixin(object):
 
     @classproperty
     def plural_class_name(cls):
-        """Either returns ``self._plural_class_name``, if provided, or defaults
-          to a title cases version of the tablename, with underscores replaced
-          with spaces::
-          
-              >>> class Material(BaseMixin):
-              ...     __tablename__ = 'materials'
-              ... 
-              >>> Material.plural_class_name
-              'Materials'
-              >>> m = Material()
-              >>> m.plural_class_name
-              'Materials'
-              >>> class ProcessMaterials(BaseMixin):
-              ...     __tablename__ = 'process_materials'
-              ... 
-              >>> ProcessMaterials.plural_class_name
-              'Process Materials'
-              >>> ProcessMaterials._plural_class_name = 'Pro Materials'
-              >>> ProcessMaterials.plural_class_name
-              'Pro Materials'
-          
-        """
-
+        "Return plurar version of a class name."
         # If provided, use ``self._plural_class_name``.
         if hasattr(cls, "_plural_class_name"):
             return cls._plural_class_name
