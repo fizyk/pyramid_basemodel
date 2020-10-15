@@ -3,3 +3,7 @@ dist/
 build/
 .idea/
 __pycache__
+
+# coverage
+.coverage
+coverage.xml
