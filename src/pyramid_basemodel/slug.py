@@ -52,77 +52,14 @@ class BaseSlugNameMixin(object):
         return Column(Unicode(l), nullable=False)
 
     def set_slug(self, candidate=None, **kwargs):
-        """Generate and set a unique ``self.slug`` from ``self.name``.
-          
-          Setup::
-          
-              >>> from mock import MagicMock as Mock
-              >>> mock_inspect = Mock()
-              >>> mock_unique = Mock()
-              >>> return_none = lambda: None
-              >>> return_true = lambda: True
-              >>> from sqlalchemy.types import Integer
-              >>> from pyramid_basemodel import Base
-              >>> class Model(Base, BaseSlugNameMixin):
-              ...     __tablename__ = 'models'
-              ...     id =  Column(Integer, primary_key=True)
-              >>> inst = Model()
-              >>> inst.query = Mock()
-              
-          If there's a slug and no name, it's a noop::
-          
-              >>> inst.name = None
-              >>> inst.slug = 'slug'
-              >>> inst.set_slug(unique=mock_unique)
-              >>> mock_unique.called
-              False
-              >>> inst.slug
-              'slug'
-              
-          If there is a slug and a name and the slug is the candidate, then it's a noop::
-          
-              >>> inst.slug = 'abc'
-              >>> inst.name = 'Abc'
-              >>> inst.set_slug(candidate='abc', inspect=mock_inspect,
-              ...         unique=mock_unique)
-              >>> mock_unique.called
-              False
-              >>> mock_inspect.called
-              True
-              >>> inst.slug
-              'abc'
-              
-          If there's no name, uses a random digest::
-          
-              >>> mock_unique = lambda *args: args[-1]
-              >>> inst.slug = None
-              >>> inst.name = None
-              >>> inst.set_slug(unique=mock_unique)
-              >>> len(inst.slug)
-              32
-          
-          Otherwise slugifies the name::
-          
-              >>> inst.name = 'My nice name'
-              >>> inst.set_slug(unique=mock_unique)
-              >>> inst.slug
-              'my-nice-name'
-          
-          Appending n until the slug is unique::
-          
-              >>> mock_unique = lambda *args: '{0}-1'.format(args[-1])
-              >>> inst.slug = None
-              >>> inst.set_slug(unique=mock_unique)
-              >>> inst.slug
-              'my-nice-name-1'
+        """
+        Generate and set a unique ``self.slug`` from ``self.name``.
 
-          Truncates the slug::
-
-              >>> mock_unique = Mock()
-              >>> inst.name = u'a' * 95
-              >>> inst.set_slug(unique=mock_unique)
-              >>> len(mock_unique.call_args[0][3])
-              61
+        :param get_digest: function to generate random digest. Used of there's no name set.
+        :param inspect:
+        :param session: SQLAlchemy's session
+        :param to_slug: slugify function
+        :param unique: unique function
         """
         
         # Compose.
