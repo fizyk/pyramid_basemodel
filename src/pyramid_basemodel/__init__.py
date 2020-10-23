@@ -135,23 +135,10 @@ class BaseMixin(object):
 
 
 def save(instance_or_instances, session=Session):
-    """Save model instance(s) to the db.
-      
-      Setup::
-      
-          >>> from mock import Mock
-          >>> mock_session = Mock()
-      
-      A single instance is added to the session::
-      
-          >>> save('a', session=mock_session)
-          >>> mock_session.add.assert_called_with('a')
-      
-      Multiple instances are all added at the same time::
-      
-          >>> save(['a', 'b'], session=mock_session)
-          >>> mock_session.add_all.assert_called_with(['a', 'b'])
-      
+    """
+    Save model instance(s) to the db.
+
+    Both single and multiple instances can be saved.
     """
 
     v = instance_or_instances
@@ -164,47 +151,11 @@ def save(instance_or_instances, session=Session):
 def bind_engine(
     engine, session=Session, base=Base, should_create=False, should_drop=False
 ):
-    """Bind the ``session`` and ``base`` to the ``engine``.
-      
-      Setup::
-      
-          >>> from mock import Mock
-          >>> mock_session = Mock()
-          >>> mock_base = Mock()
-          >>> mock_engine = Mock()
-      
-      Binds the session::
-      
-          >>> bind_engine(mock_engine, session=mock_session, base=mock_base)
-          >>> mock_session.configure.assert_called_with(bind=mock_engine)
-      
-      Binds the base metadata::
-      
-          >>> mock_base.metadata.bind == mock_engine
-          True
-      
-      Doesn't create or drop tables by default::
-      
-          >>> mock_base.metadata.create_all.called
-          False
-          >>> mock_base.metadata.drop_all.called
-          False
-      
-      Creates tables if ``should_create`` is ``True``::
-      
-          >>> mock_base = Mock()
-          >>> bind_engine(mock_engine, session=mock_session, base=mock_base,
-          ...             should_create=True)
-          >>> mock_base.metadata.create_all.called
-          True
+    """
+    Bind the ``session`` and ``base`` to the ``engine``.
 
-      Drops tables if ``should_drop`` is ``True``::
-      
-          >>> bind_engine(mock_engine, session=mock_session, base=mock_base,
-          ...             should_drop=True)
-          >>> mock_base.metadata.drop_all.called
-          True
-
+    :param should_create: Triggers create tables on all models
+    :param should_drop: Triggers drop on all tables
     """
 
     session.configure(bind=engine)
@@ -216,48 +167,7 @@ def bind_engine(
 
 
 def includeme(config):
-    """Bind to the db engine specifed in ``config.registry.settings``.
-      
-      Setup::
-      
-          >>> from mock import Mock
-          >>> import pyramid_basemodel
-          >>> _engine_from_config = pyramid_basemodel.engine_from_config
-          >>> _bind_engine = pyramid_basemodel.bind_engine
-          >>> pyramid_basemodel.engine_from_config = Mock()
-          >>> pyramid_basemodel.engine_from_config.return_value = 'engine'
-          >>> pyramid_basemodel.bind_engine = Mock()
-          >>> mock_config = Mock()
-          >>> configure_mock = {"registry.settings": {}}
-          >>> mock_config.configure_mock(**configure_mock)
-          >>> mock_config.get_settings.return_value = mock_config.registry.settings
-      
-      Calls ``bind_engine`` with the configured ``engine``::
-      
-          >>> includeme(mock_config)
-          >>>
-          >>> mock_config.action.assert_called_with(None,
-          ...         pyramid_basemodel.bind_engine,
-          ...         ('engine',),
-          ...         {'should_create': False, 'should_drop': False})
-
-      Unless told not to::
-
-          >>> pyramid_basemodel.bind_engine = Mock()
-          >>> mock_config = Mock()
-          >>> configure_mock = {"registry.settings": {'basemodel.should_bind_engine': False}}
-          >>> mock_config.configure_mock(**configure_mock)
-          >>> mock_config.get_settings.return_value = mock_config.registry.settings
-          >>> includeme(mock_config)
-          >>> mock_config.action.called
-          False
-
-      Teardown::
-      
-          >>> pyramid_basemodel.engine_from_config = _engine_from_config
-          >>> pyramid_basemodel.bind_engine = _bind_engine 
-      
-    """
+    "Bind to the db engine specifed in ``config.registry.settings``."
 
     # Bind the engine.
     settings = config.get_settings()

@@ -43,17 +43,9 @@ transactions yourself.
 
 # Tests
 
-To run the tests use, e.g.:
+To run the tests use:
 
-    nosetests --cover-package=pyramid_base_model --cover-tests --with-doctest --with-coverage pyramid_basemodel
-    ....
-    Name                             Stmts   Miss  Cover   Missing
-    --------------------------------------------------------------
-    src/pyramid_basemodel/__init__      32      0   100%   
-    ----------------------------------------------------------------------
-    Ran 4 tests in 0.031s
-    
-    OK
+    py.test -v --cov pyramid_basemodel tests/
 
 [pyramid_basemodel]: http://github.com/thruflo/pyramid_basemodel
 [pyramid_simpleauth]: http://github.com/thruflo/pyramid_basemodel

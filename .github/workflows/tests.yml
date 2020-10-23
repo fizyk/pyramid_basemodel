@@ -28,9 +28,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements-test.txt
-    - name: Test old doctest test-suite
-      run: |
-        pytest -v --doctest-modules src/
     - name: Run test
       run: |
         py.test -v --cov pyramid_basemodel tests/ --cov-report=xml
