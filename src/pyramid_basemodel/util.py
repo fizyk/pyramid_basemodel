@@ -11,28 +11,12 @@ from binascii import hexlify
 from sqlalchemy import schema
 
 def generate_random_digest(num_bytes=28, urandom=None, to_hex=None):
-    """Generates a random hash and returns the hex digest as a unicode string.
-      
-      Defaults to sha224::
-      
-          >>> import hashlib
-          >>> h = hashlib.sha224()
-          >>> digest = generate_random_digest()
-          >>> len(h.hexdigest()) == len(digest)
-          True
-      
-      Pass in ``num_bytes`` to specify a different length hash::
-      
-          >>> h = hashlib.sha512()
-          >>> digest = generate_random_digest(num_bytes=64)
-          >>> len(h.hexdigest()) == len(digest)
-          True
-      
-      Returns unicode::
-      
-          >>> type(digest) == type(u'')
-          True
-      
+    """
+    Generates a random hash and returns the hex digest as a unicode string.
+
+    :param num_bytes: number of bytes to random(select)
+    :param urandom: urandom function
+    :param to_hex: hexifying function
     """
     
     # Compose.
@@ -84,29 +68,7 @@ def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=None):
     return value
 
 def get_or_create(cls, **kwargs):
-    """Get or create a ``cls`` instance using the ``kwargs`` provided.
-      
-          >>> from mock import Mock
-          >>> mock_cls = Mock()
-          >>> kwargs = dict(foo='bar')
-      
-      If an instance matches the filter kwargs, return it::
-      
-          >>> mock_cls.query.filter_by.return_value.first.return_value = 'exist'
-          >>> get_or_create(mock_cls, **kwargs)
-          'exist'
-          >>> mock_cls.query.filter_by.assert_called_with(**kwargs)
-      
-      Otherwise return a new instance, initialised with the ``kwargs``::
-      
-          >>> mock_cls = Mock()
-          >>> mock_cls.return_value = 'new'
-          >>> mock_cls.query.filter_by.return_value.first.return_value = None
-          >>> get_or_create(mock_cls, **kwargs)
-          'new'
-          >>> mock_cls.assert_called_with(**kwargs)
-      
-    """
+    "Get or create a ``cls`` instance using the ``kwargs`` provided."
     
     instance = cls.query.filter_by(**kwargs).first()
     if not instance:
@@ -114,22 +76,12 @@ def get_or_create(cls, **kwargs):
     return instance
 
 def get_all_matching(cls, column_name, values):
-    """Get all the instances of ``cls`` where the column called ``column_name``
-      matches one of the ``values`` provided.
+    """
+    Return all instances of ``cls`` where ``column_name`` matches one of ``values``.
 
-      Setup::
-
-          >>> from mock import Mock
-          >>> mock_cls = Mock()
-          >>> mock_cls.query.filter.return_value.all.return_value = ['result']
-
-      Queries and returns the results::
-
-          >>> get_all_matching(mock_cls, 'a', [1,2,3])
-          ['result']
-          >>> mock_cls.a.in_.assert_called_with([1,2,3])
-          >>> mock_cls.query.filter.assert_called_with(mock_cls.a.in_.return_value)
-
+    :param cls:
+    :param column_name:
+    :param values:
     """
 
     column = getattr(cls, column_name)
@@ -144,26 +96,7 @@ def get_object_id(instance):
 
 def table_args_indexes(tablename, columns):
     """Call with a class name and a list of relation id columns to return the
-      appropriate op.execute created indexes, e.g.:
-
-          >>> a = table_args_indexes(
-          ...     'basket_items', [
-          ...         'basket_id',
-          ...         ('c', 'created'),
-          ...     ]
-          ... )
-          >>> b = (
-          ...     schema.Index(
-          ...         'basket_items_basket_id_idx',
-          ...         'basket_id',
-          ...     ),
-          ...     schema.Index(
-          ...         'basket_items_c_idx',
-          ...         'created',
-          ...     ),
-          ... )
-          >>> str(a) == str(b)
-          True
+      appropriate op.execute created indexes.
 
       This is useful as a way to tell `alembic revision --autogenerate` that
       these indexes should exist, even when created manually using `op.execute`.
