@@ -2,6 +2,7 @@
 # unreleased
 
 [enhancement] Switch slugify to python-slugify as the latter is python3 compatible
+[enhancement] As far as existing tests are concerned, now there's both full compatibility and feature parity between python 2 and python 3
 [CI] use CI
 
 # 0.3.7
