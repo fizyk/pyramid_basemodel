@@ -7,11 +7,11 @@ from pyramid_basemodel import save, bind_engine
 def test_save():
     "Test save method."
     mock_session = Mock()
-    save('a', session=mock_session)
-    mock_session.add.assert_called_with('a')
+    save("a", session=mock_session)
+    mock_session.add.assert_called_with("a")
 
-    save(['a', 'b'], session=mock_session)
-    mock_session.add_all.assert_called_with(['a', 'b'])
+    save(["a", "b"], session=mock_session)
+    mock_session.add_all.assert_called_with(["a", "b"])
 
 
 def test_bind_engine():
@@ -50,7 +50,7 @@ def test_bind_engine_drop():
 def test_includeme(monkeypatch):
     "Default includeme behaviour."
     mocked_engine_from_config = Mock()
-    mocked_engine_from_config.return_value = 'engine'
+    mocked_engine_from_config.return_value = "engine"
 
     monkeypatch.setattr(pyramid_basemodel, "engine_from_config", mocked_engine_from_config)
     monkeypatch.setattr(pyramid_basemodel, "bind_engine", Mock())
@@ -62,17 +62,14 @@ def test_includeme(monkeypatch):
     pyramid_basemodel.includeme(mock_config)
 
     mock_config.action.assert_called_with(
-        None,
-        pyramid_basemodel.bind_engine,
-        ('engine', ),
-        {'should_create': False, 'should_drop': False}
+        None, pyramid_basemodel.bind_engine, ("engine",), {"should_create": False, "should_drop": False}
     )
 
 
 def test_includeme_nobind():
     "Test includeme should not bind behaviour."
     mock_config = Mock()
-    configure_mock = {"registry.settings": {'basemodel.should_bind_engine': False}}
+    configure_mock = {"registry.settings": {"basemodel.should_bind_engine": False}}
     mock_config.configure_mock(**configure_mock)
     mock_config.get_settings.return_value = mock_config.registry.settings
     pyramid_basemodel.includeme(mock_config)

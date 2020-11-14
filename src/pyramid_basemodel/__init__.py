@@ -19,7 +19,7 @@
   
 """
 
-__version__ = '0.4.0'
+__version__ = "0.4.0"
 
 __all__ = [
     "Base",
@@ -62,7 +62,7 @@ class classproperty(object):
 
 class BaseMixin(object):
     """Provides an int ``id`` as primary key, ``version``, ``created`` and
-      ``modified`` columns and a scoped ``self.query`` property.
+    ``modified`` columns and a scoped ``self.query`` property.
     """
 
     #: primary key
@@ -150,9 +150,7 @@ def save(instance_or_instances, session=Session):
         session.add(v)
 
 
-def bind_engine(
-    engine, session=Session, base=Base, should_create=False, should_drop=False
-):
+def bind_engine(engine, session=Session, base=Base, should_create=False, should_drop=False):
     """
     Bind the ``session`` and ``base`` to the ``engine``.
 
@@ -194,4 +192,3 @@ def includeme(config):
             (engine,),
             {"should_create": should_create, "should_drop": should_drop},
         )
-
