@@ -17,10 +17,10 @@ from sqlalchemy.ext import declarative
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Unicode
 
-from .util import ensure_unique
-from .util import generate_random_digest
+from pyramid_basemodel.util import ensure_unique
+from pyramid_basemodel.util import generate_random_digest
 
-from . import Session
+from pyramid_basemodel import Session
 
 class BaseSlugNameMixin(object):
     """ORM mixin class that provides ``slug`` and ``name`` properties, with a

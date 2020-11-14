@@ -26,9 +26,9 @@ from pyramid.security import ALL_PERMISSIONS
 from pyramid.security import Allow, Deny
 from pyramid.security import Authenticated, Everyone
 
-from . import Session
-from .interfaces import IModelContainer
-from .root import BaseRoot
+from pyramid_basemodel import Session
+from pyramid_basemodel.interfaces import IModelContainer
+from pyramid_basemodel.root import BaseRoot
 
 def slug_validator(node, value, regexp=None):
     """Default to using a slug regexp."""
@@ -39,7 +39,7 @@ def slug_validator(node, value, regexp=None):
     
     # Raise a ValueError.
     if not regexp.match(value):
-        raise ValueError(u'{0} is not a valid slug.'.format(value))
+        raise ValueError(f'{value} is not a valid slug.')
 
 
 @implementer(IModelContainer)
@@ -221,7 +221,7 @@ class InstanceTraversalMixin(object):
             # If the query was invalid, the lookup fails, e.g.: if the
             # instance had the requisit properties but they weren't actually
             # sqlalchemy columns.
-            logger.warn(err, exc_info=True)
+            logger.warning(err, exc_info=True)
             raise KeyError(key)
         
         # Return the context, having set the parent and flagged as locatable.

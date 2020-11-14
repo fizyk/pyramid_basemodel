@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 from zope.interface import Interface
 from zope.interface import alsoProvides
 
-from .container import BaseModelContainer
-from .root import BaseRoot
+from pyramid_basemodel.container import BaseModelContainer
+from pyramid_basemodel.root import BaseRoot
 
 class BaseContentRoot(BaseRoot):
     """Base logic for looking up models."""
