@@ -42,7 +42,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from pyramid.path import DottedNameResolver
 from pyramid.settings import asbool
 
-from .interfaces import IDeclarativeBase
+from pyramid_basemodel.interfaces import IDeclarativeBase
 
 Session = scoped_session(sessionmaker())
 register(Session)

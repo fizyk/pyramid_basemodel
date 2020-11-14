@@ -48,7 +48,7 @@ def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=None):
     n_str = ''
     while True:
         # Keep trying slug, slug-1, slug-2, etc.
-        value = u'{0}{1}'.format(candidate, n_str)
+        value = f'{candidate}{n_str}'
         existing = None
         existing_instances = query.filter(property_==value).all()
         for instance in existing_instances:
@@ -61,7 +61,7 @@ def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=None):
             # fallback on appending a random digest rather than a sequential 
             # number.
             suffix = str(n) if n < 20 else gen_digest(num_bytes=8)
-            n_str = u'-{0}'.format(suffix)
+            n_str = f'-{suffix}'
             continue
         break
     
@@ -91,7 +91,7 @@ def get_all_matching(cls, column_name, values):
 
 def get_object_id(instance):
     "Return an identifier that's unique across database tables."
-    return u'{0}#{1}'.format(instance.__tablename__, instance.id)
+    return f'{instance.__tablename__}#{instance.id}'
 
 
 def table_args_indexes(tablename, columns):
@@ -112,7 +112,7 @@ def table_args_indexes(tablename, columns):
         else:
             db_name = item
             attr_name = item
-        idx_name = '{0}_{1}_idx'.format(tablename, db_name)
+        idx_name = f'{tablename}_{db_name}_idx'
         idx = schema.Index(idx_name, attr_name)
         indexes.append(idx)
     return tuple(indexes)

@@ -37,10 +37,7 @@ __all__ = [
 import logging
 logger = logging.getLogger(__name__)
 
-try: # py2
-    from cStringIO import StringIO
-except ImportError: # py3
-    from io import BytesIO
+from io import StringIO
 
 from gzip import GzipFile
 from tempfile import NamedTemporaryFile
@@ -51,8 +48,8 @@ from sqlalchemy.schema import Column
 from sqlalchemy.types import Unicode
 from sqlalchemy.types import LargeBinary
 
-from . import Base
-from . import BaseMixin
+from pyramid_basemodel import Base
+from pyramid_basemodel import BaseMixin
 
 class Blob(Base, BaseMixin):
     """Encapsulates a large binary file.
