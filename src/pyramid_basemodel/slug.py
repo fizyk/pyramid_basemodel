@@ -3,17 +3,18 @@
 """Provides a base ORM mixin for models that need a name and a url slug."""
 
 __all__ = [
-    'BaseSlugNameMixin',
+    "BaseSlugNameMixin",
 ]
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 import slugify
 
 from sqlalchemy import exc as sa_exc
 from sqlalchemy import inspect as sa_inspect
-from sqlalchemy.ext import declarative 
+from sqlalchemy.ext import declarative
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Unicode
 
@@ -22,24 +23,24 @@ from pyramid_basemodel.util import generate_random_digest
 
 from pyramid_basemodel import Session
 
+
 class BaseSlugNameMixin(object):
     """ORM mixin class that provides ``slug`` and ``name`` properties, with a
-      ``set_slug`` method to set the slug value from the name and a default
-      name aware factory classmethod.
+    ``set_slug`` method to set the slug value from the name and a default
+    name aware factory classmethod.
     """
-    
+
     _max_slug_length = 64
     _slug_is_unique = True
 
     @property
     def __name__(self):
         return self.slug
-    
-    
+
     @declarative.declared_attr
     def slug(cls):
         """A url friendly slug, e.g.: `foo-bar`."""
-        
+
         l = cls._max_slug_length
         is_unique = cls._slug_is_unique
         return Column(Unicode(l), nullable=False, unique=is_unique)
@@ -47,7 +48,7 @@ class BaseSlugNameMixin(object):
     @declarative.declared_attr
     def name(cls):
         """A human readable name, e.g.: `Foo Bar`."""
-        
+
         l = cls._max_slug_length
         return Column(Unicode(l), nullable=False)
 
@@ -61,13 +62,13 @@ class BaseSlugNameMixin(object):
         :param to_slug: slugify function
         :param unique: unique function
         """
-        
+
         # Compose.
-        gen_digest = kwargs.get('gen_digest', generate_random_digest)
-        inspect = kwargs.get('inspect', sa_inspect)
-        session = kwargs.get('session', Session)
-        to_slug = kwargs.get('to_slug', slugify.slugify)
-        unique = kwargs.get('unique', ensure_unique)
+        gen_digest = kwargs.get("gen_digest", generate_random_digest)
+        inspect = kwargs.get("inspect", sa_inspect)
+        session = kwargs.get("session", Session)
+        to_slug = kwargs.get("to_slug", slugify.slugify)
+        unique = kwargs.get("unique", ensure_unique)
 
         # Generate a candidate slug.
         if candidate is None:
@@ -75,9 +76,9 @@ class BaseSlugNameMixin(object):
                 candidate = to_slug(self.name)
             if not candidate:
                 candidate = gen_digest(num_bytes=16)
-        
+
         # Make sure it's not longer than 64 chars.
-        l = self._max_slug_length 
+        l = self._max_slug_length
         l_minus_ellipsis = l - 3
         candidate = candidate[:l]
         unique_candidate = candidate[:l_minus_ellipsis]
@@ -85,7 +86,7 @@ class BaseSlugNameMixin(object):
         # If there's no name, only set the slug if its not already set.
         if self.slug and not self.name:
             return
-        
+
         # If there is a name and the slug matches it, then don't try and
         # reset (i.e.: we only want to set a slug if the name has changed).
         if self.slug and self.name:
