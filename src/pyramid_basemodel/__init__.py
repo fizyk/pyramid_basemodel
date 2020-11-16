@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+Main pyramid_basemodel module.
 
-"""Provides global scoped ``Session`` and declarative ``Base``, ``BaseMixin``
+Provides global scoped ``Session`` and declarative ``Base``, ``BaseMixin``
   class and ``bind_engine`` function.
   
   To use, import and, e.g.: inherit from the base classes::
@@ -61,7 +63,10 @@ class classproperty(object):
 
 
 class BaseMixin(object):
-    """Provides an int ``id`` as primary key, ``version``, ``created`` and
+    """
+    Default Base Model Mixin.
+
+    Provides an int ``id`` as primary key, ``version``, ``created`` and
     ``modified`` columns and a scoped ``self.query`` property.
     """
 
@@ -90,7 +95,6 @@ class BaseMixin(object):
         If singularising the plural class name doesn't work, uses the
           ``cls.__name__``
         """
-
         # Try the manual override.
         if hasattr(cls, "_class_name"):
             return cls._class_name
@@ -105,12 +109,12 @@ class BaseMixin(object):
 
     @classproperty
     def class_slug(cls):
-        "Class slug based on either _class_slug or __tablename__"
+        """Class slug based on either _class_slug or __tablename__."""
         return getattr(cls, "_class_slug", cls.__tablename__)
 
     @classproperty
     def singular_class_slug(cls):
-        "Return singular version of ``cls.class_slug``."
+        """Return singular version of ``cls.class_slug``."""
         # If provided, use ``self._singular_class_slug``.
         if hasattr(cls, "_singular_class_slug"):
             return cls._singular_class_slug
@@ -127,7 +131,7 @@ class BaseMixin(object):
 
     @classproperty
     def plural_class_name(cls):
-        "Return plurar version of a class name."
+        """Return plurar version of a class name."""
         # If provided, use ``self._plural_class_name``.
         if hasattr(cls, "_plural_class_name"):
             return cls._plural_class_name
@@ -142,7 +146,6 @@ def save(instance_or_instances, session=Session):
 
     Both single and multiple instances can be saved.
     """
-
     v = instance_or_instances
     if isinstance(v, list) or isinstance(v, tuple):
         session.add_all(v)
@@ -157,7 +160,6 @@ def bind_engine(engine, session=Session, base=Base, should_create=False, should_
     :param should_create: Triggers create tables on all models
     :param should_drop: Triggers drop on all tables
     """
-
     session.configure(bind=engine)
     base.metadata.bind = engine
     if should_drop:
@@ -167,8 +169,7 @@ def bind_engine(engine, session=Session, base=Base, should_create=False, should_
 
 
 def includeme(config):
-    "Bind to the db engine specifed in ``config.registry.settings``."
-
+    """Bind to the db engine specifed in ``config.registry.settings``."""
     # Bind the engine.
     settings = config.get_settings()
     engine_kwargs_factory = settings.pop("sqlalchemy.engine_kwargs_factory", None)

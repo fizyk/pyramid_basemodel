@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-"""Provides a base traversal root and a mixin class for objects in the
-  Pyramid traversal hierarchy.
+"""
+Base traversal root and a mixin class for objects in the Pyramid traversal hierarchy.
+
+Provides a base traversal root and a mixin class for objects in the Pyramid traversal hierarchy.
   
-  http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/traversal.html
+http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/traversal.html
 """
 
 __all__ = [
@@ -29,7 +31,6 @@ class BaseRoot(object):
 
     def locatable(self, context, key, provides=None):
         """Make a context object locatable and return it."""
-
         # Compose.
         if provides is None:
             provides = alsoProvides
@@ -43,6 +44,7 @@ class BaseRoot(object):
         return context
 
     def __init__(self, request, key="", parent=None):
+        """Initialize BaseRoot class."""
         self.__name__ = key
         self.__parent__ = parent
         self.request = request
