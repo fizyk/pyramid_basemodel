@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
-"""Provides a base model container, used by the Pyramid traversal
-  machinery and a mixin to aid with traversal from an instance
-  back up the tree.
+"""
+Base model container.
+
+Provides a base model container, used by the Pyramid traversal
+machinery and a mixin to aid with traversal from an instance
+back up the tree.
 """
 
 __all__ = [
@@ -34,8 +37,11 @@ from pyramid_basemodel.root import BaseRoot
 
 
 def slug_validator(node, value, regexp=None):
-    """Default to using a slug regexp."""
+    """
+    Validate slug.
 
+    Defaults to using a slug regexp.
+    """
     # Compose.
     if regexp is None:
         regexp = valid_slug
@@ -67,30 +73,32 @@ class BaseModelContainer(BaseRoot):
 
     @property
     def name(self):
+        """Return plurar version of a class name."""
         return self.model_cls.plural_class_name
 
     @property
     def class_name(self):
+        """Determine class name based on the _class_name or the __tablename__."""
         return self.model_cls.class_name
 
     @property
     def plural_class_name(self):
+        """Return plurar version of a class name."""
         return self.model_cls.plural_class_name
 
     @property
     def class_slug(self):
+        """Class slug based on either _class_slug or __tablename__."""
         return self.model_cls.class_slug
 
     def get_child(self, key):
         """Query for and return the child instance, if found."""
-
         column = getattr(self.model_cls, self.property_name)
         query = self.model_cls.query.filter(column == key)
         return query.first()
 
     def __getitem__(self, key):
         """Lookup model instance by key."""
-
         try:
             self.validator(None, key)
         except self.validation_exception:
@@ -104,7 +112,6 @@ class BaseModelContainer(BaseRoot):
 
     def __init__(self, request, model_cls, key=None, parent=None, **kwargs):
         """Instantiate the container."""
-
         # Compose.
         if key is None:
             key = model_cls.class_slug
@@ -140,7 +147,6 @@ class InstanceTraversalMixin(object):
 
     def get_container(self):
         """Reverse up the parent traversal hierarchy until reaching a container."""
-
         target = self
         while True:
             parent = target.__parent__
@@ -152,7 +158,6 @@ class InstanceTraversalMixin(object):
 
     def locatable(self, context, key, provides=None):
         """Make a context object locatable and pass on the request."""
-
         # Compose.
         if provides is None:
             provides = alsoProvides
@@ -168,7 +173,6 @@ class InstanceTraversalMixin(object):
     @property
     def __parent__(self, container_cls=None, session=None):
         """Either return ``self.parent``, or a model container object."""
-
         # Compose.
         if container_cls is None:
             container_cls = BaseModelContainer
@@ -195,7 +199,6 @@ class InstanceTraversalMixin(object):
 
     def __getitem__(self, key):
         """Lookup model instance by key."""
-
         try:
             self._validator(None, key)
         except self.validation_exception:

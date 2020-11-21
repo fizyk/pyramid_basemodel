@@ -14,13 +14,12 @@ from sqlalchemy import schema
 
 def generate_random_digest(num_bytes=28, urandom=None, to_hex=None):
     """
-    Generates a random hash and returns the hex digest as a unicode string.
+    Generate a random hash and returns the hex digest as a unicode string.
 
     :param num_bytes: number of bytes to random(select)
     :param urandom: urandom function
     :param to_hex: hexifying function
     """
-
     # Compose.
     if urandom is None:
         urandom = os.urandom
@@ -35,10 +34,12 @@ def generate_random_digest(num_bytes=28, urandom=None, to_hex=None):
 
 
 def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=None):
-    """Takes a ``candidate`` value for a unique ``property_`` and iterates,
+    """
+    Make sure slug is unique.
+
+    Takes a ``candidate`` value for a unique ``property_`` and iterates,
     appending an incremented integer until unique.
     """
-
     # Compose.
     if gen_digest is None:
         gen_digest = generate_random_digest
@@ -72,8 +73,7 @@ def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=None):
 
 
 def get_or_create(cls, **kwargs):
-    "Get or create a ``cls`` instance using the ``kwargs`` provided."
-
+    """Get or create a ``cls`` instance using the ``kwargs`` provided."""
     instance = cls.query.filter_by(**kwargs).first()
     if not instance:
         instance = cls(**kwargs)
@@ -88,19 +88,21 @@ def get_all_matching(cls, column_name, values):
     :param column_name:
     :param values:
     """
-
     column = getattr(cls, column_name)
     query = cls.query.filter(column.in_(values))
     return query.all()
 
 
 def get_object_id(instance):
-    "Return an identifier that's unique across database tables."
+    """Return an identifier that's unique across database tables."""
     return f"{instance.__tablename__}#{instance.id}"
 
 
 def table_args_indexes(tablename, columns):
-    """Call with a class name and a list of relation id columns to return the
+    """
+    Build table indexes.
+
+    Call with a class name and a list of relation id columns to return the
     appropriate op.execute created indexes.
 
     This is useful as a way to tell `alembic revision --autogenerate` that
@@ -108,7 +110,6 @@ def table_args_indexes(tablename, columns):
 
     Ref: https://bitbucket.org/zzzeek/alembic/issues/233/add-indexes-to-include_object-hook
     """
-
     indexes = []
     for item in columns:
         if len(item) == 2:

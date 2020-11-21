@@ -25,7 +25,10 @@ from pyramid_basemodel import Session
 
 
 class BaseSlugNameMixin(object):
-    """ORM mixin class that provides ``slug`` and ``name`` properties, with a
+    """
+    Base mixin delivering a slug functionality.
+
+    ORM mixin class that provides ``slug`` and ``name`` properties, with a
     ``set_slug`` method to set the slug value from the name and a default
     name aware factory classmethod.
     """
@@ -35,20 +38,19 @@ class BaseSlugNameMixin(object):
 
     @property
     def __name__(self):
+        """Url friendly name."""
         return self.slug
 
     @declarative.declared_attr
     def slug(cls):
-        """A url friendly slug, e.g.: `foo-bar`."""
-
+        """Get url friendly slug, e.g.: `foo-bar`."""
         l = cls._max_slug_length
         is_unique = cls._slug_is_unique
         return Column(Unicode(l), nullable=False, unique=is_unique)
 
     @declarative.declared_attr
     def name(cls):
-        """A human readable name, e.g.: `Foo Bar`."""
-
+        """Get human readable name, e.g.: `Foo Bar`."""
         l = cls._max_slug_length
         return Column(Unicode(l), nullable=False)
 
@@ -62,7 +64,6 @@ class BaseSlugNameMixin(object):
         :param to_slug: slugify function
         :param unique: unique function
         """
-
         # Compose.
         gen_digest = kwargs.get("gen_digest", generate_random_digest)
         inspect = kwargs.get("inspect", sa_inspect)

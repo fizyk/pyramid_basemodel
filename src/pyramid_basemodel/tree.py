@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""Provide a ``BaseContentRoot`` traversal root for looking up instances
-  via their containers.
+"""
+`BaseContentRoot`` traversal root.
+
+Provide a ``BaseContentRoot`` traversal root for looking up instances
+via their containers.
 """
 
 __all__ = [
@@ -27,7 +30,6 @@ class BaseContentRoot(BaseRoot):
 
     def container_factory(self, item, key, provides=None, default_cls=None, interface_cls=None):
         """Return an instantiated and interface providing container."""
-
         # Compose.
         if provides is None:
             provides = alsoProvides
@@ -59,10 +61,12 @@ class BaseContentRoot(BaseRoot):
         return container
 
     def __getitem__(self, key):
-        """First see if the key is in ``self.mapping``. If it is, return
+        """
+        Get model from mapping.
+
+        First see if the key is in ``self.mapping``. If it is, return
         a content container configured to look up that model class.
         """
-
         # If the key matches a traversal container in the mapping, use that.
         if key in self.mapping:
             mapping_item = self.mapping.get(key)
