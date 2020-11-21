@@ -4,7 +4,7 @@
 Base traversal root and a mixin class for objects in the Pyramid traversal hierarchy.
 
 Provides a base traversal root and a mixin class for objects in the Pyramid traversal hierarchy.
-  
+
 http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/traversal.html
 """
 
@@ -14,12 +14,12 @@ __all__ = [
 
 import logging
 
-logger = logging.getLogger(__name__)
-
 from zope.interface import implementer
 from zope.interface import alsoProvides
 
 from pyramid.interfaces import ILocation
+
+logger = logging.getLogger(__name__)
 
 
 @implementer(ILocation)

@@ -10,8 +10,6 @@ __all__ = [
 
 import logging
 
-logger = logging.getLogger(__name__)
-
 from datetime import datetime
 
 from sqlalchemy import Column
@@ -19,6 +17,8 @@ from sqlalchemy import Unicode
 from sqlalchemy.ext.declarative import declared_attr
 
 from pyramid_basemodel import save as save_to_db
+
+logger = logging.getLogger(__name__)
 
 
 class PolymorphicBaseMixin(object):

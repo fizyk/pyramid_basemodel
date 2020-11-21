@@ -2,14 +2,13 @@
 
 """Shared utility functions for interacting with the data model."""
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 import os
+import logging
 from binascii import hexlify
 
 from sqlalchemy import schema
+
+logger = logging.getLogger(__name__)
 
 
 def generate_random_digest(num_bytes=28, urandom=None, to_hex=None):

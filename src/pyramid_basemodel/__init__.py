@@ -3,22 +3,22 @@
 Main pyramid_basemodel module.
 
 Provides global scoped ``Session`` and declarative ``Base``, ``BaseMixin``
-  class and ``bind_engine`` function.
-  
-  To use, import and, e.g.: inherit from the base classes::
-  
-      >>> class MyModel(Base, BaseMixin):
-      ...     __tablename__ = 'my_model'
-      ... 
-      >>> instance = MyModel()
-      >>> Session.add(instance)
-      >>> # etc.
-  
-  To automatically bind the base metadata and session to your db engine, just
-  include the package::
-  
-      config.include('pyramid_basemodel')
-  
+class and ``bind_engine`` function.
+
+To use, import and, e.g.: inherit from the base classes::
+
+  >>> class MyModel(Base, BaseMixin):
+  ...     __tablename__ = 'my_model'
+  ...
+  >>> instance = MyModel()
+  >>> Session.add(instance)
+  >>> # etc.
+
+To automatically bind the base metadata and session to your db engine, just
+include the package::
+
+  config.include('pyramid_basemodel')
+
 """
 
 __version__ = "0.4.0"
