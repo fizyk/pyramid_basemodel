@@ -4,14 +4,38 @@
 
 import os
 import logging
+import sys
 from binascii import hexlify
+from typing import Callable, Union, Type, List, Tuple, Iterable, cast
 
-from sqlalchemy import schema
+if sys.version_info[0] == 3 and sys.version_info[1] <= 7:
+    from typing_extensions import Protocol
+else:
+    from typing import Protocol
+
+from sqlalchemy import schema, Column
+from sqlalchemy.orm import Query
+
+from pyramid_basemodel import Base
 
 logger = logging.getLogger(__name__)
 
 
-def generate_random_digest(num_bytes=28, urandom=os.urandom, to_hex=hexlify):
+UrandFuncT = Callable[[int], bytes]
+HexlifyFuncT = Callable[[bytes], bytes]
+
+
+class GenRandDigestProtocol(Protocol):
+    """Random generator protocol definition."""
+
+    def __call__(self, num_bytes: int = 28, urandom: UrandFuncT = os.urandom, to_hex: HexlifyFuncT = hexlify) -> str:
+        """Protocol call definition."""
+        ...
+
+
+def generate_random_digest(
+    num_bytes: int = 28, urandom: UrandFuncT = os.urandom, to_hex: HexlifyFuncT = hexlify
+) -> str:
     """
     Generate a random hash and returns the hex digest as a unicode string.
 
@@ -22,11 +46,18 @@ def generate_random_digest(num_bytes=28, urandom=os.urandom, to_hex=hexlify):
     # Get random bytes.
     r = urandom(num_bytes)
 
-    # Return as a unicode string.
+    # Return as a string.
     return to_hex(r).decode("utf-8")
 
 
-def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=generate_random_digest):
+def ensure_unique(
+    self_: Base,
+    query: Query,
+    property_: Column,
+    value: str,
+    max_iter: int = 30,
+    gen_digest: GenRandDigestProtocol = generate_random_digest,
+) -> str:
     """
     Make sure slug is unique.
 
@@ -45,10 +76,10 @@ def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=generat
         existing = None
         existing_instances = query.filter(property_ == value).all()
         for instance in existing_instances:
-            if instance != self:
+            if instance != self_:
                 existing = instance
                 break
-        if existing and n < 30:
+        if existing and n < max_iter:
             n += 1
             # If we've tried 1, 2 ... all the way to ``max_iter``, then
             # fallback on appending a random digest rather than a sequential
@@ -61,7 +92,7 @@ def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=generat
     return value
 
 
-def get_or_create(cls, **kwargs):
+def get_or_create(cls: Type[Base], **kwargs: Union[str, int]) -> Base:
     """Get or create a ``cls`` instance using the ``kwargs`` provided."""
     instance = cls.query.filter_by(**kwargs).first()
     if not instance:
@@ -69,7 +100,7 @@ def get_or_create(cls, **kwargs):
     return instance
 
 
-def get_all_matching(cls, column_name, values):
+def get_all_matching(cls: Type[Base], column_name: str, values: List[Union[str, int]]) -> List[Base]:
     """
     Return all instances of ``cls`` where ``column_name`` matches one of ``values``.
 
@@ -82,12 +113,12 @@ def get_all_matching(cls, column_name, values):
     return query.all()
 
 
-def get_object_id(instance):
+def get_object_id(instance: Base) -> str:
     """Return an identifier that's unique across database tables."""
     return f"{instance.__tablename__}#{instance.id}"
 
 
-def table_args_indexes(tablename, columns):
+def table_args_indexes(tablename: str, columns: Iterable[Union[str, List[str]]]) -> Tuple[schema.Index, ...]:
     """
     Build table indexes.
 
@@ -105,6 +136,7 @@ def table_args_indexes(tablename, columns):
             db_name = item[0]  # db column
             attr_name = item[1]  # sqlalchemy attr
         else:
+            item = cast(str, item)
             db_name = item
             attr_name = item
         idx_name = f"{tablename}_{db_name}_idx"

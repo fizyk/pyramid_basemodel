@@ -36,10 +36,14 @@ __all__ = [
 
 import logging
 from http import HTTPStatus
+<<<<<<< HEAD
 from io import StringIO
 
 from gzip import GzipFile
+=======
+>>>>>>> 360fc0c (Add type checks and typing)
 from tempfile import NamedTemporaryFile
+from typing import IO
 
 import requests
 
@@ -77,13 +81,13 @@ class Blob(Base, BaseMixin):
     value = Column(LargeBinary, nullable=False)
 
     @classmethod
-    def factory(cls, name, file_like_object=None):
+    def factory(cls, name: str, file_like_object: IO = None) -> "Blob":
         """Create and return."""
         instance = cls()
         instance.update(name, file_like_object=file_like_object)
         return instance
 
-    def update(self, name, file_like_object=None):
+    def update(self, name: str, file_like_object: IO = None) -> None:
         """
         Update value from file like object.
 
@@ -94,7 +98,7 @@ class Blob(Base, BaseMixin):
         if file_like_object is not None:
             self.value = file_like_object.read()
 
-    def update_from_url(self, url):
+    def update_from_url(self, url: str) -> None:
         """
         Update value from url's content.
 
@@ -113,10 +117,9 @@ class Blob(Base, BaseMixin):
             if attempts < max_attempts:
                 continue
             r.raise_for_status()
-
         self.value = r.content
 
-    def get_as_named_tempfile(self, should_close=False):
+    def get_as_named_tempfile(self, should_close: bool = False) -> IO:
         """Read ``self.value`` into and return a named temporary file."""
         # Prepare the temp file.
         f = NamedTemporaryFile(delete=False)
@@ -132,6 +135,6 @@ class Blob(Base, BaseMixin):
         # Return the file.
         return f
 
-    def __json__(self):
+    def __json__(self) -> dict:
         """Create a JSONable representation."""
         return {"name": self.name}

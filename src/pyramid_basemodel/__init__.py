@@ -30,15 +30,19 @@ __all__ = [
     "bind_engine",
 ]
 
+from typing import Any, Type, Callable, List, Tuple, Union
+
 import inflect
 from datetime import datetime
 
+from pyramid.config import Configurator
+from sqlalchemy.engine import Engine
 from zope.interface import classImplements
 from zope.sqlalchemy import register
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import Column, DateTime, Integer
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from pyramid.path import DottedNameResolver
@@ -55,10 +59,10 @@ classImplements(Base, IDeclarativeBase)
 class classproperty:
     """A basic [class property](http://stackoverflow.com/a/3203659)."""
 
-    def __init__(self, getter):
+    def __init__(self, getter: Callable[..., Any]) -> None:
         self.getter = getter
 
-    def __get__(self, instance, owner):
+    def __get__(self, instance: "BaseMixin", owner: Type["BaseMixin"]) -> Any:
         return self.getter(owner)
 
 
@@ -69,6 +73,12 @@ class BaseMixin:
     Provides an int ``id`` as primary key, ``version``, ``created`` and
     ``modified`` columns and a scoped ``self.query`` property.
     """
+
+    _class_name: str
+    __name__: str
+    __tablename__: str
+    _singular_class_slug: str
+    _plural_class_name: str
 
     #: primary key
     id = Column(Integer, primary_key=True)
@@ -85,7 +95,7 @@ class BaseMixin:
     query = Session.query_property()
 
     @classproperty
-    def class_name(cls):
+    def class_name(cls) -> str:
         """
         Determine class name based on the _class_name or the __tablename__.
 
@@ -108,12 +118,12 @@ class BaseMixin:
         return cls.__name__
 
     @classproperty
-    def class_slug(cls):
+    def class_slug(cls) -> str:
         """Class slug based on either _class_slug or __tablename__."""
         return getattr(cls, "_class_slug", cls.__tablename__)
 
     @classproperty
-    def singular_class_slug(cls):
+    def singular_class_slug(cls) -> str:
         """Return singular version of ``cls.class_slug``."""
         # If provided, use ``self._singular_class_slug``.
         if hasattr(cls, "_singular_class_slug"):
@@ -130,7 +140,7 @@ class BaseMixin:
         return cls.class_name.split()[-1].lower()
 
     @classproperty
-    def plural_class_name(cls):
+    def plural_class_name(cls) -> str:
         """Return plurar version of a class name."""
         # If provided, use ``self._plural_class_name``.
         if hasattr(cls, "_plural_class_name"):
@@ -140,7 +150,10 @@ class BaseMixin:
         return cls.__tablename__.replace("_", " ").title()
 
 
-def save(instance_or_instances, session=Session):
+def save(
+    instance_or_instances: Union[List[DeclarativeMeta], Tuple[DeclarativeMeta, ...], DeclarativeMeta],
+    session: scoped_session = Session,
+) -> None:
     """
     Save model instance(s) to the db.
 
@@ -153,7 +166,13 @@ def save(instance_or_instances, session=Session):
         session.add(v)
 
 
-def bind_engine(engine, session=Session, base=Base, should_create=False, should_drop=False):
+def bind_engine(
+    engine: Engine,
+    session: scoped_session = Session,
+    base: DeclarativeMeta = Base,
+    should_create: bool = False,
+    should_drop: bool = False,
+) -> None:
     """
     Bind the ``session`` and ``base`` to the ``engine``.
 
@@ -168,7 +187,7 @@ def bind_engine(engine, session=Session, base=Base, should_create=False, should_
         base.metadata.create_all(engine)
 
 
-def includeme(config):
+def includeme(config: Configurator) -> None:
     """Bind to the db engine specifed in ``config.registry.settings``."""
     # Bind the engine.
     settings = config.get_settings()
