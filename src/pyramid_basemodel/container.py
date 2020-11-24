@@ -13,13 +13,8 @@ __all__ = [
     "InstanceTraversalMixin",
 ]
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 import re
-
-valid_slug = re.compile(r"^[.\w-]{1,64}$", re.U)
+import logging
 
 from zope.interface import implementer
 from zope.interface import alsoProvides
@@ -34,6 +29,9 @@ from pyramid.security import Authenticated, Everyone
 from pyramid_basemodel import Session
 from pyramid_basemodel.interfaces import IModelContainer
 from pyramid_basemodel.root import BaseRoot
+
+valid_slug = re.compile(r"^[.\w-]{1,64}$", re.U)
+logger = logging.getLogger(__name__)
 
 
 def slug_validator(node, value, regexp=None):
@@ -122,9 +120,9 @@ class BaseModelContainer(BaseRoot):
         self.model_cls = model_cls
         self.__name__ = key
         self.__parent__ = parent
-        if kwargs.has_key("property_name"):
+        if "property_name" in kwargs:
             self.property_name = kwargs.get("property_name")
-        if kwargs.has_key("validator"):
+        if "validator" in kwargs:
             self.validator = kwargs.get("validator")
         else:
             self.validator = self._validator

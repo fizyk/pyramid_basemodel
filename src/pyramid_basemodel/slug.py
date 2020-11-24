@@ -8,8 +8,6 @@ __all__ = [
 
 import logging
 
-logger = logging.getLogger(__name__)
-
 import slugify
 
 from sqlalchemy import exc as sa_exc
@@ -22,6 +20,8 @@ from pyramid_basemodel.util import ensure_unique
 from pyramid_basemodel.util import generate_random_digest
 
 from pyramid_basemodel import Session
+
+logger = logging.getLogger(__name__)
 
 
 class BaseSlugNameMixin(object):
@@ -44,15 +44,12 @@ class BaseSlugNameMixin(object):
     @declarative.declared_attr
     def slug(cls):
         """Get url friendly slug, e.g.: `foo-bar`."""
-        l = cls._max_slug_length
-        is_unique = cls._slug_is_unique
-        return Column(Unicode(l), nullable=False, unique=is_unique)
+        return Column(Unicode(cls._max_slug_length), nullable=False, unique=cls._slug_is_unique)
 
     @declarative.declared_attr
     def name(cls):
         """Get human readable name, e.g.: `Foo Bar`."""
-        l = cls._max_slug_length
-        return Column(Unicode(l), nullable=False)
+        return Column(Unicode(cls._max_slug_length), nullable=False)
 
     def set_slug(self, candidate=None, **kwargs):
         """
@@ -79,10 +76,10 @@ class BaseSlugNameMixin(object):
                 candidate = gen_digest(num_bytes=16)
 
         # Make sure it's not longer than 64 chars.
-        l = self._max_slug_length
-        l_minus_ellipsis = l - 3
-        candidate = candidate[:l]
-        unique_candidate = candidate[:l_minus_ellipsis]
+        length = self._max_slug_length
+        length_minus_ellipsis = length - 3
+        candidate = candidate[:length]
+        unique_candidate = candidate[:length_minus_ellipsis]
 
         # If there's no name, only set the slug if its not already set.
         if self.slug and not self.name:

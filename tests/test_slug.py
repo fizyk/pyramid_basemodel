@@ -50,27 +50,24 @@ def test_set_slug_is_slug_is_name(sample_model):
 
 def test_set_slug_no_slug_no_name(sample_model):
     "Test that the slug will be a random digest if the name is not set."
-    mock_unique = lambda *args: args[-1]
     sample_model.slug = None
     sample_model.name = None
-    sample_model.set_slug(unique=mock_unique)
+    sample_model.set_slug(unique=lambda *args: args[-1])
     assert len(sample_model.slug) == 32
 
 
 def test_set_slug_no_slug_is_name(sample_model):
     "Test correct slugification of a name."
-    mock_unique = lambda *args: args[-1]
     sample_model.name = "My nice name"
-    sample_model.set_slug(unique=mock_unique)
+    sample_model.set_slug(unique=lambda *args: args[-1])
     assert sample_model.slug == "my-nice-name"
 
 
 def test_set_slug_slug_unique(sample_model):
     "Test that the unique function get's called."
-    mock_unique = lambda *args: "{0}-1".format(args[-1])
     sample_model.slug = None
     sample_model.name = "My nice name"
-    sample_model.set_slug(unique=mock_unique)
+    sample_model.set_slug(unique=lambda *args: "{0}-1".format(args[-1]))
     assert sample_model.slug == "my-nice-name-1"
 
 

@@ -13,13 +13,13 @@ __all__ = [
 
 import logging
 
-logger = logging.getLogger(__name__)
-
 from zope.interface import Interface
 from zope.interface import alsoProvides
 
 from pyramid_basemodel.container import BaseModelContainer
 from pyramid_basemodel.root import BaseRoot
+
+logger = logging.getLogger(__name__)
 
 
 class BaseContentRoot(BaseRoot):

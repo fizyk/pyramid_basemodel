@@ -2,7 +2,7 @@
 
 """
 Provide a generic model class for storing large binary objects.
-  
+
 To store a bytestring::
 
   blob = Blob.factory('foo') # sets the blob's name to 'foo'
@@ -27,7 +27,7 @@ The Blob's ``value`` is a read only buffer, e.g. to iterate over the contents::
       if chunk is None:
           break
       # do something with ``chunk``
-  
+
 """
 
 __all__ = [
@@ -35,9 +35,6 @@ __all__ = [
 ]
 
 import logging
-
-logger = logging.getLogger(__name__)
-
 from io import StringIO
 
 from gzip import GzipFile
@@ -51,6 +48,8 @@ from sqlalchemy.types import LargeBinary
 
 from pyramid_basemodel import Base
 from pyramid_basemodel import BaseMixin
+
+logger = logging.getLogger(__name__)
 
 
 class Blob(Base, BaseMixin):
