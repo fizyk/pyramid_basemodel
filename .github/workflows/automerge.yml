@@ -22,7 +22,7 @@ jobs:
   automerge:
     name: Automerge Dependabot
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
     steps:
       - name: 'Wait for status checks'
         id: waitforstatuschecks
