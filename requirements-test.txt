@@ -1,5 +1,5 @@
 # requirements of main dependencies used for tests
-pyramid==1.10.4
+pyramid==1.10.5
 pyramid-tm==2.4
 transaction==3.0.0
 requests==2.25.0
