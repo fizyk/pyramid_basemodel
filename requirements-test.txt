@@ -13,5 +13,5 @@ inflect==4.1.0
 pytest==6.0.1
 pytest-cov==2.10.1
 coverage==5.3
-mock==4.0.2; python_version>'3'
+mock==4.0.3; python_version>'3'
 -e .[tests]
