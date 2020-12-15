@@ -21,7 +21,7 @@ from pyramid_basemodel import save as save_to_db
 logger = logging.getLogger(__name__)
 
 
-class PolymorphicBaseMixin(object):
+class PolymorphicBaseMixin:
     """
     PolymorphicMixin streamline inheritance.
 
@@ -39,7 +39,7 @@ class PolymorphicBaseMixin(object):
         return {"polymorphic_on": self.discriminator, "polymorphic_identity": self.__class__.__name__.lower()}
 
 
-class PolymorphicMixin(object):
+class PolymorphicMixin:
     """
     PolymorphicMixin streamline inheritance.
 
@@ -55,7 +55,7 @@ class PolymorphicMixin(object):
         return {"polymorphic_identity": self.__class__.__name__.lower()}
 
 
-class TouchMixin(object):
+class TouchMixin:
     """Provides ``touch`` and ``propagate_touch`` methods."""
 
     def propagate_touch(self):
@@ -67,14 +67,8 @@ class TouchMixin(object):
         update relations in an attribute event handler.
         """
 
-    def touch(self, propagate=True, now=None, save=None):
+    def touch(self, propagate=True, now=datetime.utcnow, save=save_to_db):
         """Update self.modified."""
-        # Compose.
-        if now is None:
-            now = datetime.utcnow
-        if save is None:
-            save = save_to_db
-
         # Update self's modified date.
         self.modified = now()
         save(self)

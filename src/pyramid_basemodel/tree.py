@@ -28,16 +28,10 @@ class BaseContentRoot(BaseRoot):
     apex = None  # e.g.: (Design, IDesignsContainer, {})
     mapping = {}  # {u'formats': (FileFormat, IFileFormatsContainer, {}), ...}
 
-    def container_factory(self, item, key, provides=None, default_cls=None, interface_cls=None):
+    def container_factory(
+        self, item, key, provides=alsoProvides, default_cls=BaseModelContainer, interface_cls=Interface
+    ):
         """Return an instantiated and interface providing container."""
-        # Compose.
-        if provides is None:
-            provides = alsoProvides
-        if default_cls is None:
-            default_cls = BaseModelContainer
-        if interface_cls is None:
-            interface_cls = Interface
-
         # Unpack the mapping item.
         model_cls, container_cls_or_interface, kwargs = item
 

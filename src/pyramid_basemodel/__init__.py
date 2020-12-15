@@ -52,7 +52,7 @@ Base = declarative_base()
 classImplements(Base, IDeclarativeBase)
 
 
-class classproperty(object):
+class classproperty:
     """A basic [class property](http://stackoverflow.com/a/3203659)."""
 
     def __init__(self, getter):
@@ -62,7 +62,7 @@ class classproperty(object):
         return self.getter(owner)
 
 
-class BaseMixin(object):
+class BaseMixin:
     """
     Default Base Model Mixin.
 

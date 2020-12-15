@@ -23,18 +23,14 @@ logger = logging.getLogger(__name__)
 
 
 @implementer(ILocation)
-class BaseRoot(object):
+class BaseRoot:
     """Base class for traversal factories."""
 
     __name__ = ""
     __parent__ = None
 
-    def locatable(self, context, key, provides=None):
+    def locatable(self, context, key, provides=alsoProvides):
         """Make a context object locatable and return it."""
-        # Compose.
-        if provides is None:
-            provides = alsoProvides
-
         if not hasattr(context, "__name__"):
             context.__name__ = key
         context._located_parent = self

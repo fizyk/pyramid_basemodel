@@ -1,5 +1,8 @@
 # CHANGES
 
+## Unreleased
+
+* [code] Use default arguments instead of compose sections.
 
 ## 0.4.0
 
@@ -80,6 +83,7 @@ tablename to split the word, e.g.:
     >>> class OperatingScale(Base, BaseMixin):
     ...     __tablename__ 'operating_scales'
     ... 
+
     >>> OperatingScale.class_name
     'Operating Scale'
 

@@ -24,7 +24,7 @@ from pyramid_basemodel import Session
 logger = logging.getLogger(__name__)
 
 
-class BaseSlugNameMixin(object):
+class BaseSlugNameMixin:
     """
     Base mixin delivering a slug functionality.
 
@@ -51,7 +51,15 @@ class BaseSlugNameMixin(object):
         """Get human readable name, e.g.: `Foo Bar`."""
         return Column(Unicode(cls._max_slug_length), nullable=False)
 
-    def set_slug(self, candidate=None, **kwargs):
+    def set_slug(
+        self,
+        candidate=None,
+        gen_digest=generate_random_digest,
+        inspect=sa_inspect,
+        session=Session,
+        to_slug=slugify.slugify,
+        unique=ensure_unique,
+    ):
         """
         Generate and set a unique ``self.slug`` from ``self.name``.
 
@@ -61,13 +69,6 @@ class BaseSlugNameMixin(object):
         :param to_slug: slugify function
         :param unique: unique function
         """
-        # Compose.
-        gen_digest = kwargs.get("gen_digest", generate_random_digest)
-        inspect = kwargs.get("inspect", sa_inspect)
-        session = kwargs.get("session", Session)
-        to_slug = kwargs.get("to_slug", slugify.slugify)
-        unique = kwargs.get("unique", ensure_unique)
-
         # Generate a candidate slug.
         if candidate is None:
             if self.name:
