@@ -93,21 +93,13 @@ class Blob(Base, BaseMixin):
         if file_like_object is not None:
             self.value = file_like_object.read()
 
-    def update_from_url(self, url, should_unzip=False, requests=None, gzip_cls=None, io_cls=None):
+    def update_from_url(self, url, should_unzip=False, requests=requests_lib, gzip_cls=GzipFile, io_cls=StringIO):
         """
         Update value from url's content.
 
         Update ``self.value`` to be the contents of the file downloaded
         from the ``url`` provided.
         """
-        # Compose.
-        if requests is None:
-            requests = requests_lib
-        if gzip_cls is None:
-            gzip_cls = GzipFile
-        if io_cls is None:
-            io_cls = StringIO
-
         # Download the file, raising an exception if the download fails
         # after retrying once.
         attempts = 0
@@ -127,12 +119,8 @@ class Blob(Base, BaseMixin):
         else:  # Read the response into ``self.value``.
             self.value = r.content
 
-    def get_as_named_tempfile(self, should_close=False, named_tempfile_cls=None):
+    def get_as_named_tempfile(self, should_close=False, named_tempfile_cls=NamedTemporaryFile):
         """Read ``self.value`` into and return a named temporary file."""
-        # Compose.
-        if named_tempfile_cls is None:
-            named_tempfile_cls = NamedTemporaryFile
-
         # Prepare the temp file.
         f = NamedTemporaryFile(delete=False)
 

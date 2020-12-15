@@ -34,16 +34,12 @@ valid_slug = re.compile(r"^[.\w-]{1,64}$", re.U)
 logger = logging.getLogger(__name__)
 
 
-def slug_validator(node, value, regexp=None):
+def slug_validator(node, value, regexp=valid_slug):
     """
     Validate slug.
 
     Defaults to using a slug regexp.
     """
-    # Compose.
-    if regexp is None:
-        regexp = valid_slug
-
     # Raise a ValueError.
     if not regexp.match(value):
         raise ValueError(f"{value} is not a valid slug.")
@@ -128,7 +124,7 @@ class BaseModelContainer(BaseRoot):
             self.validator = self._validator
 
 
-class InstanceTraversalMixin(object):
+class InstanceTraversalMixin:
     """Provide a default __parent__ implementation for traversal."""
 
     request = None
@@ -154,12 +150,8 @@ class InstanceTraversalMixin(object):
                 return parent
             target = parent
 
-    def locatable(self, context, key, provides=None):
+    def locatable(self, context, key, provides=alsoProvides):
         """Make a context object locatable and pass on the request."""
-        # Compose.
-        if provides is None:
-            provides = alsoProvides
-
         if not hasattr(context, "__name__"):
             context.__name__ = key
         context._located_parent = self
@@ -169,14 +161,8 @@ class InstanceTraversalMixin(object):
         return context
 
     @property
-    def __parent__(self, container_cls=None, session=None):
+    def __parent__(self, container_cls=BaseModelContainer, session=Session):
         """Either return ``self.parent``, or a model container object."""
-        # Compose.
-        if container_cls is None:
-            container_cls = BaseModelContainer
-        if session is None:
-            session = Session
-
         # If the context has been located, return the container.
         if hasattr(self, "_located_parent"):
             return self._located_parent

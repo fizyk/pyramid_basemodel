@@ -11,7 +11,7 @@ from sqlalchemy import schema
 logger = logging.getLogger(__name__)
 
 
-def generate_random_digest(num_bytes=28, urandom=None, to_hex=None):
+def generate_random_digest(num_bytes=28, urandom=os.urandom, to_hex=hexlify):
     """
     Generate a random hash and returns the hex digest as a unicode string.
 
@@ -19,12 +19,6 @@ def generate_random_digest(num_bytes=28, urandom=None, to_hex=None):
     :param urandom: urandom function
     :param to_hex: hexifying function
     """
-    # Compose.
-    if urandom is None:
-        urandom = os.urandom
-    if to_hex is None:
-        to_hex = hexlify
-
     # Get random bytes.
     r = urandom(num_bytes)
 
@@ -32,17 +26,13 @@ def generate_random_digest(num_bytes=28, urandom=None, to_hex=None):
     return to_hex(r).decode("utf-8")
 
 
-def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=None):
+def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=generate_random_digest):
     """
     Make sure slug is unique.
 
     Takes a ``candidate`` value for a unique ``property_`` and iterates,
     appending an incremented integer until unique.
     """
-    # Compose.
-    if gen_digest is None:
-        gen_digest = generate_random_digest
-
     # Unpack
     candidate = value
 
