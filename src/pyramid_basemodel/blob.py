@@ -36,12 +36,6 @@ __all__ = [
 
 import logging
 from http import HTTPStatus
-<<<<<<< HEAD
-from io import StringIO
-
-from gzip import GzipFile
-=======
->>>>>>> 360fc0c (Add type checks and typing)
 from tempfile import NamedTemporaryFile
 from typing import IO
 

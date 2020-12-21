@@ -15,7 +15,9 @@ __all__ = [
 
 import re
 import logging
+from typing import Any, Callable
 
+from sqlalchemy.ext.declarative import DeclarativeMeta
 from zope.interface import implementer
 from zope.interface import alsoProvides
 
@@ -34,7 +36,7 @@ valid_slug = re.compile(r"^[.\w-]{1,64}$", re.U)
 logger = logging.getLogger(__name__)
 
 
-def slug_validator(node, value, regexp=valid_slug):
+def slug_validator(node: Any, value: str, regexp: re.Pattern = valid_slug) -> None:
     """
     Validate slug.
 
@@ -53,7 +55,7 @@ class BaseModelContainer(BaseRoot):
     validation_exception = Exception
 
     @property
-    def _validator(self):
+    def _validator(self) -> Callable[[Any, str, re.Pattern], None]:
         return slug_validator
 
     # Default container acl to be private whilst granting authenticated
@@ -66,32 +68,32 @@ class BaseModelContainer(BaseRoot):
     ]
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return plurar version of a class name."""
         return self.model_cls.plural_class_name
 
     @property
-    def class_name(self):
+    def class_name(self) -> str:
         """Determine class name based on the _class_name or the __tablename__."""
         return self.model_cls.class_name
 
     @property
-    def plural_class_name(self):
+    def plural_class_name(self) -> str:
         """Return plurar version of a class name."""
         return self.model_cls.plural_class_name
 
     @property
-    def class_slug(self):
+    def class_slug(self) -> str:
         """Class slug based on either _class_slug or __tablename__."""
         return self.model_cls.class_slug
 
-    def get_child(self, key):
+    def get_child(self, key: str) -> DeclarativeMeta:
         """Query for and return the child instance, if found."""
         column = getattr(self.model_cls, self.property_name)
         query = self.model_cls.query.filter(column == key)
         return query.first()
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Any:
         """Lookup model instance by key."""
         try:
             self.validator(None, key)
@@ -119,7 +121,7 @@ class BaseModelContainer(BaseRoot):
         if "property_name" in kwargs:
             self.property_name = kwargs.get("property_name")
         if "validator" in kwargs:
-            self.validator = kwargs.get("validator")
+            self.validator = kwargs["validator"]
         else:
             self.validator = self._validator
 
