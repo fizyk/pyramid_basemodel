@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* [simplify] Removed `named_tempfile_cls` from `Blob.get_as_named_tempfile` as it wasn't used.
+* [simplify] Simplified the `Blob.update_from_url`. Now the method accepts only url parameter and does exactly one thing.
 * [code] Use default arguments instead of compose sections.
 
 ## 0.4.0

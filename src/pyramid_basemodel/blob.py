@@ -35,12 +35,13 @@ __all__ = [
 ]
 
 import logging
+from http import HTTPStatus
 from io import StringIO
 
 from gzip import GzipFile
 from tempfile import NamedTemporaryFile
 
-import requests as requests_lib
+import requests
 
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Unicode
@@ -93,7 +94,7 @@ class Blob(Base, BaseMixin):
         if file_like_object is not None:
             self.value = file_like_object.read()
 
-    def update_from_url(self, url, should_unzip=False, requests=requests_lib, gzip_cls=GzipFile, io_cls=StringIO):
+    def update_from_url(self, url):
         """
         Update value from url's content.
 
@@ -107,19 +108,15 @@ class Blob(Base, BaseMixin):
         while True:
             attempts += 1
             r = requests.get(url)
-            if r.status_code == requests.codes.ok:
+            if r.status_code == HTTPStatus.OK:
                 break
             if attempts < max_attempts:
                 continue
             r.raise_for_status()
 
-        # If necessary, unzip using the gzip library.
-        if should_unzip:
-            self.value = gzip_cls(fileobj=io_cls(r.content)).read()
-        else:  # Read the response into ``self.value``.
-            self.value = r.content
+        self.value = r.content
 
-    def get_as_named_tempfile(self, should_close=False, named_tempfile_cls=NamedTemporaryFile):
+    def get_as_named_tempfile(self, should_close=False):
         """Read ``self.value`` into and return a named temporary file."""
         # Prepare the temp file.
         f = NamedTemporaryFile(delete=False)
