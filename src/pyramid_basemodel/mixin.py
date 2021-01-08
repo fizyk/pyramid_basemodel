@@ -9,9 +9,10 @@ __all__ = [
 ]
 
 import logging
+import sys
 
 from datetime import datetime
-from typing import Callable, Protocol, List, Union, Tuple
+from typing import Callable, List, Union, Tuple
 
 from sqlalchemy import Column
 from sqlalchemy import Unicode
