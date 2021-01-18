@@ -1,6 +1,6 @@
 # CHANGES
 
-## Unreleased
+## 0.5.0
 
 * [simplify] Removed `inspect` and `to_slug` from `BaseSlugNameMixin.set_slug` method. These parameters seemd like a way 
   to override some core functionality, which seems like a rare enough case to not maintain it, especially without tests.
