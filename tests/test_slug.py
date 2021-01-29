@@ -1,4 +1,7 @@
+from unittest.mock import patch
+
 import pytest
+import sqlalchemy
 from mock import MagicMock
 from sqlalchemy import Column, Integer
 
@@ -35,16 +38,17 @@ def test_set_slug_is_slug_no_name(sample_model):
     assert sample_model.slug == "slug"
 
 
-def test_set_slug_is_slug_is_name(sample_model):
+@patch("pyramid_basemodel.slug.inspect")
+def test_set_slug_is_slug_is_name(inpsect_mock, sample_model):
     "Test that slug won't be generated if it's same as candidate."
-    mock_inspect = MagicMock()
+    # mock_inspect = MagicMock()
     mock_unique = MagicMock()
 
     sample_model.slug = "abc"
     sample_model.name = "Abc"
-    sample_model.set_slug(candidate="abc", inspect=mock_inspect, unique=mock_unique)
+    sample_model.set_slug(candidate="abc", unique=mock_unique)
+    assert inpsect_mock.called is True
     assert not mock_unique.called
-    assert mock_inspect.called is True
     assert sample_model.slug == "abc"
 
 

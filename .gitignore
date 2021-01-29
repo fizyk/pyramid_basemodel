@@ -7,3 +7,6 @@ __pycache__
 # coverage
 .coverage
 coverage.xml
+
+#typing
+.pytype

@@ -9,12 +9,14 @@ __all__ = [
 ]
 
 import logging
+import sys
 
 from datetime import datetime
+from typing import Callable, List, Union, Tuple
 
 from sqlalchemy import Column
 from sqlalchemy import Unicode
-from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.ext.declarative import declared_attr, DeclarativeMeta
 
 from pyramid_basemodel import save as save_to_db
 
@@ -34,7 +36,7 @@ class PolymorphicBaseMixin:
     discriminator = Column("type", Unicode(16))
 
     @declared_attr
-    def __mapper_args__(self):
+    def __mapper_args__(self: "PolymorphicBaseMixin") -> dict:
         """Set the ``polymorphic_identity`` value to the lower case class name."""
         return {"polymorphic_on": self.discriminator, "polymorphic_identity": self.__class__.__name__.lower()}
 
@@ -50,7 +52,7 @@ class PolymorphicMixin:
     """
 
     @declared_attr
-    def __mapper_args__(self):
+    def __mapper_args__(self) -> dict:
         """Set the ``polymorphic_identity`` value to the lower case class name."""
         return {"polymorphic_identity": self.__class__.__name__.lower()}
 
@@ -58,7 +60,7 @@ class PolymorphicMixin:
 class TouchMixin:
     """Provides ``touch`` and ``propagate_touch`` methods."""
 
-    def propagate_touch(self):
+    def propagate_touch(self) -> None:
         """
         Override to propagate touch events to relations.
 
@@ -67,7 +69,12 @@ class TouchMixin:
         update relations in an attribute event handler.
         """
 
-    def touch(self, propagate=True, now=datetime.utcnow, save=save_to_db):
+    def touch(
+        self,
+        propagate: bool = True,
+        now: Callable[[], datetime] = datetime.utcnow,
+        save: Callable[[Union[List[DeclarativeMeta], Tuple[DeclarativeMeta, ...], DeclarativeMeta]], None] = save_to_db,
+    ) -> None:
         """Update self.modified."""
         # Update self's modified date.
         self.modified = now()

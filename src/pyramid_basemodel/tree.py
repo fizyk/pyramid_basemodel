@@ -12,6 +12,7 @@ __all__ = [
 ]
 
 import logging
+from typing import Dict, Tuple, Optional, Callable, Any, Union
 
 from zope.interface import Interface
 from zope.interface import alsoProvides
@@ -21,16 +22,23 @@ from pyramid_basemodel.root import BaseRoot
 
 logger = logging.getLogger(__name__)
 
+ApexT = Tuple[type, type, Dict]
+
 
 class BaseContentRoot(BaseRoot):
     """Base logic for looking up models."""
 
-    apex = None  # e.g.: (Design, IDesignsContainer, {})
-    mapping = {}  # {u'formats': (FileFormat, IFileFormatsContainer, {}), ...}
+    apex: Union[ApexT, None] = None  # e.g.: (Design, IDesignsContainer, {})
+    mapping: Dict[str, ApexT] = {}  # {u'formats': (FileFormat, IFileFormatsContainer, {}), ...}
 
     def container_factory(
-        self, item, key, provides=alsoProvides, default_cls=BaseModelContainer, interface_cls=Interface
-    ):
+        self,
+        item: ApexT,
+        key: str,
+        provides: Callable[[Any, Any], None] = alsoProvides,
+        default_cls: type = BaseModelContainer,
+        interface_cls: type = Interface,
+    ) -> Any:
         """Return an instantiated and interface providing container."""
         # Unpack the mapping item.
         model_cls, container_cls_or_interface, kwargs = item
@@ -54,7 +62,7 @@ class BaseContentRoot(BaseRoot):
         # Return the container.
         return container
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Any:
         """
         Get model from mapping.
 
@@ -64,7 +72,8 @@ class BaseContentRoot(BaseRoot):
         # If the key matches a traversal container in the mapping, use that.
         if key in self.mapping:
             mapping_item = self.mapping.get(key)
-            return self.container_factory(mapping_item, key)
+            if mapping_item:
+                return self.container_factory(mapping_item, key)
 
         # Otherwise try and lookup using the apex model class.
         if self.apex:

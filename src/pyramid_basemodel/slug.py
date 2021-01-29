@@ -7,21 +7,35 @@ __all__ = [
 ]
 
 import logging
+import sys
 
-import slugify
+if sys.version_info[0] == 3 and sys.version_info[1] <= 7:
+    from typing_extensions import Protocol
+else:
+    from typing import Protocol
+
+from slugify import slugify
 
 from sqlalchemy import exc as sa_exc
-from sqlalchemy import inspect as sa_inspect
+from sqlalchemy import inspect
 from sqlalchemy.ext import declarative
+from sqlalchemy.orm import scoped_session, Query
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Unicode
 
-from pyramid_basemodel.util import ensure_unique
+from pyramid_basemodel.util import ensure_unique, GenRandDigestProtocol
 from pyramid_basemodel.util import generate_random_digest
 
-from pyramid_basemodel import Session
+from pyramid_basemodel import Session, Base
 
 logger = logging.getLogger(__name__)
+
+
+class UniqueFuncT(Protocol):
+    """Unique function protocol."""
+
+    def __call__(self, self_: Base, query: Query, property_: Column, value: str) -> str:
+        ...
 
 
 class BaseSlugNameMixin:
@@ -33,46 +47,43 @@ class BaseSlugNameMixin:
     name aware factory classmethod.
     """
 
-    _max_slug_length = 64
-    _slug_is_unique = True
+    query: Query
+    _max_slug_length: int = 64
+    _slug_is_unique: bool = True
 
     @property
-    def __name__(self):
+    def __name__(self) -> str:
         """Url friendly name."""
         return self.slug
 
     @declarative.declared_attr
-    def slug(cls):
+    def slug(cls) -> Column:
         """Get url friendly slug, e.g.: `foo-bar`."""
         return Column(Unicode(cls._max_slug_length), nullable=False, unique=cls._slug_is_unique)
 
     @declarative.declared_attr
-    def name(cls):
+    def name(cls) -> Column:
         """Get human readable name, e.g.: `Foo Bar`."""
         return Column(Unicode(cls._max_slug_length), nullable=False)
 
     def set_slug(
         self,
-        candidate=None,
-        gen_digest=generate_random_digest,
-        inspect=sa_inspect,
-        session=Session,
-        to_slug=slugify.slugify,
-        unique=ensure_unique,
-    ):
+        candidate: str = None,
+        gen_digest: GenRandDigestProtocol = generate_random_digest,
+        session: scoped_session = Session,
+        unique: UniqueFuncT = ensure_unique,
+    ) -> None:
         """
         Generate and set a unique ``self.slug`` from ``self.name``.
 
         :param get_digest: function to generate random digest. Used of there's no name set.
-        :param inspect:
-        :param session: SQLAlchemy's session
         :param to_slug: slugify function
         :param unique: unique function
         """
         # Generate a candidate slug.
         if candidate is None:
             if self.name:
-                candidate = to_slug(self.name)
+                candidate = slugify(self.name)
             if not candidate:
                 candidate = gen_digest(num_bytes=16)
 
