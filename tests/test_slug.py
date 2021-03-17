@@ -18,10 +18,7 @@ def sample_model():
 
     # Remove table from declarative base
     Base.metadata.remove(Model.__table__)
-    del Model._decl_class_registry[Model.__name__]
-    root_module = Model._decl_class_registry["_sa_module_registry"]
-    if Model.__name__ in root_module.get_module(__name__).contents:
-        del root_module.get_module(__name__).contents[Model.__name__]
+    Base.registry.dispose()
 
 
 def test_set_slug_is_slug_no_name(sample_model):
