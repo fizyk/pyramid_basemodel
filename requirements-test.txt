@@ -14,5 +14,5 @@ pytest==6.2.3
 pytest-cov==2.11.1
 coverage==5.5
 mock==4.0.3; python_version>'3'
-requests-mock==1.9.1
+requests-mock==1.9.2
 -e .[tests]
