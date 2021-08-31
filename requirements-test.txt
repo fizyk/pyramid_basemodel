@@ -10,7 +10,7 @@ zope.interface==5.4.0
 zope.sqlalchemy==1.5
 inflect==5.3.0
 # tests
-pytest==6.2.4
+pytest==6.2.5
 pytest-cov==2.12.1
 coverage==5.5
 mock==4.0.3; python_version>'3'
