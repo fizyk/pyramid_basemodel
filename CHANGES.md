@@ -1,5 +1,9 @@
 # CHANGES
 
+## Unreleased
+
+* [package] Marked python 3.10 compatible (Trove Classifiers)
+
 ## 0.5.0
 
 * [simplify] Removed `inspect` and `to_slug` from `BaseSlugNameMixin.set_slug` method. These parameters seemd like a way 
