@@ -1,6 +1,6 @@
 # CHANGES
 
-## Unreleased
+## 0.5.1
 
 * [package] Marked python 3.10 compatible (Trove Classifiers)
 
