@@ -1,6 +1,6 @@
 # requirements of main dependencies used for tests
 pyramid==2.0
-pyramid-tm==2.4
+pyramid-tm==2.5
 transaction==3.0.1
 requests==2.27.1
 sqlalchemy==1.4.32
