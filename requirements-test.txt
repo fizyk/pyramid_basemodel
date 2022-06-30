@@ -2,7 +2,7 @@
 pyramid==2.0
 pyramid-tm==2.5
 transaction==3.0.1
-requests==2.28.0
+requests==2.28.1
 sqlalchemy==1.4.39
 python-slugify==6.1.2
 text-unidecode==1.3
