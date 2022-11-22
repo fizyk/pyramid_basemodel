@@ -9,6 +9,7 @@ on:
       - 'Run tests'
       - 'Test build package'
       - 'Run linters'
+      - 'Run test commands'
 
 jobs:
   merge-me:
