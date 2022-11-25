@@ -8,4 +8,6 @@ on:
 
 jobs:
   basic_linters:
-    uses: fizyk/actions-reuse/.github/workflows/linters-python.yml@v1.0.0
+    uses: fizyk/actions-reuse/.github/workflows/linters-python.yml@v1.5.1
+    with:
+      pipenv: true

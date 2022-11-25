@@ -1,0 +1,1 @@
+Moved development dependency management into pipfile/pipfile.lock
