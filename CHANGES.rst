@@ -3,6 +3,18 @@ CHANGES
 
 .. towncrier release notes start
 
+0.5.2 (2022-11-25)
+==================
+
+Miscellaneus
+------------
+
+- Moved development dependency management into pipfile/pipfile.lock (`#283 <https://https://github.com/fizyk/pyramid_basemodel/issues/283>`_)
+- Change versionin bumping tool from bumpversion to tbump (`#285 <https://https://github.com/fizyk/pyramid_basemodel/issues/285>`_)
+- Updated package description to support python 3.11 (`#286 <https://https://github.com/fizyk/pyramid_basemodel/issues/286>`_)
+- Added project urls to setup.cfg for better pypi.org experience. (`#287 <https://https://github.com/fizyk/pyramid_basemodel/issues/287>`_)
+
+
 0.5.1
 -----
 
