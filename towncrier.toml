@@ -4,22 +4,18 @@ single_file=true
 filename="CHANGES.rst"
 issue_format="`#{issue} <https://https://github.com/fizyk/pyramid_basemodel/issues/{issue}>`_"
 
-[[tool.towncrier.type]]
-directory = "feature"
+[tool.towncrier.fragment.feature]
 name = "Features"
 showcontent = true
 
-[[tool.towncrier.type]]
-directory = "bugfix"
+[tool.towncrier.fragment.bugfix]
 name = "Bugfixes"
 showcontent = true
 
-[[tool.towncrier.type]]
-directory = "break"
+[tool.towncrier.fragment.break]
 name = "Breaking changes"
 showcontent = true
 
-[[tool.towncrier.type]]
-directory = "misc"
+[tool.towncrier.fragment.misc]
 name = "Miscellaneus"
 showcontent = true
