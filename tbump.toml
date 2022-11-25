@@ -38,6 +38,10 @@ src = "pyramid_basemodel/__init__.py"
 src = "setup.cfg"
 search = 'version = {current_version}'
 
+[[file]]
+src = "setup.cfg"
+search = 'Changelog = https://github.com/fizyk/pyramid_basemodel/blob/v{current_version}/CHANGES.rst'
+
 # You can specify a list of commands to
 # run after the files have been patched
 # and before the git commit is made
