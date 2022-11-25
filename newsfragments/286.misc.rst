@@ -1,0 +1,1 @@
+Updated package description to support python 3.11
