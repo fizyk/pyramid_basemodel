@@ -1,0 +1,2 @@
+Migrate automerge `fizyk/actions-reuse/.github/workflows/automerge-shared.yml`
+using github application for maintaining short lived acess tokens for merge-me actions.
