@@ -1,8 +1,151 @@
+[project]
+name = "pyramid_basemodel"
+version = "0.5.2"
+description = "pyramid_basemodel - a thin, low level SQLAlchemy bindings to pyramid"
+readme = "README.rst"
+keywords = ["pyramid", "sqlalchemy"]
+license = {file = "UNLICENSE"}
+authors = [
+  {name = "James Arthur"}
+]
+maintainers = [
+  {name = "Grzegorz Śliwiński", email = "fizyk+pypi@fizyk.dev"}
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Web Environment",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: The Unlicense (Unlicense)",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Framework :: Pyramid",
+  "Topic :: Database :: Front-Ends",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Internet :: WWW/HTTP :: WSGI",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "pyramid",
+  "pyramid_tm",
+  "requests",
+  "SQLAlchemy",
+  "zope.interface",
+  "zope.sqlalchemy",
+  "python-slugify",
+  "inflect",
+]
+requires-python = ">= 3.7"
+
+[project.urls]
+"Source" = "https://github.com/fizyk/pyramid_basemodel/"
+"Bug Tracker" = "https://github.com/fizyk/pyramid_basemodel/issues"
+"Changelog" = "https://github.com/fizyk/pyramid_basemodel/blob/v0.5.2/CHANGES.rst"
+
 [build-system]
-requires = ["setuptools >= 40.6.0", "wheel"]
+requires = ["setuptools >= 61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+zip-safe = true
+packages = ["pyramid_basemodel"]
+
+[tool.towncrier]
+directory = "newsfragments"
+single_file=true
+filename="CHANGES.rst"
+issue_format="`#{issue} <https://https://github.com/fizyk/pyramid_basemodel/issues/{issue}>`_"
+
+[tool.towncrier.fragment.feature]
+name = "Features"
+showcontent = true
+
+[tool.towncrier.fragment.bugfix]
+name = "Bugfixes"
+showcontent = true
+
+[tool.towncrier.fragment.break]
+name = "Breaking changes"
+showcontent = true
+
+[tool.towncrier.fragment.misc]
+name = "Miscellaneus"
+showcontent = true
+
+
+[tool.pytest.ini_options]
+xfail_strict=true
+
+[tool.pydocstyle]
+ignore = "D203,D212"
 
 [tool.black]
 line-length = 120
 target-version = ['py39']
 include = '.*\.pyi?$'
+
+[tool.tbump]
+# Uncomment this if your project is hosted on GitHub:
+# github_url = "https://github.com/<user or organization>/<project>/"
+
+[tool.tbump.version]
+current = "0.5.2"
+
+# Example of a semver regexp.
+# Make sure this matches current_version before
+# using tbump
+regex = '''
+  (?P<major>\d+)
+  \.
+  (?P<minor>\d+)
+  \.
+  (?P<patch>\d+)
+  (\-
+    (?P<extra>.+)
+  )?
+  '''
+
+[tool.tbump.git]
+message_template = "Release {new_version}"
+tag_template = "v{new_version}"
+
+[[tool.tbump.field]]
+# the name of the field
+name = "extra"
+# the default value to use, if there is no match
+default = ""
+
+
+# For each file to patch, add a [[file]] config
+# section containing the path of the file, relative to the
+# tbump.toml location.
+[[tool.tbump.file]]
+src = "pyramid_basemodel/__init__.py"
+
+[[tool.tbump.file]]
+src = "pyproject.toml"
+search = 'version = "{current_version}"'
+
+[[tool.tbump.file]]
+src = "pyproject.toml"
+search = '"Changelog" = "https://github.com/fizyk/pyramid_basemodel/blob/v{current_version}/CHANGES.rst"'
+
+# You can specify a list of commands to
+# run after the files have been patched
+# and before the git commit is made
+
+[[tool.tbump.before_commit]]
+name = "Build changelog"
+cmd = "pipenv run towncrier build --version {new_version} --yes"
+
+# Or run some commands after the git tag and the branch
+# have been pushed:
+#  [[tool.tbump.after_push]]
+#  name = "publish"
+#  cmd = "./publish.sh"
