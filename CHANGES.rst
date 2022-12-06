@@ -3,6 +3,17 @@ CHANGES
 
 .. towncrier release notes start
 
+0.5.3 (2022-12-06)
+==================
+
+Miscellaneus
+------------
+
+- Migrate automerge `fizyk/actions-reuse/.github/workflows/automerge-shared.yml`
+  using github application for maintaining short lived acess tokens for merge-me actions. (`#297 <https://https://github.com/fizyk/pyramid_basemodel/issues/297>`_)
+- Move as much of the project configuration to pyproject.toml as possible. And drop setup.py. (`#301 <https://https://github.com/fizyk/pyramid_basemodel/issues/301>`_)
+
+
 0.5.2 (2022-11-25)
 ==================
 
