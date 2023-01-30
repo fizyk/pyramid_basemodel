@@ -3,6 +3,15 @@ CHANGES
 
 .. towncrier release notes start
 
+0.6.0 (2023-01-30)
+==================
+
+Breaking changes
+----------------
+
+- Require SQLALchemy 2.0 as the imports were adjusted according to SQLALchemy 2.0 Deprecation warnings. (`#327 <https://https://github.com/fizyk/pyramid_basemodel/issues/327>`_)
+
+
 0.5.3 (2022-12-06)
 ==================
 

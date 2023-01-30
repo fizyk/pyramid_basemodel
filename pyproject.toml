@@ -1,6 +1,6 @@
 [project]
 name = "pyramid_basemodel"
-version = "0.5.3"
+version = "0.6.0"
 description = "pyramid_basemodel - a thin, low level SQLAlchemy bindings to pyramid"
 readme = "README.rst"
 keywords = ["pyramid", "sqlalchemy"]
@@ -46,7 +46,7 @@ requires-python = ">= 3.7"
 [project.urls]
 "Source" = "https://github.com/fizyk/pyramid_basemodel/"
 "Bug Tracker" = "https://github.com/fizyk/pyramid_basemodel/issues"
-"Changelog" = "https://github.com/fizyk/pyramid_basemodel/blob/v0.5.3/CHANGES.rst"
+"Changelog" = "https://github.com/fizyk/pyramid_basemodel/blob/v0.6.0/CHANGES.rst"
 
 [build-system]
 requires = ["setuptools >= 61.0.0", "wheel"]
@@ -95,7 +95,7 @@ include = '.*\.pyi?$'
 # github_url = "https://github.com/<user or organization>/<project>/"
 
 [tool.tbump.version]
-current = "0.5.3"
+current = "0.6.0"
 
 # Example of a semver regexp.
 # Make sure this matches current_version before
