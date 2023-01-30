@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pyramid = "==2"
+pyramid = "==2.0.1"
 pyramid-tm = "==2.5"
 requests = "==2.28.2"
 sqlalchemy = "==1.4.46"
