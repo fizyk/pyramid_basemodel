@@ -38,8 +38,7 @@ from zope.sqlalchemy import register
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import Column, DateTime, Integer
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
 
 from pyramid.path import DottedNameResolver
 from pyramid.settings import asbool
