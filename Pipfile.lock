@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "312392bd9bb6ee64e5b70087fe844f8a4cee08bb43c98f9f1d28b9b17b671fc6"
+            "sha256": "05d72621fc234d0f8c106d28f55d454e9807cf6e7e3000e1fe723b27c2cf9d13"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -293,11 +293,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:23aaf86b85ca52ceb801d32703f12d77517b2556af839621c641fca11287952b",
-                "sha256:f104fa03692a2602fa0fec6c6a9e63b6c8a968de13e17c026957dd1f53d80990"
+                "sha256:5df61bf30bb10c6f756eb19e7c9f3b473051f48db77fddbe06ff2ca307df9a6f",
+                "sha256:62642358adc77ffa87233bc4d2354c4b2682d214048f500964dbe760ccedf102"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==67.7.2"
+            "version": "==67.8.0"
         },
         "sqlalchemy": {
             "hashes": [
@@ -876,11 +876,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:23aaf86b85ca52ceb801d32703f12d77517b2556af839621c641fca11287952b",
-                "sha256:f104fa03692a2602fa0fec6c6a9e63b6c8a968de13e17c026957dd1f53d80990"
+                "sha256:5df61bf30bb10c6f756eb19e7c9f3b473051f48db77fddbe06ff2ca307df9a6f",
+                "sha256:62642358adc77ffa87233bc4d2354c4b2682d214048f500964dbe760ccedf102"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==67.7.2"
+            "version": "==67.8.0"
         },
         "six": {
             "hashes": [
@@ -908,11 +908,11 @@
         },
         "tbump": {
             "hashes": [
-                "sha256:683eab2e5a4d4861b6928c422d9e51e1d3aeccbbd69d0281fab2c374345e1d9f",
-                "sha256:cf711835b155eaefcf2023ca8963200d893cb40998c9393684df020e6ab1c0b3"
+                "sha256:170a4395d167daee357cb96af5e874119c470feaba9f605e73f3426e768c2542",
+                "sha256:9ebf5d69bc92ca8be1afb13a80f51e374526cb9988f4c3b167036a9e8a10a684"
             ],
             "index": "pypi",
-            "version": "==6.9.0"
+            "version": "==6.10.0"
         },
         "tomlkit": {
             "hashes": [
