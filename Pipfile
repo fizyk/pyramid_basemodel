@@ -15,7 +15,7 @@ inflect = "==6.0.4"
 
 [dev-packages]
 towncrier = "==23.6.0"
-pytest = "==7.3.1"
+pytest = "==7.3.2"
 pytest-cov = "==4.1.0"
 coverage = "==7.2.7"
 mock = "==5.0.2"
