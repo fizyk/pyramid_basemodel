@@ -11,3 +11,4 @@ jobs:
     uses: fizyk/actions-reuse/.github/workflows/tests-pytests.yml@v2.1.2
     with:
       pipenv-install-options: --skip-lock
+      python-versions: '["3.8", "3.9", "3.10", "3.11"]'
