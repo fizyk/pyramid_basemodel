@@ -11,7 +11,7 @@ sqlalchemy = "==2.0.17"
 "zope.interface" = "==5.5.2"
 "zope.sqlalchemy" = "==1.6"
 python-slugify = "==8.0.1"
-inflect = "==6.1.0"
+inflect = "==6.2.0"
 
 [dev-packages]
 towncrier = "==23.6.0"
