@@ -21,6 +21,6 @@ coverage = "==7.2.7"
 mock = "==5.1.0"
 requests-mock = "==1.11.0"
 black = "==23.7.0"
-pycodestyle = "==2.10.0"
+pycodestyle = "==2.11.0"
 tbump = "==6.10.0"
 pydocstyle = {version = "==6.3.0", extras = ["toml"]}
