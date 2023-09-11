@@ -20,7 +20,7 @@ pytest-cov = "==4.1.0"
 coverage = "==7.3.1"
 mock = "==5.1.0"
 requests-mock = "==1.11.0"
-black = "==23.7.0"
+black = "==23.9.1"
 pycodestyle = "==2.11.0"
 tbump = "==6.11.0"
 pydocstyle = {version = "==6.3.0", extras = ["toml"]}
