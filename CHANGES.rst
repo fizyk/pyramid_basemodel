@@ -3,6 +3,21 @@ CHANGES
 
 .. towncrier release notes start
 
+0.6.1 (2023-10-11)
+==================
+
+Features
+--------
+
+- Support Python 3.12 (`#397 <https://https://github.com/fizyk/pyramid_basemodel/issues/397>`_)
+
+
+Miscellaneus
+------------
+
+- `#358 <https://https://github.com/fizyk/pyramid_basemodel/issues/358>`_, `#361 <https://https://github.com/fizyk/pyramid_basemodel/issues/361>`_, `#372 <https://https://github.com/fizyk/pyramid_basemodel/issues/372>`_, `#398 <https://https://github.com/fizyk/pyramid_basemodel/issues/398>`_
+
+
 0.6.0 (2023-01-30)
 ==================
 
