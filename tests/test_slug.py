@@ -1,3 +1,4 @@
+"""Slug test module."""
 import pytest
 from mock import MagicMock
 from sqlalchemy import Column, Integer
@@ -8,6 +9,8 @@ from pyramid_basemodel.slug import BaseSlugNameMixin
 
 @pytest.fixture
 def sample_model():
+    """Sample model fixture."""
+
     class Model(Base, BaseSlugNameMixin):
         __tablename__ = "models"
         id = Column(Integer, primary_key=True)
@@ -22,7 +25,7 @@ def sample_model():
 
 
 def test_set_slug_is_slug_no_name(sample_model):
-    "Test that slug won't be generated if already present."
+    """Test that slug won't be generated if already present."""
     mock_unique = MagicMock()
 
     sample_model.name = None
@@ -33,7 +36,7 @@ def test_set_slug_is_slug_no_name(sample_model):
 
 
 def test_set_slug_is_slug_is_name(sample_model):
-    "Test that slug won't be generated if it's same as candidate."
+    """Test that slug won't be generated if it's same as candidate."""
     mock_inspect = MagicMock()
     mock_unique = MagicMock()
 
@@ -46,7 +49,7 @@ def test_set_slug_is_slug_is_name(sample_model):
 
 
 def test_set_slug_no_slug_no_name(sample_model):
-    "Test that the slug will be a random digest if the name is not set."
+    """Test that the slug will be a random digest if the name is not set."""
     sample_model.slug = None
     sample_model.name = None
     sample_model.set_slug(unique=lambda *args: args[-1])
@@ -54,14 +57,14 @@ def test_set_slug_no_slug_no_name(sample_model):
 
 
 def test_set_slug_no_slug_is_name(sample_model):
-    "Test correct slugification of a name."
+    """Test correct slugification of a name."""
     sample_model.name = "My nice name"
     sample_model.set_slug(unique=lambda *args: args[-1])
     assert sample_model.slug == "my-nice-name"
 
 
 def test_set_slug_slug_unique(sample_model):
-    "Test that the unique function get's called."
+    """Test that the unique function get's called."""
     sample_model.slug = None
     sample_model.name = "My nice name"
     sample_model.set_slug(unique=lambda *args: "{0}-1".format(args[-1]))
@@ -69,7 +72,7 @@ def test_set_slug_slug_unique(sample_model):
 
 
 def test_set_slug_truncate(sample_model):
-    "Test that the slug is truncated."
+    """Test that the slug is truncated."""
     mock_unique = MagicMock()
     sample_model.name = "a" * 95
     sample_model.set_slug(unique=mock_unique)

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-Base model container.
+"""Base model container.
 
 Provides a base model container, used by the Pyramid traversal
 machinery and a mixin to aid with traversal from an instance
@@ -13,18 +12,13 @@ __all__ = [
     "InstanceTraversalMixin",
 ]
 
-import re
 import logging
-
-from zope.interface import implementer
-from zope.interface import alsoProvides
-
-from sqlalchemy.exc import InvalidRequestError
+import re
 
 from pyramid.interfaces import ILocation
-from pyramid.security import ALL_PERMISSIONS
-from pyramid.security import Allow, Deny
-from pyramid.security import Authenticated, Everyone
+from pyramid.security import ALL_PERMISSIONS, Allow, Authenticated, Deny, Everyone
+from sqlalchemy.exc import InvalidRequestError
+from zope.interface import alsoProvides, implementer
 
 from pyramid_basemodel import Session
 from pyramid_basemodel.interfaces import IModelContainer
@@ -35,8 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 def slug_validator(node, value, regexp=valid_slug):
-    """
-    Validate slug.
+    """Validate slug.
 
     Defaults to using a slug regexp.
     """

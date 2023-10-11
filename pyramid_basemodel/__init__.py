@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Main pyramid_basemodel module.
+"""Main pyramid_basemodel module.
 
 Provides global scoped ``Session`` and declarative ``Base``, ``BaseMixin``
 class and ``bind_engine`` function.
@@ -30,18 +29,15 @@ __all__ = [
     "bind_engine",
 ]
 
-import inflect
 from datetime import datetime
 
-from zope.interface import classImplements
-from zope.sqlalchemy import register
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import Column, DateTime, Integer
-from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
-
+import inflect
 from pyramid.path import DottedNameResolver
 from pyramid.settings import asbool
+from sqlalchemy import Column, DateTime, Integer, engine_from_config
+from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
+from zope.interface import classImplements
+from zope.sqlalchemy import register
 
 from pyramid_basemodel.interfaces import IDeclarativeBase
 
@@ -62,8 +58,7 @@ class classproperty:
 
 
 class BaseMixin:
-    """
-    Default Base Model Mixin.
+    """Default Base Model Mixin.
 
     Provides an int ``id`` as primary key, ``version``, ``created`` and
     ``modified`` columns and a scoped ``self.query`` property.
@@ -85,8 +80,7 @@ class BaseMixin:
 
     @classproperty
     def class_name(cls):
-        """
-        Determine class name based on the _class_name or the __tablename__.
+        """Determine class name based on the _class_name or the __tablename__.
 
         If provided, defaults to ``cls._class_name``, otherwise default to
         ``cls.plural_class_name``, which is derived from the cls.__tablename__.
@@ -140,8 +134,7 @@ class BaseMixin:
 
 
 def save(instance_or_instances, session=Session):
-    """
-    Save model instance(s) to the db.
+    """Save model instance(s) to the db.
 
     Both single and multiple instances can be saved.
     """
@@ -153,8 +146,7 @@ def save(instance_or_instances, session=Session):
 
 
 def bind_engine(engine, session=Session, base=Base, should_create=False, should_drop=False):
-    """
-    Bind the ``session`` and ``base`` to the ``engine``.
+    """Bind the ``session`` and ``base`` to the ``engine``.
 
     :param should_create: Triggers create tables on all models
     :param should_drop: Triggers drop on all tables

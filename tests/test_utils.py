@@ -1,19 +1,21 @@
+"""Test utils module."""
+
 import hashlib
 
 from mock import MagicMock, Mock
 from sqlalchemy import schema
 
 from pyramid_basemodel.util import (
-    get_object_id,
     generate_random_digest,
-    get_or_create,
     get_all_matching,
+    get_object_id,
+    get_or_create,
     table_args_indexes,
 )
 
 
 def test_get_object_id():
-    "Check get object id utility function."
+    """Check get object id utility function."""
     mock_user = MagicMock()
     mock_user.__tablename__ = "users"
     mock_user.id = 1234
@@ -21,21 +23,21 @@ def test_get_object_id():
 
 
 def test_generate_random_digest_default():
-    "Check digest length with default arguments."
+    """Check digest length with default arguments."""
     h = hashlib.sha224()
     digest = generate_random_digest()
     assert len(h.hexdigest()) == len(digest)
 
 
 def test_generate_random_digest_longer():
-    "Check digest lenght with explicit num_bytes different than default."
+    """Check digest lenght with explicit num_bytes different than default."""
     h = hashlib.sha512()
     digest = generate_random_digest(num_bytes=64)
     assert len(h.hexdigest()) == len(digest)
 
 
 def test_get_or_create_existing():
-    "Test get_or_create where instance already exists."
+    """Test get_or_create where instance already exists."""
     mock_cls = Mock()
     mock_cls.return_value = "new"
     kwargs = dict(foo="bar")
@@ -47,7 +49,7 @@ def test_get_or_create_existing():
 
 
 def test_get_or_create_new():
-    "Test get_or_create where instance does not exists."
+    """Test get_or_create where instance does not exists."""
     mock_cls = Mock()
     mock_cls.return_value = "new"
     kwargs = dict(foo="bar")
@@ -58,7 +60,7 @@ def test_get_or_create_new():
 
 
 def test_get_all_matching():
-    "Test return all matching instances."
+    """Test return all matching instances."""
     mock_cls = Mock()
     mock_cls.query.filter.return_value.all.return_value = ["result"]
 
@@ -68,7 +70,7 @@ def test_get_all_matching():
 
 
 def test_table_args_indexes():
-    "Test table_args_indexes to build proper indexes."
+    """Test table_args_indexes to build proper indexes."""
     a = table_args_indexes(
         "basket_items",
         [

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-Base traversal root and a mixin class for objects in the Pyramid traversal hierarchy.
+"""Base traversal root and a mixin class for objects in the Pyramid traversal hierarchy.
 
 Provides a base traversal root and a mixin class for objects in the Pyramid traversal hierarchy.
 
@@ -14,10 +13,8 @@ __all__ = [
 
 import logging
 
-from zope.interface import implementer
-from zope.interface import alsoProvides
-
 from pyramid.interfaces import ILocation
+from zope.interface import alsoProvides, implementer
 
 logger = logging.getLogger(__name__)
 

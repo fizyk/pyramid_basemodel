@@ -2,8 +2,8 @@
 
 """Shared utility functions for interacting with the data model."""
 
-import os
 import logging
+import os
 from binascii import hexlify
 
 from sqlalchemy import schema
@@ -12,8 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def generate_random_digest(num_bytes=28, urandom=os.urandom, to_hex=hexlify):
-    """
-    Generate a random hash and returns the hex digest as a unicode string.
+    """Generate a random hash and returns the hex digest as a unicode string.
 
     :param num_bytes: number of bytes to random(select)
     :param urandom: urandom function
@@ -27,8 +26,7 @@ def generate_random_digest(num_bytes=28, urandom=os.urandom, to_hex=hexlify):
 
 
 def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=generate_random_digest):
-    """
-    Make sure slug is unique.
+    """Make sure slug is unique.
 
     Takes a ``candidate`` value for a unique ``property_`` and iterates,
     appending an incremented integer until unique.
@@ -70,8 +68,7 @@ def get_or_create(cls, **kwargs):
 
 
 def get_all_matching(cls, column_name, values):
-    """
-    Return all instances of ``cls`` where ``column_name`` matches one of ``values``.
+    """Return all instances of ``cls`` where ``column_name`` matches one of ``values``.
 
     :param cls:
     :param column_name:
@@ -88,8 +85,7 @@ def get_object_id(instance):
 
 
 def table_args_indexes(tablename, columns):
-    """
-    Build table indexes.
+    """Build table indexes.
 
     Call with a class name and a list of relation id columns to return the
     appropriate op.execute created indexes.

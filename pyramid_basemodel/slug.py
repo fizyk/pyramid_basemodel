@@ -9,24 +9,20 @@ __all__ = [
 import logging
 
 import slugify
-
 from sqlalchemy import exc as sa_exc
 from sqlalchemy import inspect as sa_inspect
 from sqlalchemy.ext import declarative
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Unicode
 
-from pyramid_basemodel.util import ensure_unique
-from pyramid_basemodel.util import generate_random_digest
-
 from pyramid_basemodel import Session
+from pyramid_basemodel.util import ensure_unique, generate_random_digest
 
 logger = logging.getLogger(__name__)
 
 
 class BaseSlugNameMixin:
-    """
-    Base mixin delivering a slug functionality.
+    """Base mixin delivering a slug functionality.
 
     ORM mixin class that provides ``slug`` and ``name`` properties, with a
     ``set_slug`` method to set the slug value from the name and a default
@@ -60,8 +56,7 @@ class BaseSlugNameMixin:
         to_slug=slugify.slugify,
         unique=ensure_unique,
     ):
-        """
-        Generate and set a unique ``self.slug`` from ``self.name``.
+        """Generate and set a unique ``self.slug`` from ``self.name``.
 
         :param get_digest: function to generate random digest. Used of there's no name set.
         :param inspect:
