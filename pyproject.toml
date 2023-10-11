@@ -82,13 +82,20 @@ showcontent = true
 [tool.pytest.ini_options]
 xfail_strict=true
 
-[tool.pydocstyle]
-ignore = "D203,D212"
-
 [tool.black]
 line-length = 120
 target-version = ['py39']
 include = '.*\.pyi?$'
+
+[tool.ruff]
+line-length = 120
+select = [
+    "E",   # pycodestyle
+    "F",   # pyflakes
+    "I",   # isort
+    "D",   # pydocstyle
+]
+
 
 [tool.tbump]
 # Uncomment this if your project is hosted on GitHub:

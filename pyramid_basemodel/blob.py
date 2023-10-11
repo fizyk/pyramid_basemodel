@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-Provide a generic model class for storing large binary objects.
+"""Provide a generic model class for storing large binary objects.
 
 To store a bytestring::
 
@@ -36,26 +35,19 @@ __all__ = [
 
 import logging
 from http import HTTPStatus
-from io import StringIO
-
-from gzip import GzipFile
 from tempfile import NamedTemporaryFile
 
 import requests
-
 from sqlalchemy.schema import Column
-from sqlalchemy.types import Unicode
-from sqlalchemy.types import LargeBinary
+from sqlalchemy.types import LargeBinary, Unicode
 
-from pyramid_basemodel import Base
-from pyramid_basemodel import BaseMixin
+from pyramid_basemodel import Base, BaseMixin
 
 logger = logging.getLogger(__name__)
 
 
 class Blob(Base, BaseMixin):
-    """
-    Encapsulates a large binary file.
+    """Encapsulates a large binary file.
 
     Instances must have a unique ``self.name``, which has a maximum length
     of 64 characters.
@@ -84,8 +76,7 @@ class Blob(Base, BaseMixin):
         return instance
 
     def update(self, name, file_like_object=None):
-        """
-        Update value from file like object.
+        """Update value from file like object.
 
         Update properties, reading the ``file_like_object`` into
         ``self.value`` if provided.
@@ -95,8 +86,7 @@ class Blob(Base, BaseMixin):
             self.value = file_like_object.read()
 
     def update_from_url(self, url):
-        """
-        Update value from url's content.
+        """Update value from url's content.
 
         Update ``self.value`` to be the contents of the file downloaded
         from the ``url`` provided.

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-`BaseContentRoot`` traversal root.
+"""`BaseContentRoot`` traversal root.
 
 Provide a ``BaseContentRoot`` traversal root for looking up instances
 via their containers.
@@ -13,8 +12,7 @@ __all__ = [
 
 import logging
 
-from zope.interface import Interface
-from zope.interface import alsoProvides
+from zope.interface import Interface, alsoProvides
 
 from pyramid_basemodel.container import BaseModelContainer
 from pyramid_basemodel.root import BaseRoot
@@ -40,7 +38,6 @@ class BaseContentRoot(BaseRoot):
         is_interface = issubclass(container_cls_or_interface, interface_cls)
         if is_interface:
             container_cls = default_cls
-            container_interface = container_cls_or_interface
         else:
             container_cls = container_cls_or_interface
 
@@ -55,8 +52,7 @@ class BaseContentRoot(BaseRoot):
         return container
 
     def __getitem__(self, key):
-        """
-        Get model from mapping.
+        """Get model from mapping.
 
         First see if the key is in ``self.mapping``. If it is, return
         a content container configured to look up that model class.

@@ -1,11 +1,12 @@
+"""Test for elements defined in init module."""
 from mock import Mock
 
 import pyramid_basemodel
-from pyramid_basemodel import save, bind_engine
+from pyramid_basemodel import bind_engine, save
 
 
 def test_save():
-    "Test save method."
+    """Test save method."""
     mock_session = Mock()
     save("a", session=mock_session)
     mock_session.add.assert_called_with("a")
@@ -15,7 +16,7 @@ def test_save():
 
 
 def test_bind_engine():
-    "Test default bind engine behaviour."
+    """Test default bind engine behaviour."""
     mock_session = Mock()
     mock_base = Mock()
     mock_engine = Mock()
@@ -30,7 +31,7 @@ def test_bind_engine():
 
 
 def test_bind_engine_create():
-    "Test whether bind_engine triggers create_all if requested."
+    """Test whether bind_engine triggers create_all if requested."""
     mock_base = Mock()
     bind_engine(Mock(), session=Mock(), base=mock_base, should_create=True)
 
@@ -39,7 +40,7 @@ def test_bind_engine_create():
 
 
 def test_bind_engine_drop():
-    "Test whether bind_engine triggers drop_all if requested."
+    """Test whether bind_engine triggers drop_all if requested."""
     mock_base = Mock()
     bind_engine(Mock(), session=Mock(), base=mock_base, should_drop=True)
 
@@ -48,7 +49,7 @@ def test_bind_engine_drop():
 
 
 def test_includeme(monkeypatch):
-    "Default includeme behaviour."
+    """Default includeme behaviour."""
     mocked_engine_from_config = Mock()
     mocked_engine_from_config.return_value = "engine"
 
@@ -67,7 +68,7 @@ def test_includeme(monkeypatch):
 
 
 def test_includeme_nobind():
-    "Test includeme should not bind behaviour."
+    """Test includeme should not bind behaviour."""
     mock_config = Mock()
     configure_mock = {"registry.settings": {"basemodel.should_bind_engine": False}}
     mock_config.configure_mock(**configure_mock)

@@ -1,8 +1,9 @@
+"""Model test module."""
 from pyramid_basemodel import BaseMixin
 
 
 def test_model_classname():
-    "Test model's class name."
+    """Test model's class name."""
 
     class Foo(BaseMixin):
         __tablename__ = "flobbles"
@@ -16,7 +17,7 @@ def test_model_classname():
 
 
 def test_model_classname_singular():
-    "Test model singularise class name."
+    """Test model singularise class name."""
 
     class Foo(BaseMixin):
         plural_class_name = "Not Plural"
@@ -25,7 +26,7 @@ def test_model_classname_singular():
 
 
 def test_model_class_slug():
-    "Test model's class slug."
+    """Test model's class slug."""
 
     class Foo(BaseMixin):
         __tablename__ = "foos"
@@ -40,7 +41,7 @@ def test_model_class_slug():
 
 
 def test_model_singular_class_slug():
-    "Test model singular class slug."
+    """Test model singular class slug."""
 
     class Material(BaseMixin):
         __tablename__ = "materials"
@@ -60,7 +61,7 @@ def test_model_singular_class_slug():
 
 
 def test_model_plurar_class_name():
-    "Test model plurar class name."
+    """Test model plurar class name."""
 
     class Material(BaseMixin):
         __tablename__ = "materials"
