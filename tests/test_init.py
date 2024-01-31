@@ -1,4 +1,5 @@
 """Test for elements defined in init module."""
+
 from mock import Mock
 
 import pyramid_basemodel

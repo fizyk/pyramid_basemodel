@@ -1,4 +1,5 @@
 """Blob module tests."""
+
 from pyramid_basemodel.blob import Blob
 
 
