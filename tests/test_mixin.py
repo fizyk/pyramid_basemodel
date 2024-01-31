@@ -1,4 +1,5 @@
 """Mixin test module."""
+
 from mock import Mock, patch
 
 from pyramid_basemodel.mixin import TouchMixin

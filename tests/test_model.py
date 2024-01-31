@@ -1,4 +1,5 @@
 """Model test module."""
+
 from pyramid_basemodel import BaseMixin
 
 

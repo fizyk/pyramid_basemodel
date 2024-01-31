@@ -1,4 +1,5 @@
 """Slug test module."""
+
 import pytest
 from mock import MagicMock
 from sqlalchemy import Column, Integer
