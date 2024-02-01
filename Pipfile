@@ -10,7 +10,7 @@ requests = "==2.31.0"
 sqlalchemy = "==2.0.25"
 "zope.interface" = "==6.1"
 "zope.sqlalchemy" = "==3.1"
-python-slugify = "==8.0.2"
+python-slugify = "==8.0.3"
 inflect = "==7.0.0"
 
 [dev-packages]
