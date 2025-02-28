@@ -30,7 +30,7 @@ importing your model and this package, e.g.:
 
     # for example in yourapp.__init__.py
     import mymodel
-    
+
     def main(global_config, **settings):
         config = Configurator(settings=settings)
         config.include('pyramid_basemodel')
