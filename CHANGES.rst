@@ -79,7 +79,7 @@ Miscellaneus
 0.5.0
 -----
 
-* [simplify] Removed `inspect` and `to_slug` from `BaseSlugNameMixin.set_slug` method. These parameters seemd like a way 
+* [simplify] Removed `inspect` and `to_slug` from `BaseSlugNameMixin.set_slug` method. These parameters seemd like a way
   to override some core functionality, which seems like a rare enough case to not maintain it, especially without tests.
 * [simplify] Removed `named_tempfile_cls` from `Blob.get_as_named_tempfile` as it wasn't used.
 * [simplify] Simplified the `Blob.update_from_url`. Now the method accepts only url parameter and does exactly one thing.
@@ -181,7 +181,7 @@ tablename to split the word, e.g.:
 
     >>> class OperatingScale(Base, BaseMixin):
     ...     __tablename__ 'operating_scales'
-    ... 
+    ...
 
     >>> OperatingScale.class_name
     'Operating Scale'
@@ -212,4 +212,3 @@ Bugfix to parse config options properly.
 -----
 
 Added `basemodel.should_create_all` configuration option.
-
