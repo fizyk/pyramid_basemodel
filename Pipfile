@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 pyramid = "==2.0.2"
 pyramid-tm = "==2.6"
-requests = "==2.32.4"
+requests = "==2.32.5"
 sqlalchemy = "==2.0.43"
 "zope.interface" = "==7.2"
 "zope.sqlalchemy" = "==3.1"
