@@ -3,6 +3,29 @@ CHANGES
 
 .. towncrier release notes start
 
+pyramid_basemodel 0.7.0 (2025-09-30)
+====================================
+
+Breaking changes
+----------------
+
+- Drop support for Python 3.9
+
+
+Features
+--------
+
+- Add support for Python 3.14
+
+
+Miscellaneus
+------------
+
+- Adjust workflows for shared-actions 3
+- Migrate from black to ruff format.
+- Use pre-commit for maintaining code style and linting
+
+
 0.6.3 (2024-10-14)
 ==================
 
