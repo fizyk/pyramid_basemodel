@@ -1,0 +1,1 @@
+Migrate from black to ruff format.
