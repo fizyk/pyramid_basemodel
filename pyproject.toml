@@ -82,13 +82,9 @@ showcontent = false
 [tool.pytest.ini_options]
 xfail_strict=true
 
-[tool.black]
-line-length = 120
-target-version = ['py310']
-include = '.*\.pyi?$'
-
 [tool.ruff]
 line-length = 120
+target-version = 'py310'
 
 [tool.ruff.lint]
 select = [
