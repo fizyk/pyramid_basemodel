@@ -78,9 +78,8 @@ showcontent = true
 name = "Miscellaneus"
 showcontent = false
 
-
-[tool.pytest.ini_options]
-xfail_strict=true
+[tool.pytest]
+strict_xfail = true
 
 [tool.ruff]
 line-length = 120
