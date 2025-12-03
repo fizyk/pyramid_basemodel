@@ -9,7 +9,7 @@ pyramid-tm = "==2.6"
 requests = "==2.32.5"
 sqlalchemy = "==2.0.44"
 "zope.interface" = "==8.1.1"
-"zope.sqlalchemy" = "==4.0"
+"zope.sqlalchemy" = "==4.1"
 python-slugify = "==8.0.4"
 inflect = "==7.5.0"
 
