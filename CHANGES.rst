@@ -18,8 +18,8 @@ Features
 - Add support for Python 3.14
 
 
-Miscellaneus
-------------
+Miscellaneous
+-------------
 
 - Adjust workflows for shared-actions 3
 - Migrate from black to ruff format.
@@ -41,8 +41,8 @@ Features
 - Support Python 3.13
 
 
-Miscellaneus
-------------
+Miscellaneous
+-------------
 
 - `#436 <https://https://github.com/fizyk/pyramid_basemodel/issues/436>`_
 
@@ -56,8 +56,8 @@ Features
 - Support Python 3.12 (`#397 <https://https://github.com/fizyk/pyramid_basemodel/issues/397>`_)
 
 
-Miscellaneus
-------------
+Miscellaneous
+-------------
 
 - `#358 <https://https://github.com/fizyk/pyramid_basemodel/issues/358>`_, `#361 <https://https://github.com/fizyk/pyramid_basemodel/issues/361>`_, `#372 <https://https://github.com/fizyk/pyramid_basemodel/issues/372>`_, `#398 <https://https://github.com/fizyk/pyramid_basemodel/issues/398>`_
 
@@ -74,8 +74,8 @@ Breaking changes
 0.5.3 (2022-12-06)
 ==================
 
-Miscellaneus
-------------
+Miscellaneous
+-------------
 
 - Migrate automerge `fizyk/actions-reuse/.github/workflows/automerge-shared.yml`
   using github application for maintaining short lived acess tokens for merge-me actions. (`#297 <https://https://github.com/fizyk/pyramid_basemodel/issues/297>`_)
@@ -85,8 +85,8 @@ Miscellaneus
 0.5.2 (2022-11-25)
 ==================
 
-Miscellaneus
-------------
+Miscellaneous
+-------------
 
 - Moved development dependency management into pipfile/pipfile.lock (`#283 <https://https://github.com/fizyk/pyramid_basemodel/issues/283>`_)
 - Change versionin bumping tool from bumpversion to tbump (`#285 <https://https://github.com/fizyk/pyramid_basemodel/issues/285>`_)
