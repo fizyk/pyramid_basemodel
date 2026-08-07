@@ -1,6 +1,6 @@
 [build-system]
-build-backend = "setuptools.build_meta"
-requires = [ "setuptools>=61.0.0" ]
+build-backend = "uv_build"
+requires = [ "uv-build>=0.12,<0.13" ]
 
 [project]
 name = "pyramid-basemodel"
@@ -11,7 +11,7 @@ keywords = [ "pyramid", "sqlalchemy" ]
 license = { file = "UNLICENSE" }
 requires-python = ">=3.10"
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
     "Framework :: Pyramid",
     "Intended Audience :: Developers",
@@ -53,9 +53,31 @@ Source = "https://github.com/fizyk/pyramid_basemodel/"
 "Bug Tracker" = "https://github.com/fizyk/pyramid_basemodel/issues"
 Changelog = "https://github.com/fizyk/pyramid_basemodel/blob/v0.7.0/CHANGES.rst"
 
-[tool.setuptools]
-packages = [ "pyramid_basemodel" ]
-zip-safe = true
+[dependency-groups]
+dev = [
+    "coverage==7.15.3",
+    "inflect==7.5.0",
+    "mock==5.2.0",
+    "pyramid==2.1.0",
+    "pyramid-tm==2.6",
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+    "python-slugify==8.0.4",
+    "requests==2.34.2",
+    "requests-mock==1.12.1",
+    "sqlalchemy==2.0.51",
+    "zope-interface==8.5",
+    "zope-sqlalchemy==4.1",
+]
+release = [
+    "tbump==6.11.0",
+    "towncrier==25.8.0",
+]
+
+[tool.uv.build-backend]
+module-name = "pyramid_basemodel"
+module-root = ""
+source-include = [ "CHANGES.rst" ]
 
 [tool.ruff]
 target-version = "py310"
@@ -84,7 +106,7 @@ strict_xfail = true
 
 [[tool.tbump.before_commit]]
 name = "Build changelog"
-cmd = "pipenv run towncrier build --version {new_version} --yes"
+cmd = "uv run towncrier build --version {new_version} --yes"
 
 [[tool.tbump.field]]
 # the name of the field
