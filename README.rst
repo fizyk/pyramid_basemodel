@@ -63,12 +63,3 @@ To run the tests use:
 [pyramid_basemodel]: http://github.com/fizyk/pyramid_basemodel
 [pyramid_simpleauth]: http://github.com/thruflo/pyramid_simpleauth
 [pyramid_tm]: http://pyramid_tm.readthedocs.org
-
-Release
-=======
-
-Install pipenv and --dev dependencies first, Then run:
-
-.. code-block::
-
-    pipenv run tbump [NEW_VERSION]
