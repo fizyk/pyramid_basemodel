@@ -1,8 +1,8 @@
 name: Merge me test dependencies!
 
 on:
-  pull_request:
-    branches: [ main ]
+  pull_request_target:
+    types: [opened, reopened, synchronize]
 
 jobs:
   automerge:
