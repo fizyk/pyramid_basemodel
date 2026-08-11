@@ -1,17 +1,8 @@
 name: Merge me test dependencies!
 
 on:
-  workflow_run:
-    types:
-      - completed
-    workflows:
-      - 'Run tests'
-      - 'Test build package'
-      - 'Run pre-commit'
-      - 'Run test commands'
-  check_suite:
-    types:
-      - completed
+  pull_request:
+    branches: [ main ]
 
 jobs:
   automerge:
