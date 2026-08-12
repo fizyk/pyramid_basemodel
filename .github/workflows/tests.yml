@@ -6,8 +6,12 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions: {}
+
 jobs:
   tests:
+    permissions:
+      contents: read
     uses: fizyk/actions-reuse/.github/workflows/shared-tests-pytests.yml@3768ca868776ab12e78334cc376094a7aec3d9b6 # v5.3.1
     with:
       python-versions: '["3.10", "3.11", "3.12", "3.13", "3.14"]'

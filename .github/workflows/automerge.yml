@@ -1,6 +1,6 @@
 name: Merge me test dependencies!
 
-on:
+on:  # zizmor: ignore[dangerous-triggers] intentional: this workflow only evaluates completed checks
   workflow_run:
     types:
       - completed
@@ -13,8 +13,11 @@ on:
     types:
       - completed
 
+permissions: {}
+
 jobs:
   automerge:
+    permissions: {}
     uses: fizyk/actions-reuse/.github/workflows/shared-automerge.yml@31be9bf07155154cfce850e9d4133b502ee6f023 # v5.3.0
     secrets:
       client_id: ${{ secrets.MERGE_APP_CLIENT_ID }}
