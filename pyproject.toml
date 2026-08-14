@@ -55,7 +55,7 @@ Changelog = "https://github.com/fizyk/pyramid_basemodel/blob/v0.7.0/CHANGES.rst"
 
 [dependency-groups]
 dev = [
-    "coverage==7.15.3",
+    "coverage==7.15.4",
     "inflect==7.5.0",
     "mock==5.2.0",
     "pyramid==2.1.0",
