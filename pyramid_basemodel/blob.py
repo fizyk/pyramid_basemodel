@@ -35,10 +35,11 @@ __all__ = [
 
 import logging
 from http import HTTPStatus
-from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile, _TemporaryFileWrapper
+from typing import IO
 
 import requests
-from sqlalchemy.schema import Column
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.types import LargeBinary, Unicode
 
 from pyramid_basemodel import Base, BaseMixin
@@ -65,17 +66,17 @@ class Blob(Base, BaseMixin):
 
     __tablename__ = "blobs"
 
-    name = Column(Unicode(64), nullable=False, unique=True)
-    value = Column(LargeBinary, nullable=False)
+    name: Mapped[str] = mapped_column(Unicode(64), nullable=False, unique=True)
+    value: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
 
     @classmethod
-    def factory(cls, name, file_like_object=None):
+    def factory(cls, name: str, file_like_object: IO[bytes] | None = None) -> "Blob":
         """Create and return."""
         instance = cls()
         instance.update(name, file_like_object=file_like_object)
         return instance
 
-    def update(self, name, file_like_object=None):
+    def update(self, name: str, file_like_object: IO[bytes] | None = None) -> None:
         """Update value from file like object.
 
         Update properties, reading the ``file_like_object`` into
@@ -85,7 +86,7 @@ class Blob(Base, BaseMixin):
         if file_like_object is not None:
             self.value = file_like_object.read()
 
-    def update_from_url(self, url):
+    def update_from_url(self, url: str) -> None:
         """Update value from url's content.
 
         Update ``self.value`` to be the contents of the file downloaded
@@ -106,7 +107,7 @@ class Blob(Base, BaseMixin):
 
         self.value = r.content
 
-    def get_as_named_tempfile(self, should_close=False):
+    def get_as_named_tempfile(self, should_close: bool = False) -> "_TemporaryFileWrapper[bytes]":
         """Read ``self.value`` into and return a named temporary file."""
         # Prepare the temp file.
         f = NamedTemporaryFile(delete=False)
@@ -122,6 +123,6 @@ class Blob(Base, BaseMixin):
         # Return the file.
         return f
 
-    def __json__(self):
+    def __json__(self) -> dict[str, str]:
         """Create a JSONable representation."""
         return {"name": self.name}

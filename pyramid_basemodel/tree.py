@@ -11,6 +11,8 @@ __all__ = [
 ]
 
 import logging
+from collections.abc import Callable
+from typing import Any, ClassVar
 
 from zope.interface import Interface, alsoProvides
 
@@ -19,16 +21,25 @@ from pyramid_basemodel.root import BaseRoot
 
 logger = logging.getLogger(__name__)
 
+#: ``(model_cls, container_cls_or_interface, kwargs)``, as stored in
+#: ``BaseContentRoot.apex`` and the values of ``BaseContentRoot.mapping``.
+MappingItem = tuple[Any, Any, dict[str, Any]]
+
 
 class BaseContentRoot(BaseRoot):
     """Base logic for looking up models."""
 
-    apex = None  # e.g.: (Design, IDesignsContainer, {})
-    mapping = {}  # {u'formats': (FileFormat, IFileFormatsContainer, {}), ...}
+    apex: ClassVar[MappingItem | None] = None  # e.g.: (Design, IDesignsContainer, {})
+    mapping: ClassVar[dict[str, MappingItem]] = {}  # {u'formats': (FileFormat, IFileFormatsContainer, {}), ...}
 
     def container_factory(
-        self, item, key, provides=alsoProvides, default_cls=BaseModelContainer, interface_cls=Interface
-    ):
+        self,
+        item: MappingItem,
+        key: str,
+        provides: Callable[..., None] = alsoProvides,
+        default_cls: type[BaseModelContainer] = BaseModelContainer,
+        interface_cls: Any = Interface,
+    ) -> Any:
         """Return an instantiated and interface providing container."""
         # Unpack the mapping item.
         model_cls, container_cls_or_interface, kwargs = item
@@ -51,7 +62,7 @@ class BaseContentRoot(BaseRoot):
         # Return the container.
         return container
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Any:
         """Get model from mapping.
 
         First see if the key is in ``self.mapping``. If it is, return
@@ -59,7 +70,7 @@ class BaseContentRoot(BaseRoot):
         """
         # If the key matches a traversal container in the mapping, use that.
         if key in self.mapping:
-            mapping_item = self.mapping.get(key)
+            mapping_item = self.mapping[key]
             return self.container_factory(mapping_item, key)
 
         # Otherwise try and lookup using the apex model class.

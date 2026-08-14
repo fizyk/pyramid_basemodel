@@ -1,4 +1,7 @@
 ---
+ci:
+  skip: [uv-sync, mypy]
+
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 minimum_pre_commit_version: 4.0.0
@@ -46,3 +49,24 @@ repos:
     rev: v1.28.0
     hooks:
       - id: zizmor
+
+  - repo: local
+    hooks:
+      - id: uv-sync
+        stages: [pre-commit, manual]
+        language: system
+        name: Install dependencies for the local linters
+        entry: uv sync
+        types_or:
+          - python
+          - toml  # pyproject.toml
+        pass_filenames: false
+      - id: mypy
+        stages: [pre-commit, manual]
+        name: mypy
+        entry: uv run mypy .
+        language: system
+        types_or:
+          - python
+          - toml  # pyproject.toml
+        pass_filenames: false

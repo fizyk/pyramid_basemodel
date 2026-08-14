@@ -7,12 +7,14 @@ __all__ = [
 ]
 
 import logging
+from collections.abc import Callable
+from typing import Any, ClassVar
 
 import slugify
 from sqlalchemy import exc as sa_exc
 from sqlalchemy import inspect as sa_inspect
-from sqlalchemy.ext import declarative
-from sqlalchemy.schema import Column
+from sqlalchemy.orm import Mapped, declared_attr, mapped_column, scoped_session
+from sqlalchemy.orm.scoping import QueryPropertyDescriptor
 from sqlalchemy.types import Unicode
 
 from pyramid_basemodel import Session
@@ -29,33 +31,36 @@ class BaseSlugNameMixin:
     name aware factory classmethod.
     """
 
-    _max_slug_length = 64
-    _slug_is_unique = True
+    _max_slug_length: ClassVar[int] = 64
+    _slug_is_unique: ClassVar[bool] = True
+
+    #: Provided by ``BaseMixin`` when the two are combined on a model.
+    query: ClassVar[QueryPropertyDescriptor]
 
     @property
-    def __name__(self):
+    def __name__(self) -> str:
         """Url friendly name."""
         return self.slug
 
-    @declarative.declared_attr
-    def slug(cls):
+    @declared_attr
+    def slug(cls) -> Mapped[str]:
         """Get url friendly slug, e.g.: `foo-bar`."""
-        return Column(Unicode(cls._max_slug_length), nullable=False, unique=cls._slug_is_unique)
+        return mapped_column(Unicode(cls._max_slug_length), nullable=False, unique=cls._slug_is_unique)
 
-    @declarative.declared_attr
-    def name(cls):
+    @declared_attr
+    def name(cls) -> Mapped[str]:
         """Get human readable name, e.g.: `Foo Bar`."""
-        return Column(Unicode(cls._max_slug_length), nullable=False)
+        return mapped_column(Unicode(cls._max_slug_length), nullable=False)
 
     def set_slug(
         self,
-        candidate=None,
-        gen_digest=generate_random_digest,
-        inspect=sa_inspect,
-        session=Session,
-        to_slug=slugify.slugify,
-        unique=ensure_unique,
-    ):
+        candidate: str | None = None,
+        gen_digest: Callable[..., str] = generate_random_digest,
+        inspect: Callable[[Any], Any] = sa_inspect,
+        session: scoped_session[Any] = Session,
+        to_slug: Callable[..., str] = slugify.slugify,
+        unique: Callable[..., str] = ensure_unique,
+    ) -> None:
         """Generate and set a unique ``self.slug`` from ``self.name``.
 
         :param get_digest: function to generate random digest. Used of there's no name set.

@@ -1,16 +1,18 @@
 """Mixin test module."""
 
+from typing import Any
+
 from mock import Mock, patch
 
 from pyramid_basemodel.mixin import TouchMixin
 
 
-def test_touch_mixin():
+def test_touch_mixin() -> None:
     """Check wether every argument of TouchMixin get's called in proper order."""
     t = TouchMixin()
-    saved_arg = []
+    saved_arg: list[Any] = []
 
-    def save_mock(instance):
+    def save_mock(instance: Any) -> None:
         saved_arg.append(instance)
 
     assert not hasattr(t, "modified")
@@ -21,12 +23,12 @@ def test_touch_mixin():
     assert t == saved_arg[0]
 
 
-def test_touch_mixin_no_propagate():
+def test_touch_mixin_no_propagate() -> None:
     """Check wether every argument of TouchMixin get's called in proper order."""
     t = TouchMixin()
-    saved_arg = []
+    saved_arg: list[Any] = []
 
-    def save_mock(instance):
+    def save_mock(instance: Any) -> None:
         saved_arg.append(instance)
 
     assert not hasattr(t, "modified")

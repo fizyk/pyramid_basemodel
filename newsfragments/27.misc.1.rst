@@ -1,0 +1,2 @@
+Stop assigning ``Base.metadata.bind`` in ``bind_engine``. ``MetaData.bind`` was
+removed in SQLAlchemy 2.0, so the assignment had no effect.

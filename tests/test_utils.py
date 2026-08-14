@@ -14,7 +14,7 @@ from pyramid_basemodel.util import (
 )
 
 
-def test_get_object_id():
+def test_get_object_id() -> None:
     """Check get object id utility function."""
     mock_user = MagicMock()
     mock_user.__tablename__ = "users"
@@ -22,21 +22,21 @@ def test_get_object_id():
     assert get_object_id(mock_user) == "users#1234"
 
 
-def test_generate_random_digest_default():
+def test_generate_random_digest_default() -> None:
     """Check digest length with default arguments."""
     h = hashlib.sha224()
     digest = generate_random_digest()
     assert len(h.hexdigest()) == len(digest)
 
 
-def test_generate_random_digest_longer():
+def test_generate_random_digest_longer() -> None:
     """Check digest lenght with explicit num_bytes different than default."""
     h = hashlib.sha512()
     digest = generate_random_digest(num_bytes=64)
     assert len(h.hexdigest()) == len(digest)
 
 
-def test_get_or_create_existing():
+def test_get_or_create_existing() -> None:
     """Test get_or_create where instance already exists."""
     mock_cls = Mock()
     mock_cls.return_value = "new"
@@ -48,7 +48,7 @@ def test_get_or_create_existing():
     mock_cls.query.filter_by.assert_called_with(**kwargs)
 
 
-def test_get_or_create_new():
+def test_get_or_create_new() -> None:
     """Test get_or_create where instance does not exists."""
     mock_cls = Mock()
     mock_cls.return_value = "new"
@@ -59,7 +59,7 @@ def test_get_or_create_new():
     mock_cls.assert_called_with(**kwargs)
 
 
-def test_get_all_matching():
+def test_get_all_matching() -> None:
     """Test return all matching instances."""
     mock_cls = Mock()
     mock_cls.query.filter.return_value.all.return_value = ["result"]
@@ -69,7 +69,7 @@ def test_get_all_matching():
     mock_cls.query.filter.assert_called_with(mock_cls.a.in_.return_value)
 
 
-def test_table_args_indexes():
+def test_table_args_indexes() -> None:
     """Test table_args_indexes to build proper indexes."""
     a = table_args_indexes(
         "basket_items",

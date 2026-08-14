@@ -58,6 +58,7 @@ dev = [
     "coverage==7.15.4",
     "inflect==7.5.0",
     "mock==5.2.0",
+    "mypy==2.3.0; implementation_name=='cpython'",
     "pyramid==2.1.0",
     "pyramid-tm==2.6",
     "pytest==9.1.1",
@@ -66,6 +67,7 @@ dev = [
     "requests==2.34.2",
     "requests-mock==1.12.1",
     "sqlalchemy==2.0.51",
+    "types-mock==5.2.0.20260518",
     "zope-interface==8.5",
     "zope-sqlalchemy==4.1",
 ]
@@ -98,6 +100,40 @@ keep_full_version = true
 generate_python_version_classifiers = false
 table_format = "long"
 sub_table_spacing = "\n"
+
+[tool.mypy]
+exclude = [ "^\\.venv/" ]
+ignore_missing_imports = false
+follow_imports = "silent"
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_return_any = true
+warn_unreachable = true
+allow_untyped_globals = false
+allow_redefinition = false
+implicit_reexport = false
+strict_equality = true
+pretty = true
+no_implicit_optional = true
+show_error_codes = true
+
+# Neither pyramid nor the zope packages ship a py.typed marker, and no stub
+# distributions exist for them on PyPI.
+[[tool.mypy.overrides]]
+module = [ "pyramid.*", "zope.*" ]
+ignore_missing_imports = true
+
+# zope.interface.Interface is untyped, so the marker interfaces necessarily
+# subclass Any.
+[[tool.mypy.overrides]]
+module = [ "pyramid_basemodel.interfaces" ]
+disallow_subclassing_any = false
 
 [tool.pytest]
 strict_xfail = true
