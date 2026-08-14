@@ -37,7 +37,7 @@ importing your model and this package, e.g.:
         config.include('pyramid_tm')
         return config.make_wsgi_app()
 
-Or if this is all too much voodoo, you can just use the `bind_engine` function::
+Or if this is all too much voodoo, you can just use the `bind_engine` function:
 
 .. code-block:: python
 
