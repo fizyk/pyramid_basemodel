@@ -12,8 +12,11 @@ __all__ = [
 ]
 
 import logging
+from collections.abc import Callable
+from typing import Any
 
 from pyramid.interfaces import ILocation
+from pyramid.request import Request
 from zope.interface import alsoProvides, implementer
 
 logger = logging.getLogger(__name__)
@@ -23,10 +26,10 @@ logger = logging.getLogger(__name__)
 class BaseRoot:
     """Base class for traversal factories."""
 
-    __name__ = ""
-    __parent__ = None
+    __name__: str = ""
+    __parent__: Any = None
 
-    def locatable(self, context, key, provides=alsoProvides):
+    def locatable(self, context: Any, key: str, provides: Callable[..., None] = alsoProvides) -> Any:
         """Make a context object locatable and return it."""
         if not hasattr(context, "__name__"):
             context.__name__ = key
@@ -36,7 +39,7 @@ class BaseRoot:
             provides(context, ILocation)
         return context
 
-    def __init__(self, request, key="", parent=None):
+    def __init__(self, request: Request | None, key: str = "", parent: Any = None) -> None:
         """Initialize BaseRoot class."""
         self.__name__ = key
         self.__parent__ = parent

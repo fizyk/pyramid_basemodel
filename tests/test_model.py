@@ -3,7 +3,7 @@
 from pyramid_basemodel import BaseMixin
 
 
-def test_model_classname():
+def test_model_classname() -> None:
     """Test model's class name."""
 
     class Foo(BaseMixin):
@@ -17,7 +17,7 @@ def test_model_classname():
     assert foo.class_name == "Baz"
 
 
-def test_model_classname_singular():
+def test_model_classname_singular() -> None:
     """Test model singularise class name."""
 
     class Foo(BaseMixin):
@@ -26,7 +26,7 @@ def test_model_classname_singular():
     assert Foo.class_name == "Foo"
 
 
-def test_model_class_slug():
+def test_model_class_slug() -> None:
     """Test model's class slug."""
 
     class Foo(BaseMixin):
@@ -41,7 +41,7 @@ def test_model_class_slug():
     foo.class_slug == "bazaramas"
 
 
-def test_model_singular_class_slug():
+def test_model_singular_class_slug() -> None:
     """Test model singular class slug."""
 
     class Material(BaseMixin):
@@ -55,13 +55,13 @@ def test_model_singular_class_slug():
         __tablename__ = "process_materials"
 
     assert ProcessMaterials.singular_class_slug == "process_material"
-    ProcessMaterials.class_slug = "XXXXXX_NO_SINGULAR_XXXXX"
+    ProcessMaterials.class_slug = "XXXXXX_NO_SINGULAR_XXXXX"  # type: ignore[method-assign, assignment]
     assert ProcessMaterials.singular_class_slug == "material"
     ProcessMaterials._singular_class_slug = "materials"
     assert ProcessMaterials.singular_class_slug == "materials"
 
 
-def test_model_plurar_class_name():
+def test_model_plurar_class_name() -> None:
     """Test model plurar class name."""
 
     class Material(BaseMixin):

@@ -5,13 +5,20 @@
 import logging
 import os
 from binascii import hexlify
+from collections.abc import Callable, Iterable, Sequence
+from typing import Any, Union
 
 from sqlalchemy import schema
+from sqlalchemy.orm import Query
 
 logger = logging.getLogger(__name__)
 
 
-def generate_random_digest(num_bytes=28, urandom=os.urandom, to_hex=hexlify):
+def generate_random_digest(
+    num_bytes: int = 28,
+    urandom: Callable[[int], bytes] = os.urandom,
+    to_hex: Callable[[bytes], bytes] = hexlify,
+) -> str:
     """Generate a random hash and returns the hex digest as a unicode string.
 
     :param num_bytes: number of bytes to random(select)
@@ -25,7 +32,14 @@ def generate_random_digest(num_bytes=28, urandom=os.urandom, to_hex=hexlify):
     return to_hex(r).decode("utf-8")
 
 
-def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=generate_random_digest):
+def ensure_unique(
+    self: Any,
+    query: Query[Any],
+    property_: Any,
+    value: str,
+    max_iter: int = 30,
+    gen_digest: Callable[..., str] = generate_random_digest,
+) -> str:
     """Make sure slug is unique.
 
     Takes a ``candidate`` value for a unique ``property_`` and iterates,
@@ -59,7 +73,7 @@ def ensure_unique(self, query, property_, value, max_iter=30, gen_digest=generat
     return value
 
 
-def get_or_create(cls, **kwargs):
+def get_or_create(cls: Any, **kwargs: Any) -> Any:
     """Get or create a ``cls`` instance using the ``kwargs`` provided."""
     instance = cls.query.filter_by(**kwargs).first()
     if not instance:
@@ -67,7 +81,7 @@ def get_or_create(cls, **kwargs):
     return instance
 
 
-def get_all_matching(cls, column_name, values):
+def get_all_matching(cls: Any, column_name: str, values: Iterable[Any]) -> list[Any]:
     """Return all instances of ``cls`` where ``column_name`` matches one of ``values``.
 
     :param cls:
@@ -75,16 +89,19 @@ def get_all_matching(cls, column_name, values):
     :param values:
     """
     column = getattr(cls, column_name)
-    query = cls.query.filter(column.in_(values))
+    query: Query[Any] = cls.query.filter(column.in_(values))
     return query.all()
 
 
-def get_object_id(instance):
+def get_object_id(instance: Any) -> str:
     """Return an identifier that's unique across database tables."""
     return f"{instance.__tablename__}#{instance.id}"
 
 
-def table_args_indexes(tablename, columns):
+def table_args_indexes(
+    tablename: str,
+    columns: Iterable[Union[str, Sequence[str]]],
+) -> tuple[schema.Index, ...]:
     """Build table indexes.
 
     Call with a class name and a list of relation id columns to return the
@@ -95,8 +112,12 @@ def table_args_indexes(tablename, columns):
 
     Ref: https://bitbucket.org/zzzeek/alembic/issues/233/add-indexes-to-include_object-hook
     """
-    indexes = []
+    indexes: list[schema.Index] = []
     for item in columns:
+        # NOTE: the length check, not the item type, decides how an entry is
+        # unpacked. Kept as-is to preserve behaviour.
+        db_name: Any
+        attr_name: Any
         if len(item) == 2:
             db_name = item[0]  # db column
             attr_name = item[1]  # sqlalchemy attr

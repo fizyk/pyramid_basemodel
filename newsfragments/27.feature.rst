@@ -1,0 +1,2 @@
+Add type annotations throughout and ship a ``py.typed`` marker, so the package's
+types are now used by type checkers in downstream projects.

@@ -29,13 +29,18 @@ __all__ = [
     "bind_engine",
 ]
 
+from collections.abc import Callable
 from datetime import datetime
+from typing import Any, ClassVar, Generic, TypeVar
 
 import inflect
+from pyramid.config import Configurator
 from pyramid.path import DottedNameResolver
 from pyramid.settings import asbool
-from sqlalchemy import Column, DateTime, Integer, engine_from_config
-from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
+from sqlalchemy import DateTime, Integer, engine_from_config
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, scoped_session, sessionmaker
+from sqlalchemy.orm.scoping import QueryPropertyDescriptor
 from zope.interface import classImplements
 from zope.sqlalchemy import register
 
@@ -43,17 +48,25 @@ from pyramid_basemodel.interfaces import IDeclarativeBase
 
 Session = scoped_session(sessionmaker())
 register(Session)
-Base = declarative_base()
+
+
+class Base(DeclarativeBase):
+    """Declarative base for all models."""
+
+
 classImplements(Base, IDeclarativeBase)
 
+#: Return type of the getter wrapped by :class:`classproperty`.
+T = TypeVar("T")
 
-class classproperty:
+
+class classproperty(Generic[T]):
     """A basic [class property](http://stackoverflow.com/a/3203659)."""
 
-    def __init__(self, getter):
+    def __init__(self, getter: Callable[[Any], T]) -> None:
         self.getter = getter
 
-    def __get__(self, instance, owner):
+    def __get__(self, instance: object, owner: type) -> T:
         return self.getter(owner)
 
 
@@ -64,22 +77,33 @@ class BaseMixin:
     ``modified`` columns and a scoped ``self.query`` property.
     """
 
+    #: Set by the declarative machinery on every concrete model. Declared as an
+    #: instance variable to stay compatible with ``DeclarativeBase.__tablename__``.
+    __tablename__: str
+
+    #: Optional overrides a subclass may declare; annotation only, so that
+    #: ``hasattr`` keeps reporting them as absent unless actually set.
+    _class_name: ClassVar[str]
+    _class_slug: ClassVar[str]
+    _singular_class_slug: ClassVar[str]
+    _plural_class_name: ClassVar[str]
+
     #: primary key
-    id = Column(Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
 
     #: schema version
-    version = Column("v", Integer, default=1)
+    version: Mapped[int | None] = mapped_column("v", Integer, default=1)
 
     #: timestamp of object creation
-    created = Column("c", DateTime, default=datetime.utcnow)
+    created: Mapped[datetime | None] = mapped_column("c", DateTime, default=datetime.utcnow)
 
     #: timestamp of object's latest update
-    modified = Column("m", DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    modified: Mapped[datetime | None] = mapped_column("m", DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    query = Session.query_property()
+    query: ClassVar[QueryPropertyDescriptor] = Session.query_property()
 
     @classproperty
-    def class_name(cls):
+    def class_name(cls: type["BaseMixin"]) -> str:
         """Determine class name based on the _class_name or the __tablename__.
 
         If provided, defaults to ``cls._class_name``, otherwise default to
@@ -101,12 +125,12 @@ class BaseMixin:
         return cls.__name__
 
     @classproperty
-    def class_slug(cls):
+    def class_slug(cls: type["BaseMixin"]) -> str:
         """Class slug based on either _class_slug or __tablename__."""
         return getattr(cls, "_class_slug", cls.__tablename__)
 
     @classproperty
-    def singular_class_slug(cls):
+    def singular_class_slug(cls: type["BaseMixin"]) -> str:
         """Return singular version of ``cls.class_slug``."""
         # If provided, use ``self._singular_class_slug``.
         if hasattr(cls, "_singular_class_slug"):
@@ -123,7 +147,7 @@ class BaseMixin:
         return cls.class_name.split()[-1].lower()
 
     @classproperty
-    def plural_class_name(cls):
+    def plural_class_name(cls: type["BaseMixin"]) -> str:
         """Return plurar version of a class name."""
         # If provided, use ``self._plural_class_name``.
         if hasattr(cls, "_plural_class_name"):
@@ -133,7 +157,10 @@ class BaseMixin:
         return cls.__tablename__.replace("_", " ").title()
 
 
-def save(instance_or_instances, session=Session):
+def save(
+    instance_or_instances: Any,
+    session: scoped_session[Any] = Session,
+) -> None:
     """Save model instance(s) to the db.
 
     Both single and multiple instances can be saved.
@@ -145,21 +172,26 @@ def save(instance_or_instances, session=Session):
         session.add(v)
 
 
-def bind_engine(engine, session=Session, base=Base, should_create=False, should_drop=False):
+def bind_engine(
+    engine: Engine,
+    session: scoped_session[Any] = Session,
+    base: type[DeclarativeBase] = Base,
+    should_create: bool = False,
+    should_drop: bool = False,
+) -> None:
     """Bind the ``session`` and ``base`` to the ``engine``.
 
     :param should_create: Triggers create tables on all models
     :param should_drop: Triggers drop on all tables
     """
     session.configure(bind=engine)
-    base.metadata.bind = engine
     if should_drop:
         base.metadata.drop_all(engine)
     if should_create:
         base.metadata.create_all(engine)
 
 
-def includeme(config):
+def includeme(config: Configurator) -> None:
     """Bind to the db engine specifed in ``config.registry.settings``."""
     # Bind the engine.
     settings = config.get_settings()

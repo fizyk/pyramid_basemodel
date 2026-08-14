@@ -1,0 +1,3 @@
+Move models to the SQLAlchemy 2.0 declarative style: ``Base`` now subclasses
+``DeclarativeBase`` and columns are declared with ``Mapped``/``mapped_column``.
+The generated schema is unchanged.

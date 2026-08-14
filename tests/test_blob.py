@@ -1,9 +1,11 @@
 """Blob module tests."""
 
+import requests_mock as rm
+
 from pyramid_basemodel.blob import Blob
 
 
-def test_update_from_url(requests_mock):
+def test_update_from_url(requests_mock: rm.Mocker) -> None:
     """Check whether the update_from_url reads the data from url as expected."""
     a_blob = Blob()
     url = "http://test.com"
@@ -13,7 +15,7 @@ def test_update_from_url(requests_mock):
     assert a_blob.value == data.encode()
 
 
-def test_get_as_named_tempfile():
+def test_get_as_named_tempfile() -> None:
     """Check whether the namedfile is created correctly."""
     a_blob = Blob(value=b"data")
     f = a_blob.get_as_named_tempfile()

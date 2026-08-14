@@ -9,10 +9,12 @@ __all__ = [
 ]
 
 import logging
+from collections.abc import Callable
 from datetime import datetime
+from typing import Any
 
-from sqlalchemy import Column, Unicode
-from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy import Unicode
+from sqlalchemy.orm import Mapped, declared_attr, mapped_column
 
 from pyramid_basemodel import save as save_to_db
 
@@ -28,10 +30,10 @@ class PolymorphicBaseMixin:
     [single table inherited]: http://bit.ly/TBDmMx
     """
 
-    discriminator = Column("type", Unicode(16))
+    discriminator: Mapped[str | None] = mapped_column("type", Unicode(16))
 
-    @declared_attr
-    def __mapper_args__(self):
+    @declared_attr.directive
+    def __mapper_args__(self) -> dict[str, Any]:
         """Set the ``polymorphic_identity`` value to the lower case class name."""
         return {"polymorphic_on": self.discriminator, "polymorphic_identity": self.__class__.__name__.lower()}
 
@@ -45,8 +47,8 @@ class PolymorphicMixin:
     [single table inherited]: http://bit.ly/TBDmMx
     """
 
-    @declared_attr
-    def __mapper_args__(self):
+    @declared_attr.directive
+    def __mapper_args__(self) -> dict[str, Any]:
         """Set the ``polymorphic_identity`` value to the lower case class name."""
         return {"polymorphic_identity": self.__class__.__name__.lower()}
 
@@ -54,7 +56,10 @@ class PolymorphicMixin:
 class TouchMixin:
     """Provides ``touch`` and ``propagate_touch`` methods."""
 
-    def propagate_touch(self):
+    #: Provided by ``BaseMixin`` when the two are combined on a model.
+    modified: Mapped[datetime | None]
+
+    def propagate_touch(self) -> None:
         """Override to propagate touch events to relations.
 
         Note that this event *should not* be  called in response to an
@@ -62,7 +67,12 @@ class TouchMixin:
         update relations in an attribute event handler.
         """
 
-    def touch(self, propagate=True, now=datetime.utcnow, save=save_to_db):
+    def touch(
+        self,
+        propagate: bool = True,
+        now: Callable[[], datetime] = datetime.utcnow,
+        save: Callable[..., None] = save_to_db,
+    ) -> None:
         """Update self.modified."""
         # Update self's modified date.
         self.modified = now()
