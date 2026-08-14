@@ -3,6 +3,22 @@ CHANGES
 
 .. towncrier release notes start
 
+pyramid-basemodel 0.7.1 (2026-08-14)
+====================================
+
+Miscellaneous
+-------------
+
+- Update pytest configuration to toml-native (`#668 <https://github.com/fizyk/pyramid_basemodel/issues/668>`_)
+- Add zizmor to pre-commit and address its findings. (`#774 <https://github.com/fizyk/pyramid_basemodel/issues/774>`_)
+- Migrate development environment to uv (`#777 <https://github.com/fizyk/pyramid_basemodel/issues/777>`_)
+- Add Python 3.15 to CI (`#778 <https://github.com/fizyk/pyramid_basemodel/issues/778>`_)
+- Add release-schedule workflow. (`#790 <https://github.com/fizyk/pyramid_basemodel/issues/790>`_)
+- Extended pre-commit with pyproject-fmt and pyproject-validator
+- Fix codecov configuration
+- Pin setuptools to lower than 82. Since pkg_resources is no longer available, but required by pyramid.
+
+
 pyramid_basemodel 0.7.0 (2025-09-30)
 ====================================
 

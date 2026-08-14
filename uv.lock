@@ -602,7 +602,7 @@ wheels = [
 
 [[package]]
 name = "pyramid-basemodel"
-version = "0.7.0"
+version = "0.7.1"
 source = { editable = "." }
 dependencies = [
     { name = "inflect" },
