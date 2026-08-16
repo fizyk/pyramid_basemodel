@@ -10,6 +10,9 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: release-schedule
+
 jobs:
   release:
     permissions:

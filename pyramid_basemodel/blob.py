@@ -107,7 +107,7 @@ class Blob(Base, BaseMixin):
 
         self.value = r.content
 
-    def get_as_named_tempfile(self, should_close: bool = False) -> "_TemporaryFileWrapper[bytes]":
+    def get_as_named_tempfile(self, *, should_close: bool = False) -> "_TemporaryFileWrapper[bytes]":
         """Read ``self.value`` into and return a named temporary file."""
         # Prepare the temp file.
         f = NamedTemporaryFile(delete=False)

@@ -4,7 +4,6 @@ build/
 .idea/
 __pycache__
 *.egg-info/
-Pipfile.lock
 
 # coverage
 .coverage
