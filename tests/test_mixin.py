@@ -33,7 +33,7 @@ def test_touch_mixin_no_propagate() -> None:
 
     assert not hasattr(t, "modified")
     with patch.object(t, "propagate_touch") as propagate_mock:
-        t.touch(False, now=Mock, save=save_mock)
+        t.touch(propagate=False, now=Mock, save=save_mock)
         assert not propagate_mock.called
     assert hasattr(t, "modified")
     assert t == saved_arg[0]

@@ -1,0 +1,4 @@
+The `should_create` and `should_drop` arguments of `bind_engine`, and the
+`should_close` argument of `get_as_named_tempfile`, are now keyword-only.
+The `propagate`, `now`, and `save` arguments of `TouchMixin.touch` are now
+keyword-only.

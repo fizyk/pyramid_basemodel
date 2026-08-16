@@ -176,6 +176,7 @@ def bind_engine(
     engine: Engine,
     session: scoped_session[Any] = Session,
     base: type[DeclarativeBase] = Base,
+    *,
     should_create: bool = False,
     should_drop: bool = False,
 ) -> None:

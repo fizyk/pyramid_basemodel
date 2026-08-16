@@ -69,6 +69,7 @@ class TouchMixin:
 
     def touch(
         self,
+        *,
         propagate: bool = True,
         now: Callable[[], datetime] = datetime.utcnow,
         save: Callable[..., None] = save_to_db,
