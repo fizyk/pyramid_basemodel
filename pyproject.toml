@@ -41,12 +41,12 @@ dependencies = [
     "zope-sqlalchemy",
 ]
 
-[[project.authors]]
-name = "James Arthur"
-
 [[project.maintainers]]
 name = "Grzegorz Śliwiński"
 email = "fizyk+pypi@fizyk.dev"
+
+[[project.authors]]
+name = "James Arthur"
 
 [project.urls]
 Source = "https://github.com/fizyk/pyramid_basemodel/"
