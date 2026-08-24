@@ -58,7 +58,7 @@ dev = [
     "coverage==7.15.4",
     "inflect==7.5.0",
     "mock==5.2.0",
-    "mypy==2.3.0; implementation_name=='cpython'",
+    "mypy==2.3.1; implementation_name=='cpython'",
     "pyramid==2.1.0",
     "pyramid-tm==2.6",
     "pytest==9.1.1",
