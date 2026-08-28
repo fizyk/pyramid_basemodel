@@ -69,7 +69,7 @@ dev = [
     "sqlalchemy==2.0.52",
     "towncrier==25.8.0",
     "types-mock==5.2.0.20260518",
-    "zope-interface==8.5",
+    "zope-interface==8.6",
     "zope-sqlalchemy==4.1",
 ]
 release = [
