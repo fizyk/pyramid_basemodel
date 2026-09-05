@@ -1,1 +1,0 @@
-Add FBT linter class to ruff configuration

@@ -3,6 +3,38 @@ CHANGES
 
 .. towncrier release notes start
 
+pyramid-basemodel 1.0.0 (2026-09-05)
+====================================
+
+Breaking changes
+----------------
+
+- The `should_create` and `should_drop` arguments of `bind_engine`, and the
+  `should_close` argument of `get_as_named_tempfile`, are now keyword-only.
+  The `propagate`, `now`, and `save` arguments of `TouchMixin.touch` are now
+  keyword-only. (`#779 <https://github.com/fizyk/pyramid_basemodel/issues/779>`_)
+
+
+Features
+--------
+
+- Add type annotations throughout and ship a ``py.typed`` marker, so the package's
+  types are now used by type checkers in downstream projects. (`#27 <https://github.com/fizyk/pyramid_basemodel/issues/27>`_)
+
+
+Miscellaneous
+-------------
+
+- Move models to the SQLAlchemy 2.0 declarative style: ``Base`` now subclasses
+  ``DeclarativeBase`` and columns are declared with ``Mapped``/``mapped_column``.
+  The generated schema is unchanged. (`#27 <https://github.com/fizyk/pyramid_basemodel/issues/27>`_)
+- Stop assigning ``Base.metadata.bind`` in ``bind_engine``. ``MetaData.bind`` was
+  removed in SQLAlchemy 2.0, so the assignment had no effect. (`#27 <https://github.com/fizyk/pyramid_basemodel/issues/27>`_)
+- Add FBT linter class to ruff configuration (`#779 <https://github.com/fizyk/pyramid_basemodel/issues/779>`_)
+- Migrated to newer automerge (`#801 <https://github.com/fizyk/pyramid_basemodel/issues/801>`_)
+- Minor packaging cleanups
+
+
 pyramid-basemodel 0.7.1 (2026-08-14)
 ====================================
 

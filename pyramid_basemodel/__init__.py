@@ -20,7 +20,7 @@ include the package::
 
 """
 
-__version__ = "0.7.1"
+__version__ = "1.0.0"
 
 __all__ = [
     "Base",
