@@ -87,11 +87,11 @@ line-length = 120
 
 [tool.ruff.lint]
 select = [
+    "D",   # pydocstyle
     "E",   # pycodestyle
     "F",   # pyflakes
-    "I",   # isort
-    "D",   # pydocstyle
     "FBT", # flake8-boolean-trap
+    "I",   # isort
 ]
 
 [tool.pyproject-fmt]
