@@ -1,0 +1,1 @@
+Autoformat pyproject.toml with newer pyproject-fmt
