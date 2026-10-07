@@ -1,0 +1,1 @@
+Add support for Python 3.15 and drop for Python 3.10

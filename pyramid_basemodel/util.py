@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-
 """Shared utility functions for interacting with the data model."""
 
 import logging
 import os
 from binascii import hexlify
 from collections.abc import Callable, Iterable, Sequence
-from typing import Any, Union
+from typing import Any
 
 from sqlalchemy import schema
 from sqlalchemy.orm import Query
@@ -100,7 +98,7 @@ def get_object_id(instance: Any) -> str:
 
 def table_args_indexes(
     tablename: str,
-    columns: Iterable[Union[str, Sequence[str]]],
+    columns: Iterable[str | Sequence[str]],
 ) -> tuple[schema.Index, ...]:
     """Build table indexes.
 

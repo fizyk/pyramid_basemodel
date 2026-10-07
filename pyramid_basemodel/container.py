@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Base model container.
 
 Provides a base model container, used by the Pyramid traversal

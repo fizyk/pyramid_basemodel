@@ -1,8 +1,8 @@
 """Test utils module."""
 
 import hashlib
+from unittest.mock import MagicMock, Mock
 
-from mock import MagicMock, Mock
 from sqlalchemy import schema
 
 from pyramid_basemodel.util import (

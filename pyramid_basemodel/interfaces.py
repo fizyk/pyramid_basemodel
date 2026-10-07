@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Marker interfaces for models and containers."""
 
 __all__ = [

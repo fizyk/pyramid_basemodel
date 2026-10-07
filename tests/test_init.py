@@ -1,9 +1,9 @@
 """Test for elements defined in init module."""
 
 from typing import Any
+from unittest.mock import Mock
 
 import pytest
-from mock import Mock
 
 import pyramid_basemodel
 from pyramid_basemodel import bind_engine, save

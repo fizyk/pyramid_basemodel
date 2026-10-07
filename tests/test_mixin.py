@@ -1,8 +1,7 @@
 """Mixin test module."""
 
 from typing import Any
-
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 
 from pyramid_basemodel.mixin import TouchMixin
 

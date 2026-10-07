@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Base traversal root and a mixin class for objects in the Pyramid traversal hierarchy.
 
 Provides a base traversal root and a mixin class for objects in the Pyramid traversal hierarchy.

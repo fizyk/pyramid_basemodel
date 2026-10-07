@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Provides a base ORM mixin for models that need a name and a url slug."""
 
 __all__ = [
