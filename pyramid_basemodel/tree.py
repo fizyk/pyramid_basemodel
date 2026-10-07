@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """`BaseContentRoot`` traversal root.
 
 Provide a ``BaseContentRoot`` traversal root for looking up instances

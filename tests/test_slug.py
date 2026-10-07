@@ -2,9 +2,9 @@
 
 from collections.abc import Iterator
 from typing import Any, cast
+from unittest.mock import MagicMock
 
 import pytest
-from mock import MagicMock
 from sqlalchemy import Column, Integer, Table
 
 from pyramid_basemodel import Base
@@ -71,7 +71,7 @@ def test_set_slug_slug_unique(sample_model: Any) -> None:
     """Test that the unique function get's called."""
     sample_model.slug = None
     sample_model.name = "My nice name"
-    sample_model.set_slug(unique=lambda *args: "{0}-1".format(args[-1]))
+    sample_model.set_slug(unique=lambda *args: f"{args[-1]}-1")
     assert sample_model.slug == "my-nice-name-1"
 
 

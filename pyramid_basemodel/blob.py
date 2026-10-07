@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Provide a generic model class for storing large binary objects.
 
 To store a bytestring::

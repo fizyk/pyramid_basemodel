@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Main pyramid_basemodel module.
 
 Provides global scoped ``Session`` and declarative ``Base``, ``BaseMixin``

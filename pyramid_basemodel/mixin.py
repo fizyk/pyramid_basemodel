@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Provides shared mixins for ORM classes."""
 
 __all__ = [
