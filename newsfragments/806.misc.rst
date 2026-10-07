@@ -1,0 +1,1 @@
+Add actionlint linter to pre-commit
