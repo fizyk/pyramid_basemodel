@@ -37,6 +37,28 @@ importing your model and this package, e.g.:
         config.include('pyramid_tm')
         return config.make_wsgi_app()
 
+To pass extra keyword arguments to SQLAlchemy's `engine_from_config`, point the
+`sqlalchemy.engine_kwargs_factory` setting at a callable by its dotted name:
+
+.. code-block:: ini
+
+    [app:main]
+    sqlalchemy.url = postgresql://localhost/mydb
+    sqlalchemy.engine_kwargs_factory = yourapp.db:engine_kwargs
+
+The callable receives the application registry and returns a dictionary of keyword
+arguments, e.g.:
+
+.. code-block:: python
+
+    # for example in yourapp/db.py
+    def engine_kwargs(registry):
+        return {"connect_args": {"application_name": "yourapp"}}
+
+Use it for arguments that a paster `.ini` value cannot express, such as objects or
+nested dictionaries. If the `sqlalchemy.pool_class` setting is also given, it
+overrides any `poolclass` the factory returns.
+
 Or if this is all too much voodoo, you can just use the `bind_engine` function:
 
 .. code-block:: python
