@@ -12,7 +12,7 @@ jobs:
   tests:
     permissions:
       contents: read
-    uses: fizyk/actions-reuse/.github/workflows/shared-tests-pytests.yml@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
+    uses: fizyk/actions-reuse/.github/workflows/shared-tests-pytests.yml@723826f1995ca7fd088e1ca408592f275fd7aeee # v5.11.0
     with:
       python-versions: '["3.11", "3.12", "3.13", "3.14", "3.15"]'
       dependency-manager: 'uv'
