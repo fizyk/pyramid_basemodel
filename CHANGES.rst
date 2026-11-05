@@ -3,6 +3,33 @@ CHANGES
 
 .. towncrier release notes start
 
+pyramid-basemodel 1.1.0 (2026-11-05)
+====================================
+
+Features
+--------
+
+- Add support for Python 3.15 and drop for Python 3.10 (`#818 <https://github.com/fizyk/pyramid_basemodel/issues/818>`_)
+
+
+Documentation
+-------------
+
+- Document the ``sqlalchemy.engine_kwargs_factory`` setting. (`#39 <https://github.com/fizyk/pyramid_basemodel/issues/39>`_)
+
+
+Miscellaneous
+-------------
+
+- Added pre-commit workflow. (`#805 <https://github.com/fizyk/pyramid_basemodel/issues/805>`_)
+- Add actionlint linter to pre-commit (`#806 <https://github.com/fizyk/pyramid_basemodel/issues/806>`_)
+- Configure Dependabot to update pre-commit dependencies. (`#808 <https://github.com/fizyk/pyramid_basemodel/issues/808>`_)
+- Turn off autofix_prs and change pre-commit's autoupdate schedule to quarterly (`#816 <https://github.com/fizyk/pyramid_basemodel/issues/816>`_)
+- Enable Ruff's UP and PYI rulesets. (`#821 <https://github.com/fizyk/pyramid_basemodel/issues/821>`_)
+- Update workflows after zizmor update to 1.30.1 (`#843 <https://github.com/fizyk/pyramid_basemodel/issues/843>`_)
+- Autoformat pyproject.toml with newer pyproject-fmt
+
+
 pyramid-basemodel 1.0.0 (2026-09-05)
 ====================================
 

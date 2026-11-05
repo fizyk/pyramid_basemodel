@@ -1,1 +1,0 @@
-Enable Ruff's UP and PYI rulesets.
