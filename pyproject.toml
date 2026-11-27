@@ -70,7 +70,7 @@ dev = [
     "towncrier==26.9.0",
     "types-mock==5.2.0.20260518",
     "zope-interface==8.7",
-    "zope-sqlalchemy==4.1",
+    "zope-sqlalchemy==4.2",
 ]
 release = [
     "tbump==6.11.0",
