@@ -826,7 +826,7 @@ dev = [
     { name = "towncrier", specifier = "==26.9.0" },
     { name = "types-mock", specifier = "==5.2.0.20260518" },
     { name = "zope-interface", specifier = "==8.7" },
-    { name = "zope-sqlalchemy", specifier = "==4.1" },
+    { name = "zope-sqlalchemy", specifier = "==4.2" },
 ]
 release = [{ name = "tbump", specifier = "==6.11.0" }]
 
@@ -1228,15 +1228,14 @@ wheels = [
 
 [[package]]
 name = "zope-sqlalchemy"
-version = "4.1"
+version = "4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "packaging" },
     { name = "sqlalchemy" },
     { name = "transaction" },
     { name = "zope-interface" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/09/e8/e5e230fa409e25a46ead006b534bd32190d4b30312b9a2876f16ef32da9e/zope_sqlalchemy-4.1.tar.gz", hash = "sha256:1912525fa0b2b6ff0c3cab46aab59fed45302d4de4e4b03e0d11386e770f4531", size = 33740, upload-time = "2025-11-25T07:02:40.401Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bc/5f/b60e6968579902279a2ceccb536b582d046c7a5703c46480dfe8ef3f5718/zope_sqlalchemy-4.2.tar.gz", hash = "sha256:fcf33370f33df8b03a03b3abe99803e9ef6c17664fb721b8d11d1c0f50851ef6", size = 33923, upload-time = "2026-11-19T08:25:24.405Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/18/dc/12744f04b291537e874732631b292b1bc782a9233f231180edc38adc25eb/zope_sqlalchemy-4.1-py3-none-any.whl", hash = "sha256:24c18895af4b962c0b214d84fbdf548df4ac504c9eb437b30d9bff25af0ae072", size = 22998, upload-time = "2025-11-25T07:02:38.783Z" },
+    { url = "https://files.pythonhosted.org/packages/d4/71/dfbe78ff2cf1d6625b88a7ecf3dca8e9d9d60559e5305804dd64acc85e5f/zope_sqlalchemy-4.2-py3-none-any.whl", hash = "sha256:2c3f2f00bf55c48816bca17582acb7b7371e6385b79666ad95e0714710421a8e", size = 22864, upload-time = "2026-11-19T08:25:22.855Z" },
 ]
